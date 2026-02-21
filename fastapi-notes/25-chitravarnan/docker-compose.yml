@@ -1,0 +1,25 @@
+# ============================================================
+# ChitraVarnan — Docker Compose
+# ============================================================
+# Run with: docker-compose up --build
+#
+# Make sure to create a .env file first:
+#   cp .env.example .env
+#   # Edit .env to add your GEMINI_API_KEY
+# ============================================================
+
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./cache.db:/app/cache.db
+    environment:
+      - CACHE_DB_PATH=/app/cache.db
+    restart: unless-stopped

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06 — Event Fundamentals | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 06: Event Fundamentals</h1>
+    <p class="subtitle">Understanding browser events and the event-driven programming model</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1: BookMyShow Seat Grid -->
+    <section id="example-1">
+      <h2>Example 1 — BookMyShow Seat Selection Grid</h2>
+      <p class="description">Click seats to select/deselect. Max 6 seats. Hover for tooltip. Custom events update price.</p>
+      <div class="seat-legend">
+        <span class="legend-item"><span class="legend-box premium"></span> Premium (Rs.350)</span>
+        <span class="legend-item"><span class="legend-box executive"></span> Executive (Rs.250)</span>
+        <span class="legend-item"><span class="legend-box normal"></span> Normal (Rs.150)</span>
+        <span class="legend-item"><span class="legend-box selected"></span> Selected</span>
+      </div>
+      <div id="seat-container"></div>
+      <div id="booking-summary">
+        <span>Selected: <strong id="seat-count">0</strong>/6</span>
+        <span>Total: <strong>Rs.<span id="total-price">0</span></strong></span>
+      </div>
+      <div class="output-console" id="output-1"></div>
+    </section>
+
+    <!-- EXAMPLE 2: Three Ways to Attach Handlers -->
+    <section id="example-2">
+      <h2>Example 2 — Three Ways to Attach Event Handlers</h2>
+      <p class="description">Compare inline, property, and addEventListener approaches.</p>
+      <div class="demo-row">
+        <button onclick="document.getElementById('output-2').textContent += 'Inline onclick fired!\n'">Method 1: Inline (onclick=)</button>
+        <button id="btn-property">Method 2: Property (el.onclick)</button>
+        <button id="btn-addEventListener">Method 3: addEventListener</button>
+      </div>
+      <div class="output-console" id="output-2"></div>
+    </section>
+
+    <!-- EXAMPLE 3: Event Object Inspector -->
+    <section id="example-3">
+      <h2>Example 3 — The Event Object</h2>
+      <p class="description">Click anywhere in the box below to inspect the Event object properties.</p>
+      <div id="event-inspector-area">
+        <button class="inspect-btn">Click Me</button>
+        <span class="inspect-span">Or Click Here</span>
+        <div class="inspect-div">Or This Area</div>
+      </div>
+      <div class="event-info-panel" id="event-info">
+        <div class="info-row"><span class="info-label">event.type:</span> <span id="info-type">—</span></div>
+        <div class="info-row"><span class="info-label">event.target:</span> <span id="info-target">—</span></div>
+        <div class="info-row"><span class="info-label">event.currentTarget:</span> <span id="info-currentTarget">—</span></div>
+        <div class="info-row"><span class="info-label">event.timeStamp:</span> <span id="info-timestamp">—</span></div>
+        <div class="info-row"><span class="info-label">event.isTrusted:</span> <span id="info-trusted">—</span></div>
+        <div class="info-row"><span class="info-label">event.clientX, clientY:</span> <span id="info-coords">—</span></div>
+      </div>
+    </section>
+
+    <!-- EXAMPLE 4: Mouse Event Types -->
+    <section id="example-4">
+      <h2>Example 4 — Mouse Event Types</h2>
+      <p class="description">Interact with the box below using click, double-click, hover, and right-click.</p>
+      <div class="demo-row">
+        <div id="mouse-demo-area">
+          <div class="inner-child">Inner Child</div>
+          Hover, Click, DblClick, Right-Click
+        </div>
+      </div>
+      <div class="output-console" id="output-4"></div>
+    </section>
+
+    <!-- EXAMPLE 5: removeEventListener Demo -->
+    <section id="example-5">
+      <h2>Example 5 — removeEventListener</h2>
+      <p class="description">The named function reference must match. Click "Add", test the button, then "Remove".</p>
+      <div class="demo-row">
+        <button id="add-listener-btn" class="action-btn">Add Listener</button>
+        <button id="test-click-btn" class="action-btn highlight">Test Click Target</button>
+        <button id="remove-listener-btn" class="action-btn danger">Remove Listener</button>
+      </div>
+      <div class="output-console" id="output-5"></div>
+    </section>
+
+    <!-- EXAMPLE 6: { once: true } and { passive: true } -->
+    <section id="example-6">
+      <h2>Example 6 — Event Options: once &amp; passive</h2>
+      <p class="description">The "once" button fires only on first click. Scroll the passive area to test smooth scrolling.</p>
+      <div class="demo-row">
+        <button id="once-btn" class="action-btn">Click Me (once: true)</button>
+        <span id="once-status" class="status-badge">Ready</span>
+      </div>
+      <div class="demo-row">
+        <div id="passive-scroll-area">
+          <p>Scroll this area. The passive listener tracks position without blocking scroll.</p>
+          <div class="scroll-filler"></div>
+        </div>
+        <span id="scroll-pos">Scroll Y: 0</span>
+      </div>
+      <div class="output-console" id="output-6"></div>
+    </section>
+
+    <!-- EXAMPLE 7: preventDefault -->
+    <section id="example-7">
+      <h2>Example 7 — event.preventDefault()</h2>
+      <p class="description">The form submit is intercepted. The link navigation is blocked. Right-click is customized.</p>
+      <div class="demo-row">
+        <form id="coupon-form">
+          <input type="text" id="coupon-input" placeholder="Enter 8-char coupon" maxlength="12">
+          <button type="submit" class="action-btn">Apply Coupon</button>
+        </form>
+      </div>
+      <div class="demo-row">
+        <a href="https://www.bookmyshow.com" id="prevented-link" target="_blank">BookMyShow Link (prevented)</a>
+        <div id="context-menu-area">Right-click me (custom menu)</div>
+      </div>
+      <div class="output-console" id="output-7"></div>
+    </section>
+
+    <!-- EXAMPLE 8: Custom Events -->
+    <section id="example-8">
+      <h2>Example 8 — Custom Events &amp; dispatchEvent</h2>
+      <p class="description">Click "Dispatch" to fire a custom event. The listener module picks it up.</p>
+      <div class="demo-row">
+        <button id="dispatch-btn" class="action-btn">Dispatch Custom Event</button>
+        <button id="dispatch-programmatic" class="action-btn">Dispatch Programmatic Click</button>
+      </div>
+      <div class="output-console" id="output-8"></div>
+    </section>
+
+    <!-- EXAMPLE 9: AbortController -->
+    <section id="example-9">
+      <h2>Example 9 — AbortController for Bulk Cleanup</h2>
+      <p class="description">Add multiple listeners with a shared signal, then abort them all at once.</p>
+      <div class="demo-row">
+        <button id="setup-abort-btn" class="action-btn">Setup Listeners (with signal)</button>
+        <button id="abort-btn" class="action-btn danger">Abort All</button>
+        <button id="abort-test-btn" class="action-btn highlight">Test Target</button>
+      </div>
+      <div class="output-console" id="output-9"></div>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 — Drag and Drop | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>FILE 15: Drag and Drop</h1>
+    <p class="subtitle">HTML Drag and Drop API, sortable lists, Kanban boards, and accessibility</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: Overview -->
+    <section id="example-1">
+      <h2>Example 1 — HTML Drag and Drop API Overview</h2>
+      <p class="description">Native browser feature. Works through events on both dragged element (source) and drop zone (target).</p>
+
+      <div class="event-flow">
+        <div class="flow-group">
+          <h3>Source Events</h3>
+          <div class="flow-item">1. <strong>dragstart</strong> — setup data transfer</div>
+          <div class="flow-item">2. <strong>drag</strong> — fires repeatedly while moving</div>
+          <div class="flow-item">3. <strong>dragend</strong> — after drop (always fires)</div>
+        </div>
+        <div class="flow-arrow">&#8594;</div>
+        <div class="flow-group">
+          <h3>Drop Zone Events</h3>
+          <div class="flow-item">1. <strong>dragenter</strong> — element enters zone</div>
+          <div class="flow-item">2. <strong>dragover</strong> — hovering over zone</div>
+          <div class="flow-item">3. <strong>dragleave</strong> — leaves zone</div>
+          <div class="flow-item">4. <strong>drop</strong> — user releases</div>
+        </div>
+      </div>
+
+      <pre id="log-1" class="console-output"></pre>
+    </section>
+
+    <!-- SECTIONS 2-5, 8: Kanban Board -->
+    <section id="example-2">
+      <h2>Examples 2-5, 8 — Trello/Jira Kanban Board</h2>
+      <p class="description">Drag cards between columns. Cards carry data via dataTransfer. preventDefault() on dragover is CRITICAL.</p>
+
+      <div class="kanban-board" role="application" aria-label="Task Board">
+
+        <div class="column" data-column-id="todo" role="group" aria-label="To Do">
+          <div class="column-header">
+            <h3>To Do</h3>
+            <span class="column-count" id="count-todo">3</span>
+          </div>
+          <div class="task-list" role="listbox" id="list-todo">
+            <div class="task-card" draggable="true" data-task-id="TASK-101" role="option" tabindex="0" aria-grabbed="false">
+              <div class="task-priority high"></div>
+              <h4>Fix login bug</h4>
+              <span class="task-assignee">Priya</span>
+              <span class="task-id">TASK-101</span>
+            </div>
+            <div class="task-card" draggable="true" data-task-id="TASK-102" role="option" tabindex="0" aria-grabbed="false">
+              <div class="task-priority medium"></div>
+              <h4>Add dark mode</h4>
+              <span class="task-assignee">Rahul</span>
+              <span class="task-id">TASK-102</span>
+            </div>
+            <div class="task-card" draggable="true" data-task-id="TASK-103" role="option" tabindex="0" aria-grabbed="false">
+              <div class="task-priority low"></div>
+              <h4>Write API docs</h4>
+              <span class="task-assignee">Unassigned</span>
+              <span class="task-id">TASK-103</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="column" data-column-id="in-progress" role="group" aria-label="In Progress">
+          <div class="column-header">
+            <h3>In Progress</h3>
+            <span class="column-count" id="count-in-progress">1</span>
+          </div>
+          <div class="task-list" role="listbox" id="list-in-progress">
+            <div class="task-card" draggable="true" data-task-id="TASK-104" role="option" tabindex="0" aria-grabbed="false">
+              <div class="task-priority high"></div>
+              <h4>Refactor auth</h4>
+              <span class="task-assignee">Amit</span>
+              <span class="task-id">TASK-104</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="column" data-column-id="done" role="group" aria-label="Done">
+          <div class="column-header">
+            <h3>Done</h3>
+            <span class="column-count" id="count-done">1</span>
+          </div>
+          <div class="task-list" role="listbox" id="list-done">
+            <div class="task-card" draggable="true" data-task-id="TASK-105" role="option" tabindex="0" aria-grabbed="false">
+              <div class="task-priority medium"></div>
+              <h4>Setup CI/CD</h4>
+              <span class="task-assignee">Sneha</span>
+              <span class="task-id">TASK-105</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ARIA live region for screen reader announcements -->
+      <div aria-live="assertive" class="sr-only" id="drag-announcer"></div>
+
+      <pre id="log-2" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 6-7: Sortable List -->
+    <section id="example-6">
+      <h2>Examples 6-7 — Sortable List: Reordering Within a Container</h2>
+      <p class="description">Drag to reorder items. Uses getBoundingClientRect() to find insertion point.</p>
+
+      <div class="sortable-container">
+        <div class="sortable-list" id="sortable-list">
+          <div class="sortable-item" draggable="true" data-item-id="1">
+            <span class="drag-handle">&#9776;</span>
+            <span>1. Fix critical payment bug</span>
+            <span class="sort-priority high">P0</span>
+          </div>
+          <div class="sortable-item" draggable="true" data-item-id="2">
+            <span class="drag-handle">&#9776;</span>
+            <span>2. Update profile UI</span>
+            <span class="sort-priority medium">P1</span>
+          </div>
+          <div class="sortable-item" draggable="true" data-item-id="3">
+            <span class="drag-handle">&#9776;</span>
+            <span>3. Add search feature</span>
+            <span class="sort-priority medium">P1</span>
+          </div>
+          <div class="sortable-item" draggable="true" data-item-id="4">
+            <span class="drag-handle">&#9776;</span>
+            <span>4. Write unit tests</span>
+            <span class="sort-priority low">P2</span>
+          </div>
+          <div class="sortable-item" draggable="true" data-item-id="5">
+            <span class="drag-handle">&#9776;</span>
+            <span>5. Update documentation</span>
+            <span class="sort-priority low">P2</span>
+          </div>
+        </div>
+        <p class="sort-result" id="sort-result">Current order: 1, 2, 3, 4, 5</p>
+      </div>
+
+      <pre id="log-6" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 10: Keyboard Accessibility -->
+    <section id="example-10">
+      <h2>Example 10 — Keyboard Accessibility</h2>
+      <p class="description">WCAG 2.1 requires keyboard alternatives. Space = pick/drop, Arrows = move, Escape = cancel.</p>
+
+      <div class="a11y-instructions">
+        <div class="a11y-key"><kbd>Space</kbd> / <kbd>Enter</kbd> — Pick up or drop card</div>
+        <div class="a11y-key"><kbd>&#8593;</kbd> <kbd>&#8595;</kbd> — Move within column</div>
+        <div class="a11y-key"><kbd>&#8592;</kbd> <kbd>&#8594;</kbd> — Move to adjacent column</div>
+        <div class="a11y-key"><kbd>Esc</kbd> — Cancel move</div>
+      </div>
+
+      <pre id="log-10" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 11: File Drop Zone -->
+    <section id="example-11">
+      <h2>Example 11 — File Drop Zone</h2>
+      <p class="description">Drag files from your desktop. Validates type (JPEG, PNG, PDF) and size (max 5MB).</p>
+
+      <div class="file-drop-zone" id="file-drop-zone">
+        <div class="drop-zone-content">
+          <span class="drop-icon">&#128193;</span>
+          <p>Drag &amp; drop files here</p>
+          <p class="drop-hint">JPEG, PNG, PDF up to 5MB</p>
+        </div>
+      </div>
+
+      <div class="file-list" id="file-list"></div>
+
+      <pre id="log-11" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 12: Complete Reference & Takeaways -->
+    <section id="example-12">
+      <h2>Example 12 — Complete Kanban Board Reference</h2>
+      <p class="description">All pieces fit together: draggable cards, drop zones, sortable, keyboard, ARIA.</p>
+
+      <pre id="log-12" class="console-output"></pre>
+
+      <div class="key-takeaways">
+        <h3>KEY TAKEAWAYS</h3>
+        <ol>
+          <li><strong>Drag events:</strong> SOURCE (dragstart, drag, dragend) and DROP ZONE (dragenter, dragover, dragleave, drop).</li>
+          <li><strong>CRITICAL:</strong> preventDefault() in dragover is required for drop to work.</li>
+          <li><strong>dataTransfer.setData()</strong> in dragstart, getData() in drop only. Data is unreadable in dragover (security).</li>
+          <li><strong>effectAllowed</strong> (dragstart) controls available operations. <strong>dropEffect</strong> (dragover) controls cursor.</li>
+          <li><strong>Sortable lists:</strong> getBoundingClientRect() to find insertion point by comparing mouse Y to card centers.</li>
+          <li><strong>dragleave fires on child elements</strong> — check relatedTarget or contains().</li>
+          <li><strong>HTML DnD API does NOT work on touch.</strong> Use pointer events as fallback.</li>
+          <li><strong>Accessibility:</strong> keyboard alt (Space=pick/drop, Arrows=move, Escape=cancel) with ARIA live regions. REQUIRED by WCAG 2.1.</li>
+          <li><strong>dataTransfer.files</strong> provides desktop file drag support. Always validate type and size.</li>
+          <li><strong>For production,</strong> consider SortableJS or dnd-kit. But understanding native API is essential.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

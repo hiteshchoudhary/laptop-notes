@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07 — Event Propagation | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 07: Event Propagation</h1>
+    <p class="subtitle">How events travel through the DOM — capturing, target, and bubbling phases</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1: Propagation Visualizer -->
+    <section id="example-1">
+      <h2>Example 1 — Live Propagation Visualizer</h2>
+      <p class="description">Click the innermost button. Watch the event travel through each layer with color highlights.</p>
+      <div class="phase-indicator">
+        <span class="phase-badge" id="phase-display">Click to start</span>
+      </div>
+      <div class="propagation-box" id="grandparent" data-label="Grandparent (#ride-list)">
+        <div class="propagation-box" id="parent" data-label="Parent (.ride-card)">
+          <div class="propagation-box" id="child" data-label="Child (.info-section)">
+            <button class="propagation-btn" id="target-btn" data-label="Button (.book-btn)">Book Ride</button>
+          </div>
+        </div>
+      </div>
+      <div class="output-console" id="output-1"></div>
+    </section>
+
+    <!-- EXAMPLE 2: Three Phases Diagram -->
+    <section id="example-2">
+      <h2>Example 2 — The Three Phases of Event Propagation</h2>
+      <p class="description">Every DOM event goes through three phases. Click "Run Demo" to see capturing, target, and bubbling in order.</p>
+      <div class="phase-diagram">
+        <div class="phase-col">
+          <h3>Phase 1: CAPTURING</h3>
+          <p>Top → Down</p>
+          <div class="arrow-down"></div>
+        </div>
+        <div class="phase-col target-col">
+          <h3>Phase 2: TARGET</h3>
+          <p>At the element</p>
+        </div>
+        <div class="phase-col">
+          <h3>Phase 3: BUBBLING</h3>
+          <p>Bottom → Up</p>
+          <div class="arrow-up"></div>
+        </div>
+      </div>
+      <div class="demo-row">
+        <button id="run-phase-demo" class="action-btn">Run Phase Demo</button>
+        <button id="clear-phase-demo" class="action-btn danger">Clear</button>
+      </div>
+      <div class="output-console" id="output-2"></div>
+    </section>
+
+    <!-- EXAMPLE 3: Capturing vs Bubbling -->
+    <section id="example-3">
+      <h2>Example 3 — Capturing Phase with addEventListener(type, fn, true)</h2>
+      <p class="description">Both capture and bubble listeners are attached. Click the button to see the order.</p>
+      <div class="nested-demo" id="capture-grandparent">
+        <span class="layer-label">Grandparent (capture + bubble)</span>
+        <div class="nested-demo" id="capture-parent">
+          <span class="layer-label">Parent (capture + bubble)</span>
+          <button id="capture-btn" class="action-btn">Click Me</button>
+        </div>
+      </div>
+      <div class="output-console" id="output-3"></div>
+    </section>
+
+    <!-- EXAMPLE 4: event.eventPhase -->
+    <section id="example-4">
+      <h2>Example 4 — event.eventPhase</h2>
+      <p class="description">event.eventPhase returns 1 (CAPTURING), 2 (AT_TARGET), or 3 (BUBBLING).</p>
+      <div class="nested-demo" id="phase-outer">
+        <span class="layer-label">Outer Container</span>
+        <div class="nested-demo" id="phase-inner">
+          <span class="layer-label">Inner Container</span>
+          <button id="phase-btn" class="action-btn">Check eventPhase</button>
+        </div>
+      </div>
+      <div class="output-console" id="output-4"></div>
+    </section>
+
+    <!-- EXAMPLE 5: target vs currentTarget -->
+    <section id="example-5">
+      <h2>Example 5 — event.target vs event.currentTarget</h2>
+      <p class="description">Click different parts of the card. target changes, currentTarget stays the same.</p>
+      <div class="ride-card-demo" id="ride-card">
+        <h3 class="ride-title">Ola Auto</h3>
+        <p class="ride-price">Rs. 85 | 12 min away</p>
+        <button class="book-btn-demo">Book Ride</button>
+      </div>
+      <div class="output-console" id="output-5"></div>
+    </section>
+
+    <!-- EXAMPLE 6: stopPropagation -->
+    <section id="example-6">
+      <h2>Example 6 — event.stopPropagation()</h2>
+      <p class="description">Toggle "Stop Propagation" on the button. With it ON, parent handler won't fire.</p>
+      <div class="demo-row">
+        <label class="toggle-label">
+          <input type="checkbox" id="stop-prop-toggle">
+          Enable stopPropagation on button
+        </label>
+      </div>
+      <div class="card-demo" id="stop-card">
+        <span class="layer-label">Card (has click handler)</span>
+        <button id="stop-btn" class="action-btn">Action Button</button>
+      </div>
+      <div class="output-console" id="output-6"></div>
+    </section>
+
+    <!-- EXAMPLE 7: stopImmediatePropagation -->
+    <section id="example-7">
+      <h2>Example 7 — stopImmediatePropagation()</h2>
+      <p class="description">The button has 3 handlers. stopImmediatePropagation in #1 blocks #2, #3, AND parent.</p>
+      <div class="demo-row">
+        <label class="toggle-label">
+          <input type="checkbox" id="stop-immediate-toggle">
+          Enable stopImmediatePropagation in Handler 1
+        </label>
+      </div>
+      <div class="card-demo" id="immediate-card">
+        <span class="layer-label">Parent Card</span>
+        <button id="immediate-btn" class="action-btn">Button (3 handlers)</button>
+      </div>
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr><th></th><th>stopPropagation()</th><th>stopImmediatePropagation()</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Same element, next handler</td><td class="yes">STILL fires</td><td class="no">STOPPED</td></tr>
+            <tr><td>Parent element handler</td><td class="no">STOPPED</td><td class="no">STOPPED</td></tr>
+            <tr><td>Prevents default behavior</td><td class="no">NO</td><td class="no">NO</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="output-console" id="output-7"></div>
+    </section>
+
+    <!-- EXAMPLE 8: Events That Don't Bubble -->
+    <section id="example-8">
+      <h2>Example 8 — Events That DON'T Bubble</h2>
+      <p class="description">focus/blur don't bubble. Use focusin/focusout instead for delegation.</p>
+      <div class="demo-row">
+        <div id="focus-container">
+          <input type="text" placeholder="Focus me (focus doesn't bubble)" class="demo-input" id="focus-input-1">
+          <input type="text" placeholder="Focus me too" class="demo-input" id="focus-input-2">
+        </div>
+      </div>
+      <div class="output-console" id="output-8"></div>
+    </section>
+
+    <!-- EXAMPLE 9: Deep Nesting Trace -->
+    <section id="example-9">
+      <h2>Example 9 — Deep Nesting Propagation Trace</h2>
+      <p class="description">5 levels deep. Click the innermost "Rs. 85" to trace the full capture → bubble path.</p>
+      <div class="deep-nest" id="deep-list" data-name="list">
+        <span class="layer-label">ride-list</span>
+        <div class="deep-nest" id="deep-card" data-name="card">
+          <span class="layer-label">ride-card</span>
+          <div class="deep-nest" id="deep-info" data-name="info">
+            <span class="layer-label">info-section</span>
+            <div class="deep-nest" id="deep-price-row" data-name="priceRow">
+              <span class="layer-label">price-row</span>
+              <span class="deep-target" id="deep-price-label" data-name="priceLabel">Rs. 85</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="output-console" id="output-9"></div>
+    </section>
+
+    <!-- EXAMPLE 10: Propagation Log Panel -->
+    <section id="example-10">
+      <h2>Example 10 — Common Pitfalls &amp; Practical Card</h2>
+      <p class="description">Click different parts of the card. Fav and Share use stopPropagation. Card body shows details.</p>
+      <div class="interactive-card" id="practical-card" data-ride-id="auto-123">
+        <div class="card-body">
+          <h3>Ola Auto — Rs. 85</h3>
+          <p>12 min away | 4.5 km</p>
+        </div>
+        <div class="ride-actions">
+          <button class="fav-btn" title="Favorite">&#9825;</button>
+          <button class="share-btn" title="Share">&#8599;</button>
+          <button class="book-btn-action" title="Book">Book</button>
+        </div>
+      </div>
+      <div class="output-console" id="output-10"></div>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

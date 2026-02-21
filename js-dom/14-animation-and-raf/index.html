@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>14 — Animation &amp; requestAnimationFrame | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>FILE 14: Animation &amp; requestAnimationFrame</h1>
+    <p class="subtitle">JavaScript animations, requestAnimationFrame, Web Animations API, and performance</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: CSS vs JS Animations -->
+    <section id="example-1">
+      <h2>Example 1 — CSS Transitions vs CSS Animations vs JavaScript Animations</h2>
+      <p class="description">Each approach has its sweet spot. Hover the button, watch the shimmer, see the reward.</p>
+
+      <div class="approach-grid">
+        <div class="approach-card">
+          <h3>CSS Transition</h3>
+          <p>Hover effects, toggles</p>
+          <button class="cred-button">Hover Me</button>
+        </div>
+        <div class="approach-card">
+          <h3>CSS Animation</h3>
+          <p>Shimmers, spinners</p>
+          <div class="skeleton-demo"><div class="shimmer-bar"></div><div class="shimmer-bar short"></div></div>
+        </div>
+        <div class="approach-card">
+          <h3>JS (rAF / WAAPI)</h3>
+          <p>Dynamic, data-driven</p>
+          <button id="trigger-js-anim" class="btn btn-primary">Trigger</button>
+          <div id="js-anim-box" class="anim-box"></div>
+        </div>
+      </div>
+
+      <pre id="log-1" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 2: requestAnimationFrame -->
+    <section id="example-2">
+      <h2>Example 2 — requestAnimationFrame: The Foundation</h2>
+      <p class="description">rAF syncs updates to the display refresh rate for smooth 60fps animation.</p>
+
+      <div class="bouncing-ball-area" id="ball-area">
+        <div class="ball" id="bouncing-ball"></div>
+      </div>
+
+      <div class="ball-controls">
+        <button id="ball-start" class="btn btn-success">Start</button>
+        <button id="ball-stop" class="btn btn-danger">Stop</button>
+        <span id="ball-frame-count" class="frame-badge">Frame: 0</span>
+      </div>
+
+      <pre id="log-2" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 3: rAF vs setTimeout -->
+    <section id="example-3">
+      <h2>Example 3 — rAF vs setTimeout/setInterval: Why rAF Wins</h2>
+      <p class="description">setTimeout has timer drift, wrong refresh rate, and wastes battery in background tabs.</p>
+
+      <div class="comparison-table">
+        <div class="comp-row header"><span>Feature</span><span>setTimeout/setInterval</span><span>requestAnimationFrame</span></div>
+        <div class="comp-row"><span>Sync to display</span><span class="bad">No</span><span class="good">Yes</span></div>
+        <div class="comp-row"><span>Frame rate</span><span class="bad">Fixed (you guess)</span><span class="good">Automatic</span></div>
+        <div class="comp-row"><span>Background tabs</span><span class="bad">Keeps running</span><span class="good">Pauses</span></div>
+        <div class="comp-row"><span>Browser optimization</span><span class="bad">None</span><span class="good">Batched repaints</span></div>
+        <div class="comp-row"><span>Jank risk</span><span class="bad">High</span><span class="good">Low</span></div>
+      </div>
+
+      <pre id="log-3" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 4: Delta Time -->
+    <section id="example-4">
+      <h2>Example 4 — Animation Loop with Delta Time</h2>
+      <p class="description">Delta time makes animations TIME-BASED, not FRAME-BASED. Consistent speed across 60Hz/120Hz.</p>
+
+      <div class="counter-grid">
+        <div class="counter-card">
+          <span class="counter-label">CRED Score</span>
+          <span class="counter-value" id="counter-score">0</span>
+        </div>
+        <div class="counter-card">
+          <span class="counter-label">Cashback</span>
+          <span class="counter-value" id="counter-cashback">Rs.0</span>
+        </div>
+        <div class="counter-card">
+          <span class="counter-label">Bills Paid</span>
+          <span class="counter-value" id="counter-bills">0</span>
+        </div>
+      </div>
+
+      <button id="start-counters" class="btn btn-primary">Animate Counters</button>
+
+      <pre id="log-4" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 5: Easing Functions -->
+    <section id="example-5">
+      <h2>Example 5 — Easing Functions: Making Animations Feel Natural</h2>
+      <p class="description">Easing transforms linear progress into natural-feeling curves.</p>
+
+      <div class="easing-visualizer">
+        <div class="easing-track" data-easing="linear">
+          <span class="easing-label">Linear</span>
+          <div class="easing-runner" id="ease-linear"></div>
+        </div>
+        <div class="easing-track" data-easing="easeIn">
+          <span class="easing-label">Ease In (Quad)</span>
+          <div class="easing-runner" id="ease-in"></div>
+        </div>
+        <div class="easing-track" data-easing="easeOut">
+          <span class="easing-label">Ease Out (Quad)</span>
+          <div class="easing-runner" id="ease-out"></div>
+        </div>
+        <div class="easing-track" data-easing="easeInOut">
+          <span class="easing-label">Ease In-Out (Cubic)</span>
+          <div class="easing-runner" id="ease-in-out"></div>
+        </div>
+        <div class="easing-track" data-easing="elastic">
+          <span class="easing-label">Elastic</span>
+          <div class="easing-runner" id="ease-elastic"></div>
+        </div>
+        <div class="easing-track" data-easing="bounce">
+          <span class="easing-label">Bounce</span>
+          <div class="easing-runner" id="ease-bounce"></div>
+        </div>
+      </div>
+
+      <button id="run-easing" class="btn btn-primary">Run All Easings</button>
+
+      <pre id="log-5" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 6: Animate Right Properties -->
+    <section id="example-6">
+      <h2>Example 6 — Animating the RIGHT Properties (Avoid Reflow!)</h2>
+      <p class="description">Only animate transform and opacity. GPU-composited, skips reflow and repaint.</p>
+
+      <div class="property-comparison">
+        <div class="prop-demo" id="bad-anim">
+          <span class="prop-label bad">BAD: top/left (reflow)</span>
+          <div class="prop-box bad-box" id="bad-box"></div>
+        </div>
+        <div class="prop-demo" id="good-anim">
+          <span class="prop-label good">GOOD: transform (GPU)</span>
+          <div class="prop-box good-box" id="good-box"></div>
+        </div>
+      </div>
+
+      <button id="compare-props" class="btn btn-primary">Compare Animation</button>
+
+      <pre id="log-6" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 7: Web Animations API -->
+    <section id="example-7">
+      <h2>Example 7 — Web Animations API: element.animate()</h2>
+      <p class="description">CRED-style reward card that flips and reveals. WAAPI combines CSS performance with JS flexibility.</p>
+
+      <div class="reward-area">
+        <div class="reward-card" id="reward-card">
+          <div class="reward-front">
+            <span class="reward-icon">&#127873;</span>
+            <p>Tap to Reveal</p>
+          </div>
+          <div class="reward-back">
+            <span class="reward-icon">&#127881;</span>
+            <p>Rs. 500 Cashback!</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="flip-card" class="btn btn-primary">Flip Card</button>
+      <button id="reset-card" class="btn btn-sm">Reset</button>
+
+      <pre id="log-7" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 8: Animation Controls -->
+    <section id="example-8">
+      <h2>Example 8 — Animation Controls: Pause, Resume, Reverse, Finish</h2>
+      <p class="description">Full programmatic control over running animations.</p>
+
+      <div class="control-demo-area">
+        <div class="control-box" id="control-box"></div>
+      </div>
+
+      <div class="control-buttons">
+        <button id="ctrl-play" class="btn btn-success btn-sm">Play</button>
+        <button id="ctrl-pause" class="btn btn-warning btn-sm">Pause</button>
+        <button id="ctrl-reverse" class="btn btn-primary btn-sm">Reverse</button>
+        <button id="ctrl-finish" class="btn btn-danger btn-sm">Finish</button>
+        <button id="ctrl-cancel" class="btn btn-sm">Cancel</button>
+        <span class="state-badge" id="ctrl-state">idle</span>
+      </div>
+
+      <div class="speed-control">
+        <label>Speed: <input type="range" id="speed-range" min="-2" max="3" step="0.5" value="1"></label>
+        <span id="speed-value">1x</span>
+      </div>
+
+      <pre id="log-8" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 9: getAnimations() -->
+    <section id="example-9">
+      <h2>Example 9 — getAnimations(): Managing Multiple Animations</h2>
+      <p class="description">Manage many animations without tracking each individually.</p>
+
+      <div class="multi-anim-area" id="multi-anim-area">
+        <div class="multi-box"></div>
+        <div class="multi-box"></div>
+        <div class="multi-box"></div>
+        <div class="multi-box"></div>
+        <div class="multi-box"></div>
+      </div>
+
+      <div class="multi-controls">
+        <button id="start-multi" class="btn btn-primary btn-sm">Start All</button>
+        <button id="pause-multi" class="btn btn-warning btn-sm">Pause All</button>
+        <button id="resume-multi" class="btn btn-success btn-sm">Resume All</button>
+        <button id="speed-multi" class="btn btn-sm">2x Speed</button>
+      </div>
+
+      <pre id="log-9" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 10: Smooth Scroll -->
+    <section id="example-10">
+      <h2>Example 10 — Smooth Scroll with Custom Easing via rAF</h2>
+      <p class="description">Custom ease-in-out scroll matching a brand feel.</p>
+
+      <div class="scroll-demo-buttons">
+        <button id="smooth-to-top" class="btn btn-primary">Smooth to Top (custom easing)</button>
+        <button id="smooth-to-bottom" class="btn btn-primary">Smooth to Takeaways</button>
+      </div>
+
+      <pre id="log-10" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 11: Number Counter (reused in 4, keeping section for reference) -->
+
+    <!-- SECTION 12: Progress Bars -->
+    <section id="example-12">
+      <h2>Example 12 — Progress Bars Animate on Scroll Into View</h2>
+      <p class="description">Bars animate from 0% to target when scrolled into view. IntersectionObserver + rAF.</p>
+
+      <div class="progress-bars">
+        <div class="progress-item">
+          <span class="progress-label">Bills on time</span>
+          <div class="progress-track">
+            <div class="progress-bar" id="bar-1" data-target="87" data-delay="0"></div>
+          </div>
+          <span class="progress-value" id="val-1">0%</span>
+        </div>
+        <div class="progress-item">
+          <span class="progress-label">Cashback claimed</span>
+          <div class="progress-track">
+            <div class="progress-bar" id="bar-2" data-target="92" data-delay="200"></div>
+          </div>
+          <span class="progress-value" id="val-2">0%</span>
+        </div>
+        <div class="progress-item">
+          <span class="progress-label">CRED coins used</span>
+          <div class="progress-track">
+            <div class="progress-bar" id="bar-3" data-target="68" data-delay="400"></div>
+          </div>
+          <span class="progress-value" id="val-3">0%</span>
+        </div>
+        <div class="progress-item">
+          <span class="progress-label">Rewards redeemed</span>
+          <div class="progress-track">
+            <div class="progress-bar" id="bar-4" data-target="45" data-delay="600"></div>
+          </div>
+          <span class="progress-value" id="val-4">0%</span>
+        </div>
+      </div>
+
+      <pre id="log-12" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 13: Chaining -->
+    <section id="example-13">
+      <h2>Example 13 — Chaining Animations with Promises</h2>
+      <p class="description">CRED reward sequence: slide -> flip -> confetti -> coins -> counter.</p>
+
+      <div class="sequence-area" id="sequence-area">
+        <div class="sequence-card" id="seq-card">
+          <span>&#127873;</span>
+        </div>
+        <div class="sequence-confetti" id="seq-confetti"></div>
+        <div class="sequence-counter" id="seq-counter">Score: 800</div>
+      </div>
+
+      <button id="run-sequence" class="btn btn-primary">Run Reward Sequence</button>
+
+      <pre id="log-13" class="console-output"></pre>
+
+      <div class="key-takeaways" id="takeaways">
+        <h3>KEY TAKEAWAYS</h3>
+        <ol>
+          <li><strong>CSS transitions</strong> for simple states, CSS @keyframes for repeating, JS (rAF/WAAPI) for dynamic/complex.</li>
+          <li><strong>requestAnimationFrame</strong> syncs to display refresh rate (60/120Hz), pauses in background tabs.</li>
+          <li><strong>Delta time</strong> (elapsed / duration) gives TIME-BASED animation consistent across frame rates.</li>
+          <li><strong>Easing functions</strong> transform linear progress into natural curves. easeInOutCubic is most natural.</li>
+          <li><strong>Only animate transform and opacity</strong> -- GPU-composited, skip reflow. NEVER animate width/height/top/left.</li>
+          <li><strong>element.animate() (WAAPI)</strong> returns Animation with pause(), play(), reverse(), finish(), .finished promise.</li>
+          <li><strong>getAnimations()</strong> queries all running animations for bulk control.</li>
+          <li><strong>Chain with await animation.finished.</strong> Parallelize with Promise.all().</li>
+          <li><strong>Respect prefers-reduced-motion</strong> -- skip or reduce animations.</li>
+          <li><strong>will-change: transform</strong> hints GPU layer prep. Use sparingly.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

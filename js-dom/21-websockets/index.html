@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>21 — WebSockets | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 21: WebSockets</h1>
+    <p class="subtitle">Real-Time Bidirectional Communication &mdash; Persistent connections for live data streaming</p>
+  </header>
+
+  <div class="notice">
+    <strong>Note for students:</strong> For full WebSocket functionality, you can run a simple WS echo server with
+    <code>npx ws</code> or use the built-in echo demo below. The demos use a mock WebSocket class when no server
+    is available, so all lifecycle events and UI states are fully simulated.
+  </div>
+
+  <main>
+
+    <!-- SECTION: Connection Demo -->
+    <section id="connection-demo">
+      <h2>Section 1 &mdash; WebSocket Connection</h2>
+      <p>Open a WebSocket connection and observe the lifecycle events (open, message, error, close).</p>
+
+      <div class="connection-bar">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="connection-label">Disconnected</span>
+        <span class="badge" id="ready-state-badge">CLOSED (3)</span>
+      </div>
+
+      <div class="btn-row">
+        <button id="btn-connect">Connect</button>
+        <button id="btn-disconnect" disabled>Disconnect</button>
+      </div>
+
+      <div class="output-box" id="connection-log"></div>
+    </section>
+
+    <!-- SECTION: Live Chat -->
+    <section id="chat-demo">
+      <h2>Section 2 &mdash; Dream11 / Swiggy-Style Live Chat</h2>
+      <p>Send messages through the WebSocket. The echo server (or mock) sends them back.</p>
+
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" placeholder="Type a message..." disabled>
+          <button id="btn-send" disabled>Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Reconnection -->
+    <section id="reconnect-demo">
+      <h2>Section 3 &mdash; Reconnection with Exponential Backoff</h2>
+      <p>Connections drop. Your app MUST reconnect &mdash; but do not hammer the server. Use exponential backoff with jitter.</p>
+
+      <div class="reconnect-panel">
+        <div class="stat">
+          <span class="stat-label">Retry Count</span>
+          <span class="stat-value" id="retry-count">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Next Retry In</span>
+          <span class="stat-value" id="retry-delay">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Max Retries</span>
+          <span class="stat-value">10</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="btn-simulate-drop">Simulate Connection Drop</button>
+        <button id="btn-stop-reconnect" disabled>Stop Reconnecting</button>
+      </div>
+
+      <div class="output-box" id="reconnect-log"></div>
+    </section>
+
+    <!-- SECTION: Binary Data -->
+    <section id="binary-demo">
+      <h2>Section 4 &mdash; Binary Data Transfer</h2>
+      <p>Binary is 5-10x more compact than JSON for high-frequency data like stock ticks (Zerodha Kite).</p>
+
+      <div class="btn-row">
+        <button id="btn-binary-demo">Run Binary Demo</button>
+      </div>
+
+      <div class="output-box" id="binary-log"></div>
+    </section>
+
+    <!-- SECTION: Heartbeat -->
+    <section id="heartbeat-demo">
+      <h2>Section 5 &mdash; Heartbeat / Ping-Pong</h2>
+      <p>Proxies and firewalls kill idle connections after 30-60s. Heartbeats keep them alive.</p>
+
+      <div class="btn-row">
+        <button id="btn-start-heartbeat" disabled>Start Heartbeat</button>
+        <button id="btn-stop-heartbeat" disabled>Stop Heartbeat</button>
+      </div>
+
+      <div class="output-box" id="heartbeat-log"></div>
+    </section>
+
+    <!-- SECTION: WS vs SSE Comparison -->
+    <section id="comparison">
+      <h2>Section 6 &mdash; WebSocket vs Server-Sent Events (SSE)</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>WebSocket</th>
+            <th>SSE (EventSource)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Direction</td><td>Bidirectional</td><td>Server &rarr; Client only</td></tr>
+          <tr><td>Protocol</td><td>ws:// / wss://</td><td>Regular HTTP</td></tr>
+          <tr><td>Auto-reconnect</td><td>Manual</td><td>Built-in</td></tr>
+          <tr><td>Binary data</td><td>Yes</td><td>No (text only)</td></tr>
+          <tr><td>Max connections</td><td>No browser limit</td><td>6 per domain (HTTP/1.1)</td></tr>
+          <tr><td>Proxy friendly</td><td>Sometimes issues</td><td>Always works</td></tr>
+          <tr><td class="use-case">Best for</td><td class="use-case">Chat, gaming, stock trading</td><td class="use-case">Live feed, notifications, scores</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION: Security -->
+    <section id="security">
+      <h2>Section 7 &mdash; WebSocket Security</h2>
+      <div class="output-box" id="security-log"></div>
+    </section>
+
+    <!-- SECTION: Key Takeaways -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <div class="output-box" id="takeaways-log"></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+/* ============================================================
+   FILE 15: Drag and Drop — Styles
+   Dark theme with Jira/Trello-inspired board
+   ============================================================ */
+
+:root {
+  --primary: #6366f1;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --surface: #1e293b;
+  --border: #334155;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --accent: #818cf8;
+  --column-bg: #141b2d;
+  --radius: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  background: var(--surface);
+  padding: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle { color: #94a3b8; margin-top: 0.3rem; }
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  margin-bottom: 2.5rem;
+}
+
+section h2 { font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem; }
+section > .description { color: #94a3b8; margin-bottom: 1.2rem; font-size: 0.9rem; }
+
+.console-output {
+  background: #020617;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.8rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: #22c55e;
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-top: 0.8rem;
+}
+
+/* Event Flow Diagram */
+.event-flow {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.flow-group {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.flow-group h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 0.5rem; }
+
+.flow-item {
+  font-size: 0.8rem;
+  padding: 0.3rem 0;
+  color: #94a3b8;
+}
+
+.flow-item strong { color: var(--accent); }
+
+.flow-arrow {
+  font-size: 2rem;
+  color: var(--primary);
+  align-self: center;
+  padding-top: 1rem;
+}
+
+/* ============================================================
+   KANBAN BOARD
+   ============================================================ */
+
+.kanban-board {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.column {
+  flex: 1;
+  min-width: 250px;
+  background: var(--column-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.column.column--drag-over {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.column-header h3 { font-size: 0.9rem; color: var(--text); }
+
+.column-count {
+  background: var(--surface);
+  color: #94a3b8;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.task-list {
+  padding: 0.5rem;
+  min-height: 100px;
+}
+
+/* Task Cards */
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-bottom: 0.5rem;
+  cursor: grab;
+  user-select: none;
+  position: relative;
+  transition: opacity 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.task-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+}
+
+.task-card:active { cursor: grabbing; }
+
+.task-card.dragging {
+  opacity: 0.35;
+  border: 2px dashed var(--primary);
+  transform: rotate(2deg);
+}
+
+.task-card.keyboard-dragging {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.task-priority {
+  width: 6px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 8px 0 0 8px;
+}
+
+.task-priority.high { background: var(--danger); }
+.task-priority.medium { background: var(--warning); }
+.task-priority.low { background: var(--success); }
+
+.task-card h4 {
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.task-assignee {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-left: 0.5rem;
+}
+
+.task-id {
+  font-size: 0.65rem;
+  color: #475569;
+  float: right;
+  font-family: monospace;
+}
+
+/* Drop indicator line */
+.drop-indicator {
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  margin: 2px 0;
+  animation: pulseGlow 1s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 4px rgba(99, 102, 241, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(99, 102, 241, 0.6); }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ============================================================
+   SORTABLE LIST
+   ============================================================ */
+
+.sortable-container {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sortable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sortable-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.7rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: grab;
+  user-select: none;
+  font-size: 0.85rem;
+  transition: opacity 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.sortable-item:hover { border-color: var(--accent); }
+.sortable-item.dragging { opacity: 0.3; border: 2px dashed var(--primary); }
+
+.drag-handle {
+  color: #475569;
+  cursor: grab;
+  font-size: 1rem;
+}
+
+.sort-priority {
+  margin-left: auto;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.sort-priority.high { background: rgba(239,68,68,0.15); color: var(--danger); }
+.sort-priority.medium { background: rgba(245,158,11,0.15); color: var(--warning); }
+.sort-priority.low { background: rgba(34,197,94,0.15); color: var(--success); }
+
+.sort-result {
+  margin-top: 0.8rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+/* ============================================================
+   KEYBOARD ACCESSIBILITY
+   ============================================================ */
+
+.a11y-instructions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.a11y-key {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+kbd {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+/* ============================================================
+   FILE DROP ZONE
+   ============================================================ */
+
+.file-drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: border-color 0.3s, background 0.3s;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.file-drop-zone.drag-over {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.file-drop-zone.drag-over .drop-icon {
+  transform: scale(1.2);
+}
+
+.drop-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.drop-zone-content p { color: #94a3b8; font-size: 0.9rem; }
+.drop-hint { font-size: 0.75rem !important; color: #475569 !important; margin-top: 0.3rem; }
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.file-entry {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+}
+
+.file-entry.accepted { border-left: 3px solid var(--success); }
+.file-entry.rejected { border-left: 3px solid var(--danger); }
+
+.file-name { font-weight: 600; }
+.file-size { color: #64748b; font-family: monospace; font-size: 0.75rem; }
+.file-status { font-size: 0.75rem; font-weight: 600; }
+.file-status.ok { color: var(--success); }
+.file-status.error { color: var(--danger); }
+
+/* Key Takeaways */
+.key-takeaways {
+  background: var(--bg);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.key-takeaways h3 { color: var(--primary); font-size: 1rem; margin-bottom: 0.8rem; }
+.key-takeaways ol { padding-left: 1.3rem; font-size: 0.85rem; color: #94a3b8; }
+.key-takeaways li { margin-bottom: 0.5rem; }
+.key-takeaways strong { color: var(--text); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  main { padding: 1rem; }
+  .kanban-board { flex-direction: column; }
+  .column { min-width: unset; }
+  .event-flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); align-self: center; padding: 0; }
+}

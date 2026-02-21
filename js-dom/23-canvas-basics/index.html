@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>23 — Canvas Basics | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 23: Canvas Basics</h1>
+    <p class="subtitle">Drawing Graphics with JavaScript &mdash; shapes, text, images, and animations</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION: Bar Chart -->
+    <section id="bar-chart-section">
+      <h2>Section 1 &mdash; Razorpay-Style Dashboard Bar Chart</h2>
+      <p>A merchant dashboard chart drawn entirely on Canvas using rectangles, gradients, and text.</p>
+      <canvas id="bar-chart" width="800" height="460"></canvas>
+      <div class="output-box" id="chart-log"></div>
+    </section>
+
+    <!-- SECTION: Shapes Demo -->
+    <section id="shapes-section">
+      <h2>Section 2 &mdash; Drawing Shapes (Rectangles, Circles, Paths)</h2>
+      <p>Canvas only has direct rectangle methods. Everything else uses paths: beginPath, moveTo, lineTo, arc.</p>
+
+      <div class="btn-row">
+        <button id="btn-draw-rects">Rectangles</button>
+        <button id="btn-draw-circles">Circles &amp; Arcs</button>
+        <button id="btn-draw-triangle">Triangle</button>
+        <button id="btn-draw-star">Star</button>
+        <button id="btn-draw-rounded">Rounded Rect</button>
+        <button id="btn-clear-shapes">Clear</button>
+      </div>
+
+      <canvas id="shapes-canvas" width="800" height="300"></canvas>
+      <div class="output-box" id="shapes-log"></div>
+    </section>
+
+    <!-- SECTION: Signature / Drawing Pad -->
+    <section id="drawing-section">
+      <h2>Section 3 &mdash; Signature / Drawing Pad</h2>
+      <p>Draw with your mouse or touch. Uses mousedown/mousemove/mouseup events with getBoundingClientRect().</p>
+
+      <div class="toolbar">
+        <label>Color:
+          <input type="color" id="brush-color" value="#e2e8f0">
+        </label>
+        <label>Size:
+          <input type="range" id="brush-size" min="1" max="20" value="3">
+          <span id="brush-size-label">3px</span>
+        </label>
+        <button id="btn-clear-drawing">Clear</button>
+        <button id="btn-undo-drawing">Undo</button>
+        <button id="btn-export-png">Export PNG</button>
+      </div>
+
+      <canvas id="drawing-canvas" width="800" height="300"></canvas>
+    </section>
+
+    <!-- SECTION: Text Rendering -->
+    <section id="text-section">
+      <h2>Section 4 &mdash; Text Rendering</h2>
+      <p>fillText, strokeText, font, textAlign, measureText &mdash; used for receipts, labels, watermarks.</p>
+
+      <canvas id="text-canvas" width="800" height="200"></canvas>
+      <div class="output-box" id="text-log"></div>
+    </section>
+
+    <!-- SECTION: Gradients -->
+    <section id="gradient-section">
+      <h2>Section 5 &mdash; Gradients &amp; Colors</h2>
+      <p>Linear and radial gradients for professional-looking backgrounds (CRED reward cards).</p>
+
+      <canvas id="gradient-canvas" width="800" height="250"></canvas>
+    </section>
+
+    <!-- SECTION: Animation -->
+    <section id="animation-section">
+      <h2>Section 6 &mdash; Animation (Bouncing Ball)</h2>
+      <p>requestAnimationFrame syncs with display refresh (~60fps) and pauses when tab is hidden.</p>
+
+      <div class="btn-row">
+        <button id="btn-start-animation">Start</button>
+        <button id="btn-stop-animation" disabled>Stop</button>
+      </div>
+
+      <canvas id="animation-canvas" width="800" height="300"></canvas>
+      <div class="output-box" id="anim-log"></div>
+    </section>
+
+    <!-- SECTION: Image Drawing -->
+    <section id="image-section">
+      <h2>Section 7 &mdash; Drawing Images</h2>
+      <p>drawImage has 3 forms: position, resize, crop. Images MUST be loaded first (async).</p>
+
+      <div class="btn-row">
+        <button id="btn-draw-image">Draw Sample Image</button>
+      </div>
+
+      <canvas id="image-canvas" width="800" height="250"></canvas>
+      <div class="output-box" id="image-log"></div>
+    </section>
+
+    <!-- SECTION: Key Takeaways -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <div class="output-box" id="takeaways-log"></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11 — Scroll, Resize & Element Dimensions | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress-bar"></div>
+
+  <!-- Sticky Header -->
+  <header id="main-header">
+    <h1>FILE 11: Scroll, Resize &amp; Element Dimensions</h1>
+    <p class="subtitle">Measuring elements, tracking scroll position, and responding to viewport changes</p>
+  </header>
+
+  <!-- Compact Sticky Header (appears on scroll) -->
+  <header id="compact-header" class="compact-header">
+    <span class="compact-title">11 — Scroll, Resize &amp; Dimensions</span>
+    <span id="scroll-percent-badge" class="badge">0%</span>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: Element Dimensions -->
+    <section id="example-1">
+      <h2>Example 1 — Element Dimensions: Measuring a Product Card</h2>
+      <p class="description">Three dimension property pairs on every element. Click the card to measure it.</p>
+
+      <div class="product-card" id="demo-card">
+        <div class="card-image"></div>
+        <h3>Myntra Style Jacket</h3>
+        <div class="description" id="card-description">
+          Premium cotton blend jacket with modern cut. Perfect for casual outings and semi-formal events.
+          Features include breathable fabric, double-stitched seams, and adjustable cuffs. Available in
+          multiple sizes. Machine washable. This description is intentionally long to demonstrate overflow
+          detection and scrollHeight vs clientHeight comparison.
+        </div>
+        <p class="price">Rs. 2,499</p>
+        <button class="read-more" id="read-more-btn" style="display:none;">Read More</button>
+      </div>
+
+      <div id="dimensions-output" class="output-panel">
+        <h3>Dimension Measurements</h3>
+        <pre id="dimensions-log" class="console-output"></pre>
+      </div>
+    </section>
+
+    <!-- SECTION 2: getBoundingClientRect -->
+    <section id="example-2">
+      <h2>Example 2 — getBoundingClientRect(): Quick-View Popup</h2>
+      <p class="description">Hover a card to see viewport-relative positioning in action.</p>
+
+      <div class="card-grid">
+        <div class="product-card mini-card" id="card-a" data-name="Sneakers">
+          <div class="card-image"></div>
+          <h3>Sneakers</h3>
+          <p class="price">Rs. 1,899</p>
+        </div>
+        <div class="product-card mini-card" id="card-b" data-name="Watch">
+          <div class="card-image"></div>
+          <h3>Watch</h3>
+          <p class="price">Rs. 4,999</p>
+        </div>
+        <div class="product-card mini-card" id="card-c" data-name="Backpack">
+          <div class="card-image"></div>
+          <h3>Backpack</h3>
+          <p class="price">Rs. 1,299</p>
+        </div>
+      </div>
+
+      <div id="quick-view-popup" class="quick-view-popup" style="display:none;">
+        <h4 id="popup-title">Product</h4>
+        <p id="popup-rect" class="mono"></p>
+      </div>
+
+      <pre id="rect-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 3: Window & Document Dimensions -->
+    <section id="example-3">
+      <h2>Example 3 — Window and Document Dimensions</h2>
+      <p class="description">Resize your browser to see layout mode changes in real time.</p>
+
+      <div class="dimension-panel" id="dimension-panel">
+        <div class="dim-item">
+          <span class="dim-label">Layout Mode</span>
+          <span class="dim-value" id="layout-mode">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">window.innerWidth</span>
+          <span class="dim-value" id="win-inner-w">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">window.innerHeight</span>
+          <span class="dim-value" id="win-inner-h">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">clientWidth (no scrollbar)</span>
+          <span class="dim-value" id="doc-client-w">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">clientHeight</span>
+          <span class="dim-value" id="doc-client-h">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">scrollHeight (total doc)</span>
+          <span class="dim-value" id="doc-scroll-h">--</span>
+        </div>
+      </div>
+
+      <pre id="resize-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 4: Scroll Position -->
+    <section id="example-4">
+      <h2>Example 4 — Scroll Position Tracking</h2>
+      <p class="description">Scroll the page and watch the live scroll telemetry update.</p>
+
+      <div class="scroll-telemetry" id="scroll-telemetry">
+        <div class="dim-item">
+          <span class="dim-label">scrollY</span>
+          <span class="dim-value" id="scroll-y">0</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">Scroll %</span>
+          <span class="dim-value" id="scroll-pct">0%</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">Near Bottom?</span>
+          <span class="dim-value" id="near-bottom">No</span>
+        </div>
+      </div>
+
+      <pre id="scroll-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 5: Programmatic Scrolling -->
+    <section id="example-5">
+      <h2>Example 5 — Programmatic Scrolling</h2>
+      <p class="description">scrollTo, scrollBy, and scrollIntoView demos.</p>
+
+      <div class="button-row">
+        <button id="scroll-to-top" class="btn">Scroll to Top (smooth)</button>
+        <button id="scroll-down-200" class="btn">scrollBy +200px</button>
+        <button id="scroll-to-section-8" class="btn">scrollIntoView Section 8</button>
+      </div>
+
+      <pre id="scroll-prog-log" class="console-output"></pre>
+    </section>
+
+    <!-- Product Sections (for scrolling through) -->
+    <section id="example-6" class="product-section">
+      <h2>Example 6 — Scroll Events & Throttling</h2>
+      <p class="description">Scroll fires 60+ times/sec. Throttle with rAF or a timer to avoid jank.</p>
+
+      <div class="product-row">
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Kurta Set</h3><p class="price">Rs. 1,599</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Jeans</h3><p class="price">Rs. 1,299</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>T-Shirt</h3><p class="price">Rs. 699</p></div>
+      </div>
+
+      <div class="throttle-demo">
+        <div class="dim-item">
+          <span class="dim-label">Raw scroll events</span>
+          <span class="dim-value" id="raw-scroll-count">0</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">Throttled (rAF) calls</span>
+          <span class="dim-value" id="throttled-scroll-count">0</span>
+        </div>
+      </div>
+
+      <pre id="throttle-log" class="console-output"></pre>
+    </section>
+
+    <section id="example-7" class="product-section">
+      <h2>Example 7 — Resize Event & Debouncing</h2>
+      <p class="description">Resize fires continuously. Debounce waits until you STOP, then acts once.</p>
+
+      <div class="product-row">
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Formal Shirt</h3><p class="price">Rs. 1,899</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Chinos</h3><p class="price">Rs. 1,499</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Blazer</h3><p class="price">Rs. 4,999</p></div>
+      </div>
+
+      <div id="grid-info" class="grid-info">
+        <span>Grid Columns: <strong id="grid-columns">--</strong></span>
+      </div>
+
+      <pre id="debounce-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 8: ResizeObserver -->
+    <section id="example-8">
+      <h2>Example 8 — ResizeObserver: Watching Individual Elements</h2>
+      <p class="description">Drag the resize handle to change the container width. ResizeObserver fires on element size change.</p>
+
+      <div id="resizable-container" class="resizable-container">
+        <div class="product-card" id="observed-card">
+          <div class="card-image"></div>
+          <h3>Resizable Product Card</h3>
+          <div class="description" id="observed-desc">
+            This card is inside a resizable container. As you resize, ResizeObserver detects when this card's dimensions change.
+            If the text overflows, a "Read More" button will appear automatically.
+          </div>
+          <p class="price">Rs. 3,299</p>
+          <button class="read-more" id="observed-read-more" style="display:none;">Read More</button>
+        </div>
+        <div class="resize-readout" id="resize-readout">Width: --  Height: --</div>
+      </div>
+
+      <pre id="resize-observer-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 9: Sticky Header (meta — references the header above) -->
+    <section id="example-9" class="product-section">
+      <h2>Example 9 — Sticky Header Pattern</h2>
+      <p class="description">Scroll past 120px to see the compact header appear. The header at top demonstrates this live.</p>
+
+      <div class="product-row">
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Loafers</h3><p class="price">Rs. 2,499</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Belt</h3><p class="price">Rs. 799</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Sunglasses</h3><p class="price">Rs. 1,999</p></div>
+      </div>
+
+      <pre id="sticky-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 10: Scroll Progress (meta — references the bar at top) -->
+    <section id="example-10" class="product-section">
+      <h2>Example 10 — Scroll Progress Bar</h2>
+      <p class="description">The pink progress bar at the very top of the page shows how much you have scrolled.</p>
+
+      <div class="product-row">
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Perfume</h3><p class="price">Rs. 3,499</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Wallet</h3><p class="price">Rs. 999</p></div>
+        <div class="product-card mini-card"><div class="card-image"></div><h3>Scarf</h3><p class="price">Rs. 599</p></div>
+      </div>
+
+      <pre id="progress-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 11: Infinite Scroll -->
+    <section id="example-11">
+      <h2>Example 11 — Infinite Scroll with Skeletons</h2>
+      <p class="description">Scroll to the bottom of this section to trigger loading of more products.</p>
+
+      <div id="infinite-product-list" class="product-grid">
+        <!-- Initial products rendered by JS -->
+      </div>
+
+      <div id="skeleton-container" class="skeleton-container" style="display:none;">
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+      </div>
+
+      <div id="infinite-scroll-sentinel" class="sentinel"></div>
+      <p id="infinite-status" class="status-text"></p>
+
+      <pre id="infinite-log" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 12: Putting It All Together -->
+    <section id="example-12">
+      <h2>Example 12 — Putting It All Together</h2>
+      <p class="description">Sticky header + scroll progress + back-to-top + infinite scroll. One centralized throttled scroll handler.</p>
+
+      <pre id="master-log" class="console-output"></pre>
+
+      <div class="key-takeaways">
+        <h3>KEY TAKEAWAYS</h3>
+        <ol>
+          <li><strong>Three dimension pairs:</strong> offsetWidth (total box), clientWidth (inner usable), scrollWidth (total scrollable).</li>
+          <li><strong>getBoundingClientRect()</strong> gives VIEWPORT-relative position. Add scrollY for document-relative.</li>
+          <li><strong>window.innerWidth</strong> includes scrollbar. <code>document.documentElement.clientWidth</code> is the content area.</li>
+          <li><strong>ALWAYS throttle scroll handlers</strong> using requestAnimationFrame or a timer. Unthrottled = jank.</li>
+          <li><strong>Debounce for resize</strong> (once after silence). <strong>Throttle for scroll</strong> (respond while scrolling).</li>
+          <li><strong>ResizeObserver</strong> watches individual elements, better than window resize for most cases.</li>
+          <li><strong>{ passive: true }</strong> on scroll/touch listeners improves performance when you don't call preventDefault().</li>
+          <li><strong>scrollIntoView({ behavior: 'smooth' })</strong> is the simplest way to scroll to an element.</li>
+          <li><strong>Combine scroll features</strong> into ONE throttled handler to minimize layout thrashing.</li>
+          <li><strong>Infinite scroll</strong> = scroll position detection + async data loading + skeleton placeholders.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">&#8679; Top</button>
+
+  <script src="script.js"></script>
+</body>
+</html>

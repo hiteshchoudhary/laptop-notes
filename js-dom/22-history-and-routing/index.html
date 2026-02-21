@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>22 — History API &amp; Routing | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 22: History API &amp; Client-Side Routing</h1>
+    <p class="subtitle">Navigate between views without page reloads &mdash; the foundation of every SPA</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION: SPA Tab Navigation -->
+    <section id="spa-tabs">
+      <h2>Section 1 &mdash; MakeMyTrip-Style SPA Navigation</h2>
+      <p>Click tabs to switch views. The URL updates with pushState. Browser back/forward buttons work.</p>
+
+      <nav class="tab-nav">
+        <button class="tab-btn active" data-route="/flights">Flights</button>
+        <button class="tab-btn" data-route="/hotels">Hotels</button>
+        <button class="tab-btn" data-route="/trains">Trains</button>
+        <button class="tab-btn" data-route="/about">About</button>
+      </nav>
+
+      <div class="view-container">
+        <div class="view active" id="view-flights">
+          <h3>Flights</h3>
+          <div class="search-form-demo">
+            <div class="form-row">
+              <label>From</label><span class="form-value">DEL (New Delhi)</span>
+            </div>
+            <div class="form-row">
+              <label>To</label><span class="form-value">BOM (Mumbai)</span>
+            </div>
+            <div class="form-row">
+              <label>Date</label><span class="form-value">2025-03-15</span>
+            </div>
+            <button class="search-btn" id="btn-search-flights">Search Flights</button>
+          </div>
+        </div>
+
+        <div class="view" id="view-hotels">
+          <h3>Hotels</h3>
+          <div class="search-form-demo">
+            <div class="form-row">
+              <label>City</label><span class="form-value">Goa</span>
+            </div>
+            <div class="form-row">
+              <label>Check-in</label><span class="form-value">2025-04-01</span>
+            </div>
+            <div class="form-row">
+              <label>Rooms</label><span class="form-value">1</span>
+            </div>
+            <button class="search-btn">Search Hotels</button>
+          </div>
+        </div>
+
+        <div class="view" id="view-trains">
+          <h3>Trains</h3>
+          <div class="search-form-demo">
+            <div class="form-row">
+              <label>From</label><span class="form-value">NDLS (New Delhi)</span>
+            </div>
+            <div class="form-row">
+              <label>To</label><span class="form-value">BCT (Mumbai Central)</span>
+            </div>
+            <div class="form-row">
+              <label>Class</label><span class="form-value">3A (AC 3-Tier)</span>
+            </div>
+            <button class="search-btn">Search Trains</button>
+          </div>
+        </div>
+
+        <div class="view" id="view-about">
+          <h3>About MakeMyTrip</h3>
+          <p>India's leading travel platform. Founded 2000, Gurugram. Millions of bookings every year.</p>
+        </div>
+
+        <div class="view" id="view-404">
+          <h3>404 &mdash; Page Not Found</h3>
+          <p>The route you requested does not match any view.</p>
+        </div>
+      </div>
+
+      <div class="output-box" id="nav-log"></div>
+    </section>
+
+    <!-- SECTION: URL Inspector -->
+    <section id="url-inspector">
+      <h2>Section 2 &mdash; URL Inspector (window.location)</h2>
+      <p>Shows every part of the current URL, updated live as you navigate.</p>
+
+      <div class="url-parts">
+        <div class="url-part"><span class="url-label">href</span><span class="url-value" id="url-href">—</span></div>
+        <div class="url-part"><span class="url-label">protocol</span><span class="url-value" id="url-protocol">—</span></div>
+        <div class="url-part"><span class="url-label">hostname</span><span class="url-value" id="url-hostname">—</span></div>
+        <div class="url-part"><span class="url-label">pathname</span><span class="url-value" id="url-pathname">—</span></div>
+        <div class="url-part"><span class="url-label">search</span><span class="url-value" id="url-search">—</span></div>
+        <div class="url-part"><span class="url-label">hash</span><span class="url-value" id="url-hash">—</span></div>
+        <div class="url-part"><span class="url-label">origin</span><span class="url-value" id="url-origin">—</span></div>
+      </div>
+    </section>
+
+    <!-- SECTION: Route Params -->
+    <section id="route-params">
+      <h2>Section 3 &mdash; Route Pattern Matching (/product/:id)</h2>
+      <p>SPAs match URL patterns like <code>/product/:id</code>. Try some paths below.</p>
+
+      <div class="input-row">
+        <input type="text" id="route-test-input" placeholder="/product/amul-butter" value="/product/amul-butter">
+        <button id="btn-test-route">Match Route</button>
+      </div>
+
+      <div class="route-patterns">
+        <span class="pattern-chip">/product/:id</span>
+        <span class="pattern-chip">/category/:cat/product/:id</span>
+        <span class="pattern-chip">/</span>
+        <span class="pattern-chip">/about</span>
+      </div>
+
+      <div class="output-box" id="route-match-log"></div>
+    </section>
+
+    <!-- SECTION: URLSearchParams Builder -->
+    <section id="search-params">
+      <h2>Section 4 &mdash; URLSearchParams Builder</h2>
+      <p>Build and parse query strings safely.</p>
+
+      <div class="params-builder">
+        <div class="param-entry">
+          <input type="text" id="param-key" placeholder="key" value="from">
+          <input type="text" id="param-val" placeholder="value" value="DEL">
+          <button id="btn-add-param">Add</button>
+        </div>
+        <div class="current-params">
+          <span class="url-label">Current URL:</span>
+          <code id="built-url">?</code>
+        </div>
+        <div class="btn-row">
+          <button id="btn-clear-params">Clear All</button>
+        </div>
+      </div>
+
+      <div class="output-box" id="params-log"></div>
+    </section>
+
+    <!-- SECTION: Mini Router -->
+    <section id="mini-router">
+      <h2>Section 5 &mdash; Mini SPA Router</h2>
+      <p>A complete router mapping URL patterns to views, with 404 handling.</p>
+
+      <div class="btn-row">
+        <button class="router-link" data-path="/">Home</button>
+        <button class="router-link" data-path="/about">About</button>
+        <button class="router-link" data-path="/product/goa-resort?checkin=2025-03-15">Goa Resort</button>
+        <button class="router-link" data-path="/product/kerala-houseboat">Kerala Houseboat</button>
+        <button class="router-link" data-path="/category/hotels">Hotels Category</button>
+        <button class="router-link" data-path="/flights/international">404 Test</button>
+      </div>
+
+      <div class="router-view" id="router-view">Click a link above to navigate.</div>
+
+      <div class="output-box" id="router-log"></div>
+    </section>
+
+    <!-- SECTION: History Navigation -->
+    <section id="history-nav">
+      <h2>Section 6 &mdash; History Navigation Methods</h2>
+      <p>Programmatic back/forward for custom navigation buttons.</p>
+
+      <div class="btn-row">
+        <button id="btn-back">history.back()</button>
+        <button id="btn-forward">history.forward()</button>
+        <button id="btn-go-minus2">history.go(-2)</button>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><span class="stat-label">history.length</span><span class="stat-value" id="history-length">—</span></div>
+      </div>
+
+      <div class="output-box" id="history-log"></div>
+    </section>
+
+    <!-- SECTION: Key Takeaways -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <div class="output-box" id="takeaways-log"></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>16 — Web Storage | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 16: Web Storage — localStorage &amp; sessionStorage</h1>
+    <p class="subtitle">Persisting data in the browser across page loads</p>
+  </header>
+
+  <main>
+    <!-- SECTION 1: Flipkart Dark Mode Preference Panel -->
+    <section id="example-1">
+      <h2>Example 1 — Flipkart's Dark Mode Preference</h2>
+      <p>Toggle dark mode. Preference survives page refresh via <code>localStorage</code>.</p>
+      <div class="controls">
+        <button id="theme-toggle-btn">Toggle Dark Mode</button>
+        <span id="theme-status" class="badge">Loading...</span>
+      </div>
+      <div class="output-box" id="output-1"></div>
+    </section>
+
+    <!-- SECTION 2: sessionStorage Search Session -->
+    <section id="example-2">
+      <h2>Example 2 — sessionStorage for Search Session</h2>
+      <p>Search persists on refresh but NOT across tabs. Try opening in a new tab.</p>
+      <div class="controls">
+        <input type="text" id="search-input" placeholder="Search e.g. iPhone 15 Pro Max">
+        <button id="search-save-btn">Save Search</button>
+        <button id="search-load-btn">Load Saved</button>
+      </div>
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>localStorage</th><th>sessionStorage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Persistence</td><td>Until cleared</td><td>Until tab closes</td></tr>
+            <tr><td>Shared across tabs</td><td>YES (same origin)</td><td>NO (tab-scoped)</td></tr>
+            <tr><td>Capacity</td><td>~5-10 MB</td><td>~5-10 MB</td></tr>
+            <tr><td>Survives refresh</td><td>YES</td><td>YES</td></tr>
+            <tr><td>Survives restart</td><td>YES</td><td>NO</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="output-box" id="output-2"></div>
+    </section>
+
+    <!-- SECTION 3: Full API Demo -->
+    <section id="example-3">
+      <h2>Example 3 — Full API: setItem, getItem, removeItem, clear, key, length</h2>
+      <p>Manage stored data: iterate keys, remove specific items, or wipe everything.</p>
+      <div class="controls">
+        <input type="text" id="key-input" placeholder="Key">
+        <input type="text" id="value-input" placeholder="Value">
+        <button id="set-btn">Set Item</button>
+        <button id="get-btn">Get Item</button>
+        <button id="remove-btn">Remove Item</button>
+        <button id="clear-btn" class="btn-danger">Clear All</button>
+      </div>
+      <div class="output-box" id="output-3"></div>
+    </section>
+
+    <!-- SECTION 4: Storing Objects (JSON Gotcha) -->
+    <section id="example-4">
+      <h2>Example 4 — Storing Objects &amp; Arrays (The JSON Gotcha)</h2>
+      <p>localStorage stores ONLY strings. Storing objects directly loses data!</p>
+      <div class="controls">
+        <button id="store-wrong-btn" class="btn-danger">Store Object WRONG Way</button>
+        <button id="store-right-btn" class="btn-success">Store Object RIGHT Way</button>
+        <button id="safe-get-btn">Safe Get JSON</button>
+      </div>
+      <div class="output-box" id="output-4"></div>
+    </section>
+
+    <!-- SECTION 5: Storage Availability & Usage Meter -->
+    <section id="example-5">
+      <h2>Example 5 — Storage Limits &amp; Usage Meter</h2>
+      <p>Check storage availability and monitor usage. Private browsing may disable storage.</p>
+      <div class="controls">
+        <button id="check-avail-btn">Check Availability</button>
+        <button id="check-usage-btn">Check Usage</button>
+      </div>
+      <div class="usage-meter">
+        <div class="meter-label">Storage Usage: <span id="usage-text">--</span></div>
+        <div class="meter-bar">
+          <div class="meter-fill" id="usage-fill" style="width: 0%"></div>
+        </div>
+        <div class="meter-detail">Approx. limit: 5 MB</div>
+      </div>
+      <div class="output-box" id="output-5"></div>
+    </section>
+
+    <!-- SECTION 6: Cross-Tab Communication -->
+    <section id="example-6">
+      <h2>Example 6 — Cross-Tab Communication (storage Event)</h2>
+      <p>Open this page in <strong>2 tabs</strong>. Changes in one tab fire the <code>storage</code> event in the other.</p>
+      <div class="controls">
+        <button id="cross-tab-btn">Update Cart (triggers event in other tabs)</button>
+        <span class="hint">Open another tab and watch for updates below</span>
+      </div>
+      <div class="cross-tab-indicator" id="cross-tab-indicator">
+        Waiting for storage events from other tabs...
+      </div>
+      <div class="output-box" id="output-6"></div>
+    </section>
+
+    <!-- SECTION 7: Recently Viewed Products -->
+    <section id="example-7">
+      <h2>Example 7 — Recently Viewed Products</h2>
+      <p>Persists across page refreshes. Max 5 items — newest first. Re-viewing moves item to front.</p>
+      <div class="product-grid" id="product-grid">
+        <div class="product-card" data-id="1" data-name="iPhone 15 Pro" data-price="134900">
+          <div class="product-icon">📱</div>
+          <div class="product-name">iPhone 15 Pro</div>
+          <div class="product-price">Rs.1,34,900</div>
+          <button class="view-btn">View Product</button>
+        </div>
+        <div class="product-card" data-id="2" data-name="Samsung Galaxy S24" data-price="74999">
+          <div class="product-icon">📱</div>
+          <div class="product-name">Samsung Galaxy S24</div>
+          <div class="product-price">Rs.74,999</div>
+          <button class="view-btn">View Product</button>
+        </div>
+        <div class="product-card" data-id="3" data-name="OnePlus 12" data-price="64999">
+          <div class="product-icon">📱</div>
+          <div class="product-name">OnePlus 12</div>
+          <div class="product-price">Rs.64,999</div>
+          <button class="view-btn">View Product</button>
+        </div>
+        <div class="product-card" data-id="4" data-name="Pixel 8 Pro" data-price="106999">
+          <div class="product-icon">📱</div>
+          <div class="product-name">Pixel 8 Pro</div>
+          <div class="product-price">Rs.1,06,999</div>
+          <button class="view-btn">View Product</button>
+        </div>
+        <div class="product-card" data-id="5" data-name="Nothing Phone 2" data-price="44999">
+          <div class="product-icon">📱</div>
+          <div class="product-name">Nothing Phone 2</div>
+          <div class="product-price">Rs.44,999</div>
+          <button class="view-btn">View Product</button>
+        </div>
+        <div class="product-card" data-id="6" data-name="Vivo X100 Pro" data-price="89999">
+          <div class="product-icon">📱</div>
+          <div class="product-name">Vivo X100 Pro</div>
+          <div class="product-price">Rs.89,999</div>
+          <button class="view-btn">View Product</button>
+        </div>
+      </div>
+      <h3>Recently Viewed</h3>
+      <div class="recently-viewed-carousel" id="recently-viewed"></div>
+      <div class="output-box" id="output-7"></div>
+    </section>
+
+    <!-- SECTION 8: TTL Cache Demo -->
+    <section id="example-8">
+      <h2>Example 8 — TTL-Based Cache (FlipkartStorage Wrapper)</h2>
+      <p>localStorage has NO expiry. This wrapper embeds timestamps for automatic expiration.</p>
+      <div class="controls">
+        <button id="ttl-store-btn">Store Recommendations (30s TTL)</button>
+        <button id="ttl-read-btn">Read Recommendations</button>
+        <button id="ttl-store-theme-btn">Store Theme (No TTL)</button>
+        <button id="ttl-read-theme-btn">Read Theme</button>
+      </div>
+      <div class="output-box" id="output-8"></div>
+    </section>
+
+    <!-- SECTION 9: Storage Inspector -->
+    <section id="example-9">
+      <h2>Storage Inspector</h2>
+      <p>View all keys/values in localStorage and sessionStorage in real-time.</p>
+      <div class="controls">
+        <button id="refresh-inspector-btn">Refresh Inspector</button>
+      </div>
+      <div class="inspector-grid">
+        <div class="inspector-panel">
+          <h3>localStorage</h3>
+          <div class="inspector-table" id="local-inspector"></div>
+        </div>
+        <div class="inspector-panel">
+          <h3>sessionStorage</h3>
+          <div class="inspector-table" id="session-inspector"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol>
+        <li><strong>localStorage</strong> persists forever; <strong>sessionStorage</strong> lives only for the current tab session.</li>
+        <li>Both store ONLY strings — use <code>JSON.stringify/JSON.parse</code> for objects and arrays.</li>
+        <li>Always wrap <code>JSON.parse</code> in try-catch for corrupted data.</li>
+        <li>The <code>storage</code> event fires in OTHER tabs only — useful for cross-tab sync.</li>
+        <li>Check storage availability before use (private browsing may block it).</li>
+        <li>Build a TTL wrapper since localStorage has no expiry.</li>
+        <li>NEVER store auth tokens, passwords, or PII — use HttpOnly cookies.</li>
+        <li>Storage is scoped to origin (protocol + domain + port).</li>
+        <li>Capacity is ~5-10 MB per origin.</li>
+        <li>Choose right storage: localStorage for preferences, sessionStorage for temp state, cookies for auth, IndexedDB for large structured data.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

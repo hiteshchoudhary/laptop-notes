@@ -1,0 +1,321 @@
+/* ============================================================
+   03 — Traversing the DOM Styles
+   Dark theme, modern, code-learning aesthetic
+   ============================================================ */
+
+:root {
+  --primary: #6366f1;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --surface: #1e293b;
+  --border: #334155;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --radius: 8px;
+  --font-mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 2rem 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+header h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
+.subtitle { color: #94a3b8; font-size: 1.05rem; }
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+section h2 {
+  font-size: 1.25rem;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.description { color: #94a3b8; margin-bottom: 1rem; font-size: 0.95rem; }
+
+code {
+  background: #0f172a;
+  color: var(--warning);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+/* --- Buttons --- */
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  transition: background 0.2s, transform 0.1s;
+  margin: 0.25rem;
+}
+
+button:hover { background: #818cf8; transform: translateY(-1px); }
+button:active { transform: translateY(0); background: #4f46e5; }
+
+.btn-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+
+/* --- Output Panel --- */
+.output-panel {
+  background: #020617;
+  color: #22c55e;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-top: 1rem;
+  min-height: 2.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- IRCTC App --- */
+.irctc-app {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.booking-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.booking-header form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.booking-header input {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.booking-header input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.train-list { margin-bottom: 1rem; }
+
+.train-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.train-name {
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.coach {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.coach-label {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.seat-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.seat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.seat.available {
+  background: #065f46;
+  color: #6ee7b7;
+  border-color: #059669;
+}
+
+.seat.available:hover {
+  background: #047857;
+  transform: scale(1.1);
+}
+
+.seat.booked {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-color: #991b1b;
+  cursor: not-allowed;
+}
+
+.seat.current {
+  border-color: var(--warning);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+  transform: scale(1.15);
+}
+
+.seat.sibling-highlight {
+  border-color: #60a5fa;
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+}
+
+.seat.parent-highlight {
+  border-color: #a78bfa;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
+}
+
+.payment-section {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.fare-info {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* --- Breadcrumb --- */
+.breadcrumb {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--warning);
+  margin-top: 0.75rem;
+}
+
+/* --- Table --- */
+#schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+#schedule-table th, #schedule-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+#schedule-table th {
+  background: var(--bg);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+#schedule-table td { background: var(--surface); }
+
+#schedule-table tr:hover td { background: var(--bg); }
+
+/* --- Cheat Sheet --- */
+.cheat-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.cheat-group {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.cheat-group h3 {
+  color: var(--primary);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.cheat-group code {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.8rem;
+}
+
+/* --- Takeaways --- */
+.takeaway-list { padding-left: 1.25rem; }
+.takeaway-list li { margin-bottom: 0.5rem; font-size: 0.92rem; color: #cbd5e1; }
+#takeaways { border-left: 3px solid var(--success); }
+
+/* --- Responsive --- */
+@media (max-width: 640px) {
+  body { padding: 1rem 0.5rem; }
+  header h1 { font-size: 1.5rem; }
+  section { padding: 1rem; }
+  .booking-header form { flex-direction: column; }
+  .btn-group { flex-direction: column; }
+  button { width: 100%; }
+  .cheat-sheet { grid-template-columns: 1fr; }
+  .seat { width: 35px; height: 35px; font-size: 0.75rem; }
+}

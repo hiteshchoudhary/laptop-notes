@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 — Keyboard, Mouse &amp; Touch Events | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 10: Keyboard, Mouse &amp; Touch Events</h1>
+    <p class="subtitle">Handling keyboard shortcuts, mouse interactions, and touch gestures</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1: Keyboard Shortcut Panel (Zerodha-style) -->
+    <section id="example-1">
+      <h2>Example 1 — Zerodha-Style Keyboard Shortcuts</h2>
+      <p class="description">Press keys to trigger shortcuts. Type in the input to test the guard (shortcuts disabled during typing).</p>
+      <div class="shortcuts-panel">
+        <div class="shortcut-row">
+          <kbd>B</kbd><span>Open Buy form</span>
+          <span class="shortcut-status" id="sc-b">—</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>S</kbd><span>Open Sell form</span>
+          <span class="shortcut-status" id="sc-s">—</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>W</kbd><span>Toggle Watchlist</span>
+          <span class="shortcut-status" id="sc-w">—</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>Esc</kbd><span>Close panel</span>
+          <span class="shortcut-status" id="sc-escape">—</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>Ctrl</kbd>+<kbd>S</kbd><span>Save (prevent browser save)</span>
+          <span class="shortcut-status" id="sc-ctrl-s">—</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>Ctrl</kbd>+<kbd>K</kbd><span>Command palette</span>
+          <span class="shortcut-status" id="sc-ctrl-k">—</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>?</kbd><span>Show help (Shift+/)</span>
+          <span class="shortcut-status" id="sc-help">—</span>
+        </div>
+      </div>
+      <div class="demo-row">
+        <input type="text" id="shortcut-input" class="demo-input" placeholder="Type here (shortcuts disabled during input)">
+      </div>
+      <div class="output-console" id="output-1"></div>
+    </section>
+
+    <!-- EXAMPLE 2: Live Key Press Display -->
+    <section id="example-2">
+      <h2>Example 2 — Live Key Press Display</h2>
+      <p class="description">Press any key. See event.key, event.code, modifiers, and repeat status in real time.</p>
+      <div class="key-display-grid">
+        <div class="key-card">
+          <div class="key-label">event.key</div>
+          <div class="key-value" id="display-key">—</div>
+        </div>
+        <div class="key-card">
+          <div class="key-label">event.code</div>
+          <div class="key-value" id="display-code">—</div>
+        </div>
+        <div class="key-card">
+          <div class="key-label">event.keyCode</div>
+          <div class="key-value deprecated" id="display-keycode">— (deprecated)</div>
+        </div>
+        <div class="key-card">
+          <div class="key-label">event.type</div>
+          <div class="key-value" id="display-type">—</div>
+        </div>
+      </div>
+      <div class="modifier-display">
+        <span class="mod-badge" id="mod-ctrl">Ctrl</span>
+        <span class="mod-badge" id="mod-shift">Shift</span>
+        <span class="mod-badge" id="mod-alt">Alt</span>
+        <span class="mod-badge" id="mod-meta">Meta</span>
+        <span class="mod-badge" id="mod-repeat">Repeat</span>
+      </div>
+      <div class="output-console" id="output-2"></div>
+    </section>
+
+    <!-- EXAMPLE 3: Mouse Tracking Area -->
+    <section id="example-3">
+      <h2>Example 3 — Mouse Position &amp; Button Tracking</h2>
+      <p class="description">Move, click, and right-click inside the area. See all coordinate systems and button info.</p>
+      <div class="mouse-area" id="mouse-area">
+        <div class="crosshair" id="crosshair"></div>
+        <div class="coord-label" id="coord-label">Move mouse here</div>
+      </div>
+      <div class="coord-grid">
+        <div class="coord-card">
+          <span class="coord-title">clientX/Y (viewport)</span>
+          <span class="coord-value" id="coord-client">—</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-title">pageX/Y (document)</span>
+          <span class="coord-value" id="coord-page">—</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-title">offsetX/Y (element)</span>
+          <span class="coord-value" id="coord-offset">—</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-title">event.button</span>
+          <span class="coord-value" id="coord-button">—</span>
+        </div>
+      </div>
+      <div class="output-console" id="output-3"></div>
+    </section>
+
+    <!-- EXAMPLE 4: Draggable Element -->
+    <section id="example-4">
+      <h2>Example 4 — Draggable Element (Pointer Events)</h2>
+      <p class="description">Drag the box with mouse or touch. Uses setPointerCapture for smooth dragging.</p>
+      <div class="drag-container" id="drag-container">
+        <div class="draggable" id="draggable">Drag me!</div>
+      </div>
+      <div class="drag-info">
+        <span>Position: <strong id="drag-pos">x: 0, y: 0</strong></span>
+        <span>Pointer type: <strong id="drag-pointer">—</strong></span>
+      </div>
+      <div class="output-console" id="output-4"></div>
+    </section>
+
+    <!-- EXAMPLE 5: Drawing Area -->
+    <section id="example-5">
+      <h2>Example 5 — Drawing Area (Pointer Events)</h2>
+      <p class="description">Draw with mouse, touch, or stylus. Change color and size. Works on all devices.</p>
+      <div class="draw-controls">
+        <label>Color: <input type="color" id="draw-color" value="#6366f1"></label>
+        <label>Size: <input type="range" id="draw-size" min="1" max="20" value="4"> <span id="size-display">4</span>px</label>
+        <button id="clear-canvas" class="action-btn danger">Clear</button>
+      </div>
+      <canvas id="draw-canvas" width="800" height="300"></canvas>
+      <div class="output-console" id="output-5"></div>
+    </section>
+
+    <!-- EXAMPLE 6: Mouse Events Detail -->
+    <section id="example-6">
+      <h2>Example 6 — Click, DblClick, ContextMenu</h2>
+      <p class="description">Single click, double click, right-click the target. Notice event firing order.</p>
+      <div class="demo-row">
+        <div class="click-target" id="click-target">Click Target</div>
+      </div>
+      <div class="output-console" id="output-6"></div>
+    </section>
+
+    <!-- EXAMPLE 7: Shortcut Hints Overlay -->
+    <section id="example-7">
+      <h2>Example 7 — Shortcut Hints Overlay</h2>
+      <p class="description">Hold <kbd>Ctrl</kbd> or <kbd>Cmd</kbd> to reveal shortcut hints on the buttons below.</p>
+      <div class="hint-buttons">
+        <button class="hint-btn" data-shortcut="S">
+          <span class="hint-overlay">Ctrl+S</span>
+          Save
+        </button>
+        <button class="hint-btn" data-shortcut="K">
+          <span class="hint-overlay">Ctrl+K</span>
+          Search
+        </button>
+        <button class="hint-btn" data-shortcut="N">
+          <span class="hint-overlay">Ctrl+N</span>
+          New
+        </button>
+        <button class="hint-btn" data-shortcut="D">
+          <span class="hint-overlay">Ctrl+D</span>
+          Delete
+        </button>
+      </div>
+      <div class="output-console" id="output-7"></div>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

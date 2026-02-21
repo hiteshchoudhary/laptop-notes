@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01 — DOM Introduction | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 01: DOM Introduction</h1>
+    <p class="subtitle">Understanding the Document Object Model — the live blueprint of every web page</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1 — Visual DOM Tree Diagram -->
+    <section id="example-1">
+      <h2>Example 1 — The Flipkart Blueprint: What is the DOM?</h2>
+      <p class="description">The DOM is a tree-structured representation of an HTML document. Every tag becomes an Element node, every piece of text becomes a Text node, and even comments become Comment nodes.</p>
+      <div class="dom-tree">
+        <div class="tree-node root">Document
+          <div class="tree-node element">html
+            <div class="tree-node element">head
+              <div class="tree-node element">title
+                <div class="tree-node text">"Flipkart"</div>
+              </div>
+            </div>
+            <div class="tree-node element">body
+              <div class="tree-node element">h1
+                <div class="tree-node text">"Welcome to Flipkart"</div>
+              </div>
+              <div class="tree-node comment">&lt;!-- Navigation --&gt;</div>
+              <div class="tree-node element">nav
+                <div class="tree-node text">"Shop by Category"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="dot root-dot"></span> Document</span>
+        <span class="legend-item"><span class="dot element-dot"></span> Element Node</span>
+        <span class="legend-item"><span class="dot text-dot"></span> Text Node</span>
+        <span class="legend-item"><span class="dot comment-dot"></span> Comment Node</span>
+      </div>
+    </section>
+
+    <!-- EXAMPLE 2 — window vs document vs globalThis -->
+    <section id="example-2">
+      <h2>Example 2 — window vs document vs globalThis</h2>
+      <p class="description">Think of a web app as an office building. <code>window</code> is the entire building. <code>document</code> is the main hall with HTML content. <code>globalThis</code> is a universal key for any JS environment.</p>
+      <div class="btn-group">
+        <button id="btn-window">Inspect window</button>
+        <button id="btn-document">Inspect document</button>
+        <button id="btn-globalthis">Inspect globalThis</button>
+      </div>
+      <pre class="output-panel" id="output-2"></pre>
+    </section>
+
+    <!-- EXAMPLE 3 — Node Types -->
+    <section id="example-3">
+      <h2>Example 3 — DOM Node Types</h2>
+      <p class="description">Not everything is an HTML element. The DOM has different node types: Element (1), Text (3), Comment (8), Document (9).</p>
+      <div class="inspect-area" id="inspect-target">
+        <h3 id="product-title">iPhone 15 <span class="price">$79,999</span></h3>
+        <!-- price API endpoint -->
+        <p id="product-desc">The latest flagship from Apple.</p>
+      </div>
+      <button id="btn-inspect">Inspect All Nodes Above</button>
+      <pre class="output-panel" id="output-3"></pre>
+    </section>
+
+    <!-- EXAMPLE 4 — document.documentElement, head, body -->
+    <section id="example-4">
+      <h2>Example 4 — Top-Level DOM Shortcuts</h2>
+      <p class="description">Direct access properties for the top-level elements: <code>document.documentElement</code>, <code>document.head</code>, <code>document.body</code>.</p>
+      <button id="btn-shortcuts">Explore Shortcuts</button>
+      <pre class="output-panel" id="output-4"></pre>
+    </section>
+
+    <!-- EXAMPLE 5 — nodeType, nodeName, nodeValue -->
+    <section id="example-5">
+      <h2>Example 5 — nodeType, nodeName, nodeValue Deep Dive</h2>
+      <p class="description">For elements, <code>nodeValue</code> is null but <code>textContent</code> gathers all descendant text. For text nodes, <code>nodeValue</code> IS the text.</p>
+      <div id="price-demo">
+        <p id="price-paragraph">Price: <strong>$79,999</strong></p>
+      </div>
+      <button id="btn-nodeprops">Inspect nodeType / nodeName / nodeValue</button>
+      <pre class="output-panel" id="output-5"></pre>
+    </section>
+
+    <!-- EXAMPLE 6 — DOM vs HTML Source -->
+    <section id="example-6">
+      <h2>Example 6 — DOM vs HTML Source</h2>
+      <p class="description">The DOM is a LIVE object. The HTML source is STATIC text. The browser auto-corrects, JavaScript modifies, and user input changes the live DOM.</p>
+      <div class="demo-area">
+        <table id="auto-correct-demo">
+          <tr><td>Browser auto-inserts <code>&lt;tbody&gt;</code></td></tr>
+        </table>
+        <input type="text" id="live-input" placeholder="Type here and inspect..." value="initial">
+      </div>
+      <button id="btn-domvshtml">Show DOM vs HTML Differences</button>
+      <pre class="output-panel" id="output-6"></pre>
+    </section>
+
+    <!-- EXAMPLE 7 — console.dir vs console.log -->
+    <section id="example-7">
+      <h2>Example 7 — console.dir() vs console.log()</h2>
+      <p class="description"><code>console.log(element)</code> shows HTML markup. <code>console.dir(element)</code> shows the JavaScript object with all properties.</p>
+      <div class="product-card" id="demo-card" data-id="42">
+        <h3>Product Card</h3>
+        <p>Check your browser console for the difference!</p>
+      </div>
+      <button id="btn-logdir">console.log vs console.dir (open DevTools!)</button>
+      <pre class="output-panel" id="output-7"></pre>
+    </section>
+
+    <!-- EXAMPLE 8 — Browser Rendering Pipeline -->
+    <section id="example-8">
+      <h2>Example 8 — Browser Rendering Pipeline</h2>
+      <p class="description">The browser follows a precise pipeline: HTML Parsing, CSS Parsing, Render Tree, Layout, Paint, Compositing.</p>
+      <div class="pipeline">
+        <div class="pipeline-step" data-step="1">
+          <div class="step-number">1</div>
+          <div class="step-label">HTML Parsing</div>
+          <div class="step-detail">DOM Tree</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step" data-step="2">
+          <div class="step-number">2</div>
+          <div class="step-label">CSS Parsing</div>
+          <div class="step-detail">CSSOM</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step" data-step="3">
+          <div class="step-number">3</div>
+          <div class="step-label">Render Tree</div>
+          <div class="step-detail">DOM + CSSOM</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step" data-step="4">
+          <div class="step-number">4</div>
+          <div class="step-label">Layout</div>
+          <div class="step-detail">Geometry (Reflow)</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step" data-step="5">
+          <div class="step-number">5</div>
+          <div class="step-label">Paint</div>
+          <div class="step-detail">Pixels on Screen</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step" data-step="6">
+          <div class="step-number">6</div>
+          <div class="step-label">Compositing</div>
+          <div class="step-detail">Layer Merging (GPU)</div>
+        </div>
+      </div>
+      <button id="btn-pipeline">Animate Pipeline</button>
+      <pre class="output-panel" id="output-8"></pre>
+    </section>
+
+    <!-- EXAMPLE 9 — Why DOM Manipulation is Expensive -->
+    <section id="example-9">
+      <h2>Example 9 — Why DOM Manipulation is Expensive</h2>
+      <p class="description">DOM manipulation triggers reflow and repaint. Minimizing these is key to building performant web apps.</p>
+      <div class="btn-group">
+        <button id="btn-bad-insert">Bad: Insert 200 items one-by-one</button>
+        <button id="btn-good-insert">Good: Batch with DocumentFragment</button>
+      </div>
+      <div class="perf-results">
+        <span id="perf-bad">--</span>
+        <span id="perf-good">--</span>
+      </div>
+      <div id="insert-target" class="insert-container"></div>
+      <pre class="output-panel" id="output-9"></pre>
+    </section>
+
+    <!-- EXAMPLE 10 — DOM Tree Audit -->
+    <section id="example-10">
+      <h2>Example 10 — DOM Tree Audit (Practical)</h2>
+      <p class="description">Count node types, measure tree depth. Google recommends &lt; 1500 nodes, depth &lt; 32.</p>
+      <button id="btn-audit">Audit This Page's DOM</button>
+      <pre class="output-panel" id="output-10"></pre>
+    </section>
+
+    <!-- EXAMPLE 11 — Common Gotchas -->
+    <section id="example-11">
+      <h2>Example 11 — Common Gotchas</h2>
+      <p class="description">The top 5 DOM mistakes new developers make.</p>
+      <div class="gotchas-list">
+        <div class="gotcha">
+          <span class="gotcha-num">1</span>
+          <span>Script in <code>&lt;head&gt;</code> without <code>defer</code> &rarr; <code>document.body</code> is null</span>
+        </div>
+        <div class="gotcha">
+          <span class="gotcha-num">2</span>
+          <span><code>childNodes</code> includes whitespace text nodes; use <code>children</code> instead</span>
+        </div>
+        <div class="gotcha">
+          <span class="gotcha-num">3</span>
+          <span><code>getElementsBy*</code> is LIVE; <code>querySelectorAll</code> is STATIC</span>
+        </div>
+        <div class="gotcha">
+          <span class="gotcha-num">4</span>
+          <span><code>innerHTML +=</code> destroys event listeners on existing children</span>
+        </div>
+        <div class="gotcha">
+          <span class="gotcha-num">5</span>
+          <span>Reading <code>offsetHeight</code> in a DOM-writing loop = layout thrashing</span>
+        </div>
+      </div>
+      <button id="btn-gotcha-demo">Demo: childNodes vs children</button>
+      <pre class="output-panel" id="output-11"></pre>
+    </section>
+
+    <!-- EXAMPLE 12 — DOM Ready Events -->
+    <section id="example-12">
+      <h2>Example 12 — DOMContentLoaded vs window.onload</h2>
+      <p class="description"><code>DOMContentLoaded</code> fires when HTML is parsed. <code>window.onload</code> fires after ALL resources load. Most scripts use DOMContentLoaded.</p>
+      <pre class="output-panel" id="output-12"></pre>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol class="takeaway-list">
+        <li>The DOM is a LIVE tree of objects, not the same as HTML source.</li>
+        <li><code>window</code> = global browser object; <code>document</code> = HTML document; <code>globalThis</code> works in all JS environments.</li>
+        <li>Every node has <code>nodeType</code> (1=Element, 3=Text, 8=Comment), <code>nodeName</code>, and <code>nodeValue</code>.</li>
+        <li><code>document.documentElement</code>, <code>.head</code>, <code>.body</code> are instant shortcuts.</li>
+        <li><code>console.dir(element)</code> shows the JS object; <code>console.log()</code> shows HTML.</li>
+        <li>Rendering pipeline: HTML &rarr; DOM &rarr; CSSOM &rarr; Render Tree &rarr; Layout &rarr; Paint &rarr; Compositing.</li>
+        <li>DOM manipulation is expensive: batch changes, use DocumentFragment, prefer CSS transforms for animations.</li>
+        <li>Use <code>.children</code> over <code>.childNodes</code> unless you need text/comment nodes.</li>
+        <li>Use <code>DOMContentLoaded</code> or <code>&lt;script defer&gt;</code> to ensure DOM is ready before running your code.</li>
+      </ol>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

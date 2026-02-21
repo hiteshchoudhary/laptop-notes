@@ -1,0 +1,46 @@
+# ============================================================
+# GyanSetu — Docker Compose
+# ============================================================
+# Run with: docker-compose up --build
+#
+# Two services:
+#   - web: FastAPI application
+#   - chromadb: Vector database server
+#
+# Make sure to create a .env file first:
+#   cp .env.example .env
+# ============================================================
+
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - chroma_data:/app/chroma_data
+      - upload_data:/app/uploads
+    depends_on:
+      - chromadb
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8001
+    restart: unless-stopped
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+  upload_data:

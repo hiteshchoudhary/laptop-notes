@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>25 — Performance &amp; Optimization | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 25: Performance &amp; DOM Optimization</h1>
+    <p class="subtitle">Making web apps fast by understanding the browser rendering pipeline</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION: Rendering Pipeline -->
+    <section id="pipeline-section">
+      <h2>Section 1 &mdash; The Browser Rendering Pipeline</h2>
+      <p>To optimize, you must understand how HTML/CSS/JS become pixels on screen.</p>
+
+      <div class="pipeline">
+        <div class="pipe-step">HTML<br><small>DOM</small></div>
+        <span class="pipe-arrow">&rarr;</span>
+        <div class="pipe-step">CSS<br><small>CSSOM</small></div>
+        <span class="pipe-arrow">&rarr;</span>
+        <div class="pipe-step">Render<br><small>Tree</small></div>
+        <span class="pipe-arrow">&rarr;</span>
+        <div class="pipe-step expensive">Layout<br><small>Reflow</small></div>
+        <span class="pipe-arrow">&rarr;</span>
+        <div class="pipe-step moderate">Paint<br><small>Repaint</small></div>
+        <span class="pipe-arrow">&rarr;</span>
+        <div class="pipe-step cheap">Composite<br><small>GPU</small></div>
+      </div>
+
+      <div class="cost-legend">
+        <span class="legend-item"><span class="dot expensive-dot"></span> Expensive (reflow)</span>
+        <span class="legend-item"><span class="dot moderate-dot"></span> Moderate (repaint)</span>
+        <span class="legend-item"><span class="dot cheap-dot"></span> Cheap (composite/GPU)</span>
+      </div>
+
+      <div class="output-box" id="pipeline-log"></div>
+    </section>
+
+    <!-- SECTION: Layout Thrashing -->
+    <section id="thrashing-section">
+      <h2>Section 2 &mdash; Layout Thrashing Demo</h2>
+      <p>Interleaving DOM reads and writes forces the browser to recalculate layout on EVERY read. Compare bad vs good code.</p>
+
+      <div class="thrash-grid" id="thrash-grid"></div>
+
+      <div class="btn-row">
+        <button id="btn-bad-thrash" class="danger-btn">Bad: Read-Write Loop</button>
+        <button id="btn-good-thrash" class="success-btn">Good: Batch Read, Then Write</button>
+        <button id="btn-reset-thrash">Reset</button>
+      </div>
+
+      <div class="timing-compare">
+        <div class="timing-box">
+          <span class="timing-label">Bad (thrashing)</span>
+          <span class="timing-value" id="bad-time">&mdash;</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-label">Good (batched)</span>
+          <span class="timing-value" id="good-time">&mdash;</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-label">Speedup</span>
+          <span class="timing-value" id="speedup">&mdash;</span>
+        </div>
+      </div>
+
+      <div class="reflow-counter">Reflow estimate: <strong id="reflow-count">0</strong></div>
+
+      <div class="output-box" id="thrash-log"></div>
+    </section>
+
+    <!-- SECTION: DocumentFragment -->
+    <section id="fragment-section">
+      <h2>Section 3 &mdash; DocumentFragment Batch Insert</h2>
+      <p>Each appendChild potentially triggers a reflow. DocumentFragment builds everything in memory, inserts once.</p>
+
+      <div class="btn-row">
+        <button id="btn-bad-insert">Bad: Individual Appends (500)</button>
+        <button id="btn-good-insert">Good: DocumentFragment (500)</button>
+        <button id="btn-clear-insert">Clear</button>
+      </div>
+
+      <div class="timing-compare">
+        <div class="timing-box">
+          <span class="timing-label">Individual</span>
+          <span class="timing-value" id="bad-insert-time">&mdash;</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-label">Fragment</span>
+          <span class="timing-value" id="good-insert-time">&mdash;</span>
+        </div>
+      </div>
+
+      <div class="insert-container" id="insert-container"></div>
+
+      <div class="output-box" id="fragment-log"></div>
+    </section>
+
+    <!-- SECTION: Virtual Scroll -->
+    <section id="virtual-scroll-section">
+      <h2>Section 4 &mdash; Virtual Scrolling (10,000 Items)</h2>
+      <p>Flipkart has 10,000+ products. Virtual scrolling renders only the ~20 visible items instead of all 10,000 DOM nodes.</p>
+
+      <div class="virtual-stats">
+        <div class="v-stat"><span class="v-label">Total Items</span><span class="v-value">10,000</span></div>
+        <div class="v-stat"><span class="v-label">DOM Nodes</span><span class="v-value" id="v-dom-count">0</span></div>
+        <div class="v-stat"><span class="v-label">Visible Range</span><span class="v-value" id="v-range">—</span></div>
+        <div class="v-stat"><span class="v-label">Memory Saved</span><span class="v-value" id="v-memory">—</span></div>
+      </div>
+
+      <div class="virtual-viewport" id="virtual-viewport">
+        <div class="virtual-spacer" id="virtual-spacer"></div>
+        <div class="virtual-content" id="virtual-content"></div>
+      </div>
+
+      <div class="output-box" id="virtual-log"></div>
+    </section>
+
+    <!-- SECTION: Debounce / Throttle -->
+    <section id="debounce-section">
+      <h2>Section 5 &mdash; Debounce &amp; Throttle Live Demo</h2>
+      <p>Scroll fires 100+ times/sec. Debounce waits until you stop. Throttle limits to N calls/sec.</p>
+
+      <div class="demo-input-area">
+        <label>Type to see debounce vs raw:</label>
+        <input type="text" id="debounce-input" placeholder="Start typing...">
+      </div>
+
+      <div class="timing-compare">
+        <div class="timing-box">
+          <span class="timing-label">Raw Events</span>
+          <span class="timing-value" id="raw-count">0</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-label">Debounced (300ms)</span>
+          <span class="timing-value" id="debounce-count">0</span>
+        </div>
+        <div class="timing-box">
+          <span class="timing-label">Throttled (200ms)</span>
+          <span class="timing-value" id="throttle-count">0</span>
+        </div>
+      </div>
+
+      <div class="output-box" id="debounce-log"></div>
+    </section>
+
+    <!-- SECTION: Performance Metrics -->
+    <section id="metrics-section">
+      <h2>Section 6 &mdash; Core Web Vitals Dashboard</h2>
+      <p>Google uses LCP, INP, and CLS as ranking factors. Poor scores = lower SEO ranking.</p>
+
+      <div class="vitals-grid">
+        <div class="vital-card">
+          <h3>LCP</h3>
+          <p class="vital-desc">Largest Contentful Paint</p>
+          <div class="vital-meter">
+            <div class="vital-bar" id="lcp-bar" style="width: 0%"></div>
+          </div>
+          <span class="vital-score" id="lcp-score">&mdash;</span>
+          <p class="vital-target">Good: &lt;2.5s | Poor: &gt;4s</p>
+        </div>
+
+        <div class="vital-card">
+          <h3>INP</h3>
+          <p class="vital-desc">Interaction to Next Paint</p>
+          <div class="vital-meter">
+            <div class="vital-bar" id="inp-bar" style="width: 0%"></div>
+          </div>
+          <span class="vital-score" id="inp-score">&mdash;</span>
+          <p class="vital-target">Good: &lt;200ms | Poor: &gt;500ms</p>
+        </div>
+
+        <div class="vital-card">
+          <h3>CLS</h3>
+          <p class="vital-desc">Cumulative Layout Shift</p>
+          <div class="vital-meter">
+            <div class="vital-bar" id="cls-bar" style="width: 0%"></div>
+          </div>
+          <span class="vital-score" id="cls-score">&mdash;</span>
+          <p class="vital-target">Good: &lt;0.1 | Poor: &gt;0.25</p>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="btn-simulate-metrics">Simulate Page Load Metrics</button>
+      </div>
+
+      <div class="output-box" id="metrics-log"></div>
+    </section>
+
+    <!-- SECTION: Resource Hints -->
+    <section id="resource-section">
+      <h2>Section 7 &mdash; Resource Hints</h2>
+      <p>Start loading critical resources BEFORE the browser discovers them naturally.</p>
+
+      <div class="resource-grid">
+        <div class="resource-card">
+          <h4>Preload</h4>
+          <p>This page's critical resources, load ASAP</p>
+          <code>&lt;link rel="preload" href="/fonts/Inter.woff2" as="font"&gt;</code>
+        </div>
+        <div class="resource-card">
+          <h4>Prefetch</h4>
+          <p>Next page's resources, load during idle time</p>
+          <code>&lt;link rel="prefetch" href="/product/123.json"&gt;</code>
+        </div>
+        <div class="resource-card">
+          <h4>Preconnect</h4>
+          <p>Establish connection to third-party domain</p>
+          <code>&lt;link rel="preconnect" href="https://cdn.flipkart.com"&gt;</code>
+        </div>
+        <div class="resource-card">
+          <h4>DNS Prefetch</h4>
+          <p>Resolve DNS early for third-party domain</p>
+          <code>&lt;link rel="dns-prefetch" href="https://analytics.example.com"&gt;</code>
+        </div>
+      </div>
+
+      <div class="output-box" id="resource-log"></div>
+    </section>
+
+    <!-- SECTION: Lazy Loading -->
+    <section id="lazy-section">
+      <h2>Section 8 &mdash; Image Lazy Loading</h2>
+      <p>Images are 50-80% of page bytes. Lazy loading defers off-screen images.</p>
+
+      <div class="lazy-comparison">
+        <div class="lazy-card">
+          <h4>Native Lazy (recommended)</h4>
+          <code>&lt;img loading="lazy" src="..." width="200" height="200"&gt;</code>
+          <p>Browser handles everything. Set width/height to prevent CLS.</p>
+        </div>
+        <div class="lazy-card">
+          <h4>IntersectionObserver (custom)</h4>
+          <code>observer.observe(img) &rarr; load when 200px away</code>
+          <p>More control: custom rootMargin, placeholder swap, animation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Optimization Results -->
+    <section id="results-section">
+      <h2>Section 9 &mdash; Before vs After Optimization</h2>
+      <p>Apply everything to a real Flipkart-like page, step by step.</p>
+
+      <table class="results-table">
+        <thead>
+          <tr><th>Metric</th><th>Before</th><th>After</th><th>Improvement</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>LCP</td><td class="bad">6.2s</td><td class="good">1.1s</td><td>82% faster</td></tr>
+          <tr><td>INP</td><td class="bad">450ms</td><td class="good">85ms</td><td>81% faster</td></tr>
+          <tr><td>CLS</td><td class="bad">0.35</td><td class="good">0.02</td><td>94% better</td></tr>
+          <tr><td>DOM nodes</td><td class="bad">500</td><td class="good">20</td><td>96% fewer</td></tr>
+          <tr><td>Data</td><td class="bad">4.2 MB</td><td class="good">0.6 MB</td><td>86% less</td></tr>
+          <tr><td>Reflows</td><td class="bad">500+</td><td class="good">2</td><td>99.6% fewer</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION: Key Takeaways -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <div class="output-box" id="takeaways-log"></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

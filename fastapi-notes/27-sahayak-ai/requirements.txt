@@ -1,0 +1,7 @@
+fastapi[standard]>=0.111.0
+uvicorn>=0.30.0
+google-generativeai>=0.7.0
+sqlmodel>=0.0.19
+pydantic-settings>=2.3.0
+httpx>=0.27.0
+websockets>=12.0

@@ -1,0 +1,447 @@
+/* ============================================================
+   01 — DOM Introduction Styles
+   Dark theme, modern, code-learning aesthetic
+   ============================================================ */
+
+:root {
+  --primary: #6366f1;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --surface: #1e293b;
+  --border: #334155;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --radius: 8px;
+  --font-mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 2rem 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* --- Header --- */
+header {
+  text-align: center;
+  padding: 2rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+}
+
+/* --- Sections --- */
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+section h2 {
+  font-size: 1.25rem;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.description {
+  color: #94a3b8;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+code {
+  background: #0f172a;
+  color: var(--warning);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+/* --- Buttons --- */
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  transition: background 0.2s, transform 0.1s;
+  margin: 0.25rem;
+}
+
+button:hover {
+  background: #818cf8;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+  background: #4f46e5;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* --- Output Panel (console-style) --- */
+.output-panel {
+  background: #020617;
+  color: #22c55e;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-top: 1rem;
+  min-height: 2.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- DOM Tree Diagram --- */
+.dom-tree {
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.tree-node {
+  position: relative;
+  padding: 0.4rem 0.8rem;
+  margin: 0.3rem 0 0.3rem 1.5rem;
+  border-left: 2px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.tree-node.root {
+  border-left: none;
+  margin-left: 0;
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.tree-node.element {
+  color: #60a5fa;
+}
+
+.tree-node.text {
+  color: #22c55e;
+  font-style: italic;
+}
+
+.tree-node.comment {
+  color: #64748b;
+}
+
+.tree-node::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0.85rem;
+  width: 1rem;
+  height: 0;
+  border-top: 2px solid var(--border);
+}
+
+.tree-node.root::before {
+  display: none;
+}
+
+/* --- Legend --- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.root-dot { background: #f59e0b; }
+.element-dot { background: #60a5fa; }
+.text-dot { background: #22c55e; }
+.comment-dot { background: #64748b; }
+
+/* --- Pipeline --- */
+.pipeline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.pipeline-step {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  text-align: center;
+  min-width: 100px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.pipeline-step.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+.step-number {
+  background: var(--primary);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.step-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.step-detail {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.pipeline-arrow {
+  color: var(--primary);
+  font-size: 1.2rem;
+  padding: 0 0.15rem;
+}
+
+/* --- Inspect Area --- */
+.inspect-area {
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.inspect-area .price {
+  color: var(--success);
+  font-weight: 700;
+}
+
+/* --- Performance Results --- */
+.perf-results {
+  display: flex;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+
+.perf-results span {
+  padding: 0.5rem 1rem;
+  background: var(--bg);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  border: 1px solid var(--border);
+}
+
+#perf-bad { color: var(--danger); }
+#perf-good { color: var(--success); }
+
+.insert-container {
+  max-height: 150px;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.insert-container .item {
+  background: var(--primary);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.65rem;
+}
+
+/* --- Demo Area --- */
+.demo-area {
+  background: var(--bg);
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+.demo-area input {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.demo-area table {
+  border-collapse: collapse;
+  margin-bottom: 0.75rem;
+}
+
+.demo-area td {
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* --- Product Card --- */
+.product-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+/* --- Gotchas --- */
+.gotchas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.gotcha {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--warning);
+  font-size: 0.9rem;
+}
+
+.gotcha-num {
+  background: var(--warning);
+  color: var(--bg);
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* --- Takeaways --- */
+.takeaway-list {
+  padding-left: 1.25rem;
+}
+
+.takeaway-list li {
+  margin-bottom: 0.5rem;
+  font-size: 0.92rem;
+  color: #cbd5e1;
+}
+
+#takeaways {
+  border-left: 3px solid var(--success);
+}
+
+/* --- Responsive --- */
+@media (max-width: 640px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  section {
+    padding: 1rem;
+  }
+
+  .pipeline {
+    flex-direction: column;
+  }
+
+  .pipeline-arrow {
+    transform: rotate(90deg);
+  }
+
+  .perf-results {
+    flex-direction: column;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}

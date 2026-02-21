@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>20 — Service Workers | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 20: Service Workers — Offline-First &amp; Network Proxy</h1>
+    <p class="subtitle">Intercepting network requests for offline support, caching, and push notifications</p>
+  </header>
+
+  <!-- Server requirement notice -->
+  <div class="notice" id="server-notice">
+    <strong>Important:</strong> Service Workers require HTTPS or localhost. This demo needs a local server to function.
+    Run one of:
+    <code>npx serve .</code> or <code>python3 -m http.server</code> in this folder, then open <code>http://localhost:PORT</code>.
+    <br>Opening via <code>file://</code> will NOT work for service worker registration.
+  </div>
+
+  <main>
+    <!-- Offline indicator bar -->
+    <div class="app-shell-bar">
+      <div class="offline-indicator" id="offline-indicator">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="network-status">Checking...</span>
+      </div>
+      <div class="sw-registration" id="sw-registration">
+        <span>SW: </span><span id="sw-reg-status">Not registered</span>
+      </div>
+    </div>
+
+    <!-- SECTION 1: What is a Service Worker -->
+    <section id="example-1">
+      <h2>Example 1 — What is a Service Worker? (Hotstar's IPL Challenge)</h2>
+      <p>A Service Worker is a script running in the background, SEPARATE from the page. It intercepts every fetch request and decides how to respond: cache, network, or both.</p>
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>Web Worker</th><th>Service Worker</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Purpose</td><td>Heavy computation</td><td>Network proxy/caching</td></tr>
+            <tr><td>Lifecycle</td><td>Page-bound</td><td>Independent of pages</td></tr>
+            <tr><td>Intercepts requests</td><td>No</td><td>Yes (fetch event)</td></tr>
+            <tr><td>Push notifications</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Background sync</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Persists after close</td><td>No</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sw-properties">
+        <div class="prop-item">Separate thread (no DOM access)</div>
+        <div class="prop-item">Acts as network PROXY</div>
+        <div class="prop-item">Intercepts ALL fetch requests in scope</div>
+        <div class="prop-item">Persists across page loads</div>
+        <div class="prop-item">Requires HTTPS</div>
+        <div class="prop-item">Lifecycle: install -> activate -> fetch</div>
+      </div>
+      <div class="output-box" id="output-1"></div>
+    </section>
+
+    <!-- SECTION 2: Registration & Lifecycle -->
+    <section id="example-2">
+      <h2>Example 2 — Registration &amp; Lifecycle Visualization</h2>
+      <p>Registration tells the browser to download sw.js and install it as the proxy.</p>
+      <div class="controls">
+        <button id="register-btn" class="btn-success">Register Service Worker</button>
+        <button id="unregister-btn" class="btn-danger">Unregister All</button>
+        <button id="update-btn">Check for Update</button>
+      </div>
+      <div class="lifecycle-viz">
+        <div class="lifecycle-step" id="lc-installing">
+          <div class="lc-dot"></div>
+          <span>Installing</span>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step" id="lc-waiting">
+          <div class="lc-dot"></div>
+          <span>Waiting</span>
+        </div>
+        <div class="lifecycle-arrow">&rarr;</div>
+        <div class="lifecycle-step" id="lc-active">
+          <div class="lc-dot"></div>
+          <span>Active</span>
+        </div>
+      </div>
+      <div class="output-box" id="output-2"></div>
+    </section>
+
+    <!-- SECTION 3: Cache Strategies -->
+    <section id="example-3">
+      <h2>Example 3 — Cache Strategies (Five Patterns)</h2>
+      <p>Different strategies per content type: static assets use Cache First, APIs use Network First.</p>
+      <div class="strategy-grid">
+        <div class="strategy-card" id="strat-cache-first">
+          <h4>1. Cache First</h4>
+          <p>Static assets: CSS, JS, fonts</p>
+          <div class="strategy-flow">Cache? -> return | else -> Network -> Cache</div>
+        </div>
+        <div class="strategy-card" id="strat-network-first">
+          <h4>2. Network First</h4>
+          <p>API data, live scores</p>
+          <div class="strategy-flow">Network? -> return+cache | else -> Cache</div>
+        </div>
+        <div class="strategy-card" id="strat-swr">
+          <h4>3. Stale While Revalidate</h4>
+          <p>Thumbnails, profiles</p>
+          <div class="strategy-flow">Serve stale -> update cache in background</div>
+        </div>
+        <div class="strategy-card" id="strat-cache-only">
+          <h4>4. Cache Only</h4>
+          <p>Versioned files (app.abc123.js)</p>
+          <div class="strategy-flow">Cache only. No network fallback.</div>
+        </div>
+        <div class="strategy-card" id="strat-network-only">
+          <h4>5. Network Only</h4>
+          <p>POST requests, analytics</p>
+          <div class="strategy-flow">Network only. No caching.</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="demo-cache-first">Demo Cache First</button>
+        <button id="demo-network-first">Demo Network First</button>
+        <button id="demo-swr">Demo SWR</button>
+      </div>
+      <div class="network-toggle">
+        <label>
+          <input type="checkbox" id="simulate-offline">
+          Simulate Offline (disables fetch in demos)
+        </label>
+      </div>
+      <div class="output-box" id="output-3"></div>
+    </section>
+
+    <!-- SECTION 4: Cache Inspector -->
+    <section id="example-4">
+      <h2>Example 4 — Cache Inspector</h2>
+      <p>View and manage cached URLs. The Cache API stores Request/Response pairs.</p>
+      <div class="controls">
+        <button id="inspect-cache-btn">Inspect Caches</button>
+        <button id="add-to-cache-btn" class="btn-success">Add Test Entry</button>
+        <button id="clear-cache-btn" class="btn-danger">Clear All Caches</button>
+      </div>
+      <div class="cache-inspector" id="cache-inspector">
+        <div class="empty-state">Click "Inspect Caches" to view cached URLs</div>
+      </div>
+      <div class="output-box" id="output-4"></div>
+    </section>
+
+    <!-- SECTION 5: Push Notifications -->
+    <section id="example-5">
+      <h2>Example 5 — Push Notifications</h2>
+      <p>Push notifications re-engage users. SW receives pushes from a server even when browser tabs are closed.</p>
+      <div class="controls">
+        <button id="notif-permission-btn">Request Notification Permission</button>
+        <button id="notif-test-btn">Send Test Notification</button>
+      </div>
+      <div class="permission-status">
+        <span>Notification Permission: </span>
+        <span class="perm-badge" id="notif-perm-status">--</span>
+      </div>
+      <div class="output-box" id="output-5"></div>
+    </section>
+
+    <!-- SECTION 6: App Status -->
+    <section id="example-6">
+      <h2>Example 6 — App Status &amp; Debugging</h2>
+      <p>Transparency about offline status builds user trust.</p>
+      <div class="controls">
+        <button id="check-status-btn">Check Full Status</button>
+      </div>
+      <div class="status-grid" id="status-grid">
+        <div class="status-item">
+          <span class="status-label">Online</span>
+          <span class="status-val" id="stat-online">--</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">SW Supported</span>
+          <span class="status-val" id="stat-sw-support">--</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">SW Active</span>
+          <span class="status-val" id="stat-sw-active">--</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Cache API</span>
+          <span class="status-val" id="stat-cache">--</span>
+        </div>
+      </div>
+      <div class="output-box" id="output-6"></div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol>
+        <li>Service Worker is a script between app and network — intercepts fetch requests, controls cache/network response.</li>
+        <li>Lifecycle: register -> install -> wait -> activate -> fetch.</li>
+        <li>Pre-cache critical assets during install with <code>cache.addAll()</code>.</li>
+        <li>Clean old caches during activate to prevent storage bloat.</li>
+        <li>Five strategies: Cache First, Network First, Stale While Revalidate, Cache Only, Network Only.</li>
+        <li>Use different named caches per content type.</li>
+        <li><code>skipWaiting()</code> forces immediate activation. <code>clients.claim()</code> takes control of open tabs.</li>
+        <li>Background Sync queues offline actions for automatic retry.</li>
+        <li>Push notifications work via push event in SW — even when browser is closed.</li>
+        <li>SWs require HTTPS, cannot access DOM, run in separate thread. Debug: DevTools > Application > Service Workers.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

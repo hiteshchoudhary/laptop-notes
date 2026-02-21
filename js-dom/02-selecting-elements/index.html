@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 — Selecting Elements | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 02: Selecting Elements</h1>
+    <p class="subtitle">Finding and selecting DOM elements — the foundation of all DOM manipulation</p>
+  </header>
+  <main>
+
+    <!-- Realistic Zomato-like UI to query against -->
+    <section id="example-1">
+      <h2>Example 1 — Zomato's Restaurant Search</h2>
+      <p class="description">This restaurant grid is the target for all our selector demos below. Try the buttons to see each method in action.</p>
+
+      <div id="app">
+        <div class="search-bar">
+          <input id="search-box" type="text" placeholder="Search restaurants...">
+        </div>
+        <div id="restaurant-list" class="restaurant-grid">
+          <div class="restaurant-card" data-cuisine="north-indian" data-rating="4.2">
+            <h3 class="restaurant-name">Punjab Grill</h3>
+            <span class="rating">4.2</span>
+            <p class="cuisine-tag">North Indian</p>
+            <button class="add-to-cart">Add to Cart</button>
+          </div>
+          <div class="restaurant-card" data-cuisine="south-indian" data-rating="4.5">
+            <h3 class="restaurant-name">Dosa Plaza</h3>
+            <span class="rating">4.5</span>
+            <p class="cuisine-tag">South Indian</p>
+            <button class="add-to-cart">Add to Cart</button>
+          </div>
+          <div class="restaurant-card" data-cuisine="chinese" data-rating="3.8">
+            <h3 class="restaurant-name">Wok Express</h3>
+            <span class="rating">3.8</span>
+            <p class="cuisine-tag">Chinese</p>
+            <button class="add-to-cart">Add to Cart</button>
+          </div>
+          <div class="restaurant-card veg-only" data-cuisine="north-indian" data-rating="4.7">
+            <h3 class="restaurant-name">Saravana Bhavan</h3>
+            <span class="rating">4.7</span>
+            <p class="cuisine-tag">North Indian &bull; Veg</p>
+            <button class="add-to-cart">Add to Cart</button>
+          </div>
+        </div>
+        <footer class="app-footer">
+          <a href="#about" class="footer-link">About Zomato</a>
+          <a href="#contact" class="footer-link">Contact</a>
+        </footer>
+      </div>
+    </section>
+
+    <!-- getElementById -->
+    <section id="example-2">
+      <h2>Example 2 — getElementById() — The Fastest Lookup</h2>
+      <p class="description">IDs are unique, so the browser maintains a hash map making this O(1). It is the FASTEST way to select.</p>
+      <div class="btn-group">
+        <button id="btn-getbyid">getElementById('search-box')</button>
+        <button id="btn-getbyid-list">getElementById('restaurant-list')</button>
+      </div>
+      <pre class="output-panel" id="output-2"></pre>
+    </section>
+
+    <!-- getElementsByClassName -->
+    <section id="example-3">
+      <h2>Example 3 — getElementsByClassName() — Live HTMLCollection</h2>
+      <p class="description">Returns a LIVE HTMLCollection that auto-updates when the DOM changes. Powerful but dangerous if you modify while iterating.</p>
+      <div class="btn-group">
+        <button id="btn-getbyclass">Get All Restaurant Cards</button>
+        <button id="btn-live-proof">Prove It's LIVE (add a card)</button>
+      </div>
+      <pre class="output-panel" id="output-3"></pre>
+    </section>
+
+    <!-- getElementsByTagName -->
+    <section id="example-4">
+      <h2>Example 4 — getElementsByTagName() — Live Collection by Tag</h2>
+      <p class="description">Direct and fast for getting all elements of a specific tag.</p>
+      <div class="btn-group">
+        <button id="btn-getbytag-h3">All &lt;h3&gt; tags</button>
+        <button id="btn-getbytag-all">All elements (*)</button>
+      </div>
+      <pre class="output-panel" id="output-4"></pre>
+    </section>
+
+    <!-- querySelector -->
+    <section id="example-5">
+      <h2>Example 5 — querySelector() — CSS Selector, First Match</h2>
+      <p class="description">Most versatile selection method. Any CSS selector works — classes, attributes, pseudo-classes, combinators.</p>
+      <div class="btn-group">
+        <button id="btn-qs-id">By ID: #app</button>
+        <button id="btn-qs-class">By class: .restaurant-card</button>
+        <button id="btn-qs-attr">By attr: [data-rating="4.7"]</button>
+        <button id="btn-qs-compound">Compound: .restaurant-card.veg-only</button>
+        <button id="btn-qs-descendant">Descendant: #restaurant-list .rating</button>
+        <button id="btn-qs-nth">Nth child: .restaurant-card:nth-child(2)</button>
+      </div>
+      <pre class="output-panel" id="output-5"></pre>
+    </section>
+
+    <!-- querySelectorAll -->
+    <section id="example-6">
+      <h2>Example 6 — querySelectorAll() — CSS Selector, All Matches</h2>
+      <p class="description">Returns a STATIC NodeList (snapshot). Safe to iterate and modify. Supports forEach natively.</p>
+      <div class="btn-group">
+        <button id="btn-qsa-cards">All .restaurant-card</button>
+        <button id="btn-qsa-ni">Filter: [data-cuisine="north-indian"]</button>
+        <button id="btn-qsa-multi">Multiple: .restaurant-name, .rating</button>
+      </div>
+      <pre class="output-panel" id="output-6"></pre>
+    </section>
+
+    <!-- Live vs Static -->
+    <section id="example-7">
+      <h2>Example 7 — Live vs Static Collections</h2>
+      <p class="description">getElementsBy* returns LIVE HTMLCollections. querySelectorAll returns STATIC NodeLists. This causes real bugs.</p>
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Returns</th>
+              <th>Live?</th>
+              <th>forEach?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>getElementById</td><td>Element/null</td><td>N/A</td><td>N/A</td></tr>
+            <tr><td>getElementsByClassName</td><td>HTMLCollection</td><td class="live-yes">YES</td><td class="no">NO</td></tr>
+            <tr><td>getElementsByTagName</td><td>HTMLCollection</td><td class="live-yes">YES</td><td class="no">NO</td></tr>
+            <tr><td>querySelector</td><td>Element/null</td><td>N/A</td><td>N/A</td></tr>
+            <tr><td>querySelectorAll</td><td>NodeList</td><td class="static-no">NO</td><td class="yes">YES</td></tr>
+            <tr><td>element.children</td><td>HTMLCollection</td><td class="live-yes">YES</td><td class="no">NO</td></tr>
+            <tr><td>element.childNodes</td><td>NodeList</td><td class="live-yes">YES</td><td class="yes">YES</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button id="btn-iter-demo">Demo: Iterating HTMLCollection</button>
+      <pre class="output-panel" id="output-7"></pre>
+    </section>
+
+    <!-- Converting to Arrays -->
+    <section id="example-8">
+      <h2>Example 8 — Converting Collections to Arrays</h2>
+      <p class="description">NodeList and HTMLCollection are not true Arrays. Convert to use map, filter, sort, reduce.</p>
+      <div class="btn-group">
+        <button id="btn-array-from">Array.from() with map</button>
+        <button id="btn-sort-rating">Sort by Rating (descending)</button>
+      </div>
+      <pre class="output-panel" id="output-8"></pre>
+    </section>
+
+    <!-- closest() -->
+    <section id="example-9">
+      <h2>Example 9 — closest() — Find Nearest Ancestor</h2>
+      <p class="description">Walks UP the DOM tree from the element. Essential for event delegation. Click any "Add to Cart" button!</p>
+      <pre class="output-panel" id="output-9"></pre>
+    </section>
+
+    <!-- matches() -->
+    <section id="example-10">
+      <h2>Example 10 — matches() — Test if Element Matches Selector</h2>
+      <p class="description">Boolean check on a single element. Perfect for event delegation patterns.</p>
+      <button id="btn-matches">Test matches() on cards</button>
+      <pre class="output-panel" id="output-10"></pre>
+    </section>
+
+    <!-- Performance -->
+    <section id="example-11">
+      <h2>Example 11 — Performance: getElementById vs querySelector</h2>
+      <p class="description">getElementById is 2-5x faster (hash map). For one-off lookups it's negligible, but in hot loops it matters.</p>
+      <button id="btn-perf">Run 10,000 Lookups Benchmark</button>
+      <pre class="output-panel" id="output-11"></pre>
+    </section>
+
+    <!-- Document Shortcuts -->
+    <section id="example-12">
+      <h2>Example 12 — document.forms, document.images, document.links</h2>
+      <p class="description">Legacy shortcuts that are still useful and performant.</p>
+      <form name="demo-form" style="display:none;"><input></form>
+      <img src="" alt="demo image" style="display:none;" width="1" height="1">
+      <button id="btn-shortcuts">Show Document Shortcuts</button>
+      <pre class="output-panel" id="output-12"></pre>
+    </section>
+
+    <!-- Chaining & Practical -->
+    <section id="example-13">
+      <h2>Example 13 — Chaining Selectors & Practical Filter</h2>
+      <p class="description">Scoping queries to containers improves readability and performance.</p>
+      <div class="btn-group">
+        <button id="btn-chain">Chained Selection Demo</button>
+        <button id="btn-filter-ni">Filter: North Indian</button>
+        <button id="btn-filter-sort">Sort by Rating</button>
+        <button id="btn-filter-reset">Reset</button>
+      </div>
+      <pre class="output-panel" id="output-13"></pre>
+    </section>
+
+    <!-- Common Mistakes -->
+    <section id="example-14">
+      <h2>Example 14 — Common Selection Mistakes</h2>
+      <p class="description">Every mistake here has been made in real codebases.</p>
+      <div class="gotchas-list">
+        <div class="gotcha"><span class="gotcha-num">1</span><span>Forgetting null check: <code>getElementById('x').textContent</code> crashes if ID doesn't exist</span></div>
+        <div class="gotcha"><span class="gotcha-num">2</span><span>Using '#' in getElementById: <code>getElementById('#search-box')</code> returns null</span></div>
+        <div class="gotcha"><span class="gotcha-num">3</span><span>Calling getElementById on an element: <code>someDiv.getElementById('x')</code> is TypeError</span></div>
+        <div class="gotcha"><span class="gotcha-num">4</span><span>Assuming querySelectorAll returns an Array: <code>.map()</code> is TypeError</span></div>
+        <div class="gotcha"><span class="gotcha-num">5</span><span>Modifying live collection while iterating forward: elements get skipped</span></div>
+      </div>
+      <button id="btn-mistakes-demo">Demo Safe Patterns</button>
+      <pre class="output-panel" id="output-14"></pre>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol class="takeaway-list">
+        <li>getElementById() is fastest — O(1). No '#' in argument.</li>
+        <li>getElementsByClassName/TagName return LIVE HTMLCollections.</li>
+        <li>querySelector = first CSS match. querySelectorAll = all matches (STATIC).</li>
+        <li>Live vs Static: getElementsBy* = live; querySelectorAll = static.</li>
+        <li>Convert to Array with Array.from() or [...spread] for map/filter/sort.</li>
+        <li>closest() searches UP (ancestors); querySelector searches DOWN.</li>
+        <li>matches() tests if element matches selector (boolean check).</li>
+        <li>document.forms, .images, .links are fast built-in shortcuts.</li>
+        <li>Chain selectors for readability: container.querySelector('.child').</li>
+        <li>Always null-check selection results before accessing properties.</li>
+      </ol>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

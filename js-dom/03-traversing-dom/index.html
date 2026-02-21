@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 — Traversing the DOM | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 03: Traversing the DOM</h1>
+    <p class="subtitle">Navigating between parent, child, and sibling nodes in the DOM tree</p>
+  </header>
+  <main>
+
+    <!-- IRCTC-like Booking Page Tree -->
+    <section id="example-1">
+      <h2>Example 1 — The IRCTC Booking Page Tree</h2>
+      <p class="description">Click any seat to traverse the DOM. The app navigates UP to find coach and train info, and DOWN into the seat to check availability.</p>
+
+      <div id="irctc-app" class="irctc-app">
+        <div id="booking-header" class="booking-header">
+          <form id="search-form">
+            <input id="from-station" placeholder="From" value="New Delhi">
+            <input id="to-station" placeholder="To" value="Howrah">
+            <button type="button" id="search-btn">Search Trains</button>
+          </form>
+        </div>
+        <div id="train-list" class="train-list">
+          <div class="train-card" data-train="12301">
+            <h3 class="train-name">Rajdhani Express</h3>
+            <div class="coach" data-coach="B1">
+              <span class="coach-label">Coach B1</span>
+              <div class="seat-row">
+                <span class="seat available" data-seat="1">1</span>
+                <span class="seat booked" data-seat="2">2</span>
+                <span class="seat available" data-seat="3">3</span>
+              </div>
+              <div class="seat-row">
+                <span class="seat available" data-seat="4">4</span>
+                <span class="seat available" data-seat="5">5</span>
+                <span class="seat booked" data-seat="6">6</span>
+              </div>
+            </div>
+            <div class="coach" data-coach="A1">
+              <span class="coach-label">Coach A1</span>
+              <div class="seat-row">
+                <span class="seat available" data-seat="1">1</span>
+                <span class="seat available" data-seat="2">2</span>
+                <span class="seat booked" data-seat="3">3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="payment-section" class="payment-section">
+          <p class="fare-info">Total Fare: $2,450</p>
+        </div>
+      </div>
+
+      <!-- Breadcrumb display -->
+      <div class="breadcrumb" id="breadcrumb">Click a seat to see breadcrumb...</div>
+      <pre class="output-panel" id="output-1"></pre>
+    </section>
+
+    <!-- parentNode vs parentElement -->
+    <section id="example-2">
+      <h2>Example 2 — Parent Navigation: parentNode vs parentElement</h2>
+      <p class="description"><code>parentNode</code> returns any node type (including Document). <code>parentElement</code> returns only Element nodes (null above &lt;html&gt;).</p>
+      <button id="btn-parent">Walk Up from Seat 3 (Coach B1)</button>
+      <pre class="output-panel" id="output-2"></pre>
+    </section>
+
+    <!-- childNodes vs children -->
+    <section id="example-3">
+      <h2>Example 3 — Children: childNodes vs children</h2>
+      <p class="description"><code>childNodes</code> returns ALL nodes (including whitespace text). <code>children</code> returns ONLY elements. This is the most common DOM traversal gotcha.</p>
+      <button id="btn-children">Compare childNodes vs children on seat-row</button>
+      <pre class="output-panel" id="output-3"></pre>
+    </section>
+
+    <!-- first/last Child vs Element variants -->
+    <section id="example-4">
+      <h2>Example 4 — firstChild vs firstElementChild</h2>
+      <p class="description">The <code>*Element*</code> variants skip text/comment nodes.</p>
+      <button id="btn-firstlast">Compare first/last Child vs ElementChild</button>
+      <pre class="output-panel" id="output-4"></pre>
+    </section>
+
+    <!-- Sibling Navigation -->
+    <section id="example-5">
+      <h2>Example 5 — Sibling Navigation</h2>
+      <p class="description">Move horizontally within the same parent. Select seat 2 to highlight adjacent seats 1 and 3.</p>
+      <button id="btn-siblings">Navigate Siblings of Seat 2</button>
+      <button id="btn-all-siblings">Get All Siblings of Seat 2</button>
+      <pre class="output-panel" id="output-5"></pre>
+    </section>
+
+    <!-- closest() -->
+    <section id="example-6">
+      <h2>Example 6 — closest() for Upward Traversal</h2>
+      <p class="description"><code>closest()</code> replaces <code>parentElement</code> chains. It is resilient to HTML structure changes because it searches by selector, not depth.</p>
+      <button id="btn-closest">closest() from Seat 3</button>
+      <pre class="output-panel" id="output-6"></pre>
+    </section>
+
+    <!-- contains() -->
+    <section id="example-7">
+      <h2>Example 7 — contains() — Check if Element is Descendant</h2>
+      <p class="description">Answers: "Is element B inside element A?" Useful for click-outside detection.</p>
+      <button id="btn-contains">Run contains() Tests</button>
+      <pre class="output-panel" id="output-7"></pre>
+    </section>
+
+    <!-- Walking the DOM Tree -->
+    <section id="example-8">
+      <h2>Example 8 — Walking the Entire DOM Tree (Recursive)</h2>
+      <p class="description">Recursive DOM traversal is fundamental. DOM diffing, HTML sanitizers, and accessibility checkers all use this pattern.</p>
+      <button id="btn-walk">Walk the IRCTC App Tree</button>
+      <pre class="output-panel" id="output-8"></pre>
+    </section>
+
+    <!-- Table Traversal -->
+    <section id="example-9">
+      <h2>Example 9 — Table-Specific Traversal</h2>
+      <p class="description">The DOM provides special properties for tables: <code>rows</code>, <code>cells</code>, <code>tHead</code>, <code>tBodies</code>.</p>
+      <table id="schedule-table">
+        <thead>
+          <tr><th>Station</th><th>Arrival</th><th>Departure</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>New Delhi</td><td>-</td><td>16:55</td></tr>
+          <tr><td>Kanpur Central</td><td>21:45</td><td>21:50</td></tr>
+          <tr><td>Allahabad Jn</td><td>00:15</td><td>00:20</td></tr>
+          <tr><td>Howrah</td><td>10:00</td><td>-</td></tr>
+        </tbody>
+      </table>
+      <button id="btn-table">Traverse Table with Special Properties</button>
+      <pre class="output-panel" id="output-9"></pre>
+    </section>
+
+    <!-- Breadcrumb Builder -->
+    <section id="example-10">
+      <h2>Example 10 — Building a Breadcrumb from DOM Position</h2>
+      <p class="description">Combines closest(), parentElement, textContent, and dataset to build a breadcrumb dynamically.</p>
+      <button id="btn-breadcrumb">Build Breadcrumb for Seat 3, Coach B1</button>
+      <pre class="output-panel" id="output-10"></pre>
+    </section>
+
+    <!-- TreeWalker -->
+    <section id="example-11">
+      <h2>Example 11 — TreeWalker and NodeIterator</h2>
+      <p class="description">Built-in APIs for efficient filtered traversal. More efficient than manual recursion for large documents.</p>
+      <button id="btn-treewalker">Find All Text Nodes with TreeWalker</button>
+      <pre class="output-panel" id="output-11"></pre>
+    </section>
+
+    <!-- Cheat Sheet -->
+    <section id="example-12">
+      <h2>Example 12 — Traversal Cheat Sheet</h2>
+      <div class="cheat-sheet">
+        <div class="cheat-group">
+          <h3>Moving UP</h3>
+          <code>element.parentElement</code>
+          <code>element.closest(selector)</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Moving DOWN</h3>
+          <code>element.children</code>
+          <code>element.firstElementChild</code>
+          <code>element.lastElementChild</code>
+          <code>element.childElementCount</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Moving SIDEWAYS</h3>
+          <code>element.previousElementSibling</code>
+          <code>element.nextElementSibling</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Checking</h3>
+          <code>parent.contains(child)</code>
+          <code>element.matches(selector)</code>
+          <code>element.hasChildNodes()</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Practical: Seat Finder -->
+    <section id="example-13">
+      <h2>Example 13 — Practical: IRCTC Seat Finder</h2>
+      <p class="description">Find all available seats in a specific coach, combining traversal techniques.</p>
+      <div class="btn-group">
+        <button id="btn-find-b1">Find Available in B1</button>
+        <button id="btn-find-a1">Find Available in A1</button>
+      </div>
+      <pre class="output-panel" id="output-13"></pre>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol class="takeaway-list">
+        <li>Always use *Element* variants (parentElement, children, firstElementChild, nextElementSibling) to skip whitespace.</li>
+        <li>parentNode vs parentElement: identical except at top of DOM.</li>
+        <li>childNodes = all nodes; children = elements only.</li>
+        <li>closest(selector) searches UP — essential for event delegation.</li>
+        <li>contains() checks if one element is inside another.</li>
+        <li>Tables have special properties: table.rows, row.cells, tHead.</li>
+        <li>TreeWalker/NodeIterator are built-in filtered traversal tools.</li>
+        <li>Never hardcode depth (parentElement.parentElement). Use closest().</li>
+      </ol>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

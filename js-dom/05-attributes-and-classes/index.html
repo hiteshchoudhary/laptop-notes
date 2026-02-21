@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05 — Attributes and Classes | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 05: Attributes and Classes</h1>
+    <p class="subtitle">Managing HTML attributes, CSS classes, inline styles, and data attributes</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1 — Razorpay Payment Button States -->
+    <section id="example-1">
+      <h2>Example 1 — Razorpay Payment Button States</h2>
+      <p class="description">Each state change involves toggling CSS classes, modifying attributes, updating data attributes, and changing styles.</p>
+      <div id="razorpay-checkout" class="checkout-box">
+        <div class="payment-form" data-merchant="swiggy" data-currency="INR">
+          <div class="form-row">
+            <input id="card-number" type="text" placeholder="Card Number" maxlength="16" required>
+          </div>
+          <div class="form-row-split">
+            <input id="expiry" type="text" placeholder="MM/YY" required>
+            <input id="cvv" type="text" placeholder="CVV" maxlength="3" required autocomplete="off">
+          </div>
+          <button id="pay-btn" class="btn btn-primary btn-large"
+                  data-amount="49900" data-order-id="order_abc123">
+            Pay $499
+          </button>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-state-idle">Idle</button>
+        <button id="btn-state-processing">Processing</button>
+        <button id="btn-state-success">Success</button>
+        <button id="btn-state-error">Error</button>
+      </div>
+      <pre class="output-panel" id="output-1"></pre>
+    </section>
+
+    <!-- EXAMPLE 2 — getAttribute/setAttribute/removeAttribute/hasAttribute -->
+    <section id="example-2">
+      <h2>Example 2 — getAttribute, setAttribute, removeAttribute, hasAttribute</h2>
+      <p class="description">The low-level API for all HTML attributes. These work with HTML attributes — the initial values.</p>
+      <button id="btn-attr-demo">Demo on Pay Button</button>
+      <pre class="output-panel" id="output-2"></pre>
+    </section>
+
+    <!-- EXAMPLE 3 — Attributes vs Properties -->
+    <section id="example-3">
+      <h2>Example 3 — HTML Attributes vs DOM Properties</h2>
+      <p class="description">Attributes = initial HTML values. Properties = live JS state. They sync for some (id, class) but NOT for others (value, checked).</p>
+      <div class="demo-area">
+        <input id="attr-demo-input" type="text" value="4111" placeholder="Type to see difference...">
+        <label class="checkbox-label">
+          <input id="attr-demo-check" type="checkbox" checked> Save card for later
+        </label>
+      </div>
+      <button id="btn-attr-vs-prop">Compare Attribute vs Property</button>
+      <pre class="output-panel" id="output-3"></pre>
+    </section>
+
+    <!-- EXAMPLE 4 — dataset -->
+    <section id="example-4">
+      <h2>Example 4 — dataset: Custom data-* Attributes</h2>
+      <p class="description"><code>data-*</code> attributes are the standard for custom DOM metadata. Hyphens become camelCase in the dataset API.</p>
+      <div id="dataset-target" class="data-display"
+           data-amount="49900"
+           data-order-id="order_abc123"
+           data-currency="INR"
+           data-merchant-name="Swiggy">
+        Payment Element
+      </div>
+      <div class="btn-group">
+        <button id="btn-read-data">Read dataset</button>
+        <button id="btn-write-data">Write dataset</button>
+        <button id="btn-delete-data">Delete dataset.status</button>
+      </div>
+      <pre class="output-panel" id="output-4"></pre>
+    </section>
+
+    <!-- EXAMPLE 5 — classList -->
+    <section id="example-5">
+      <h2>Example 5 — classList: add, remove, toggle, contains, replace</h2>
+      <p class="description">The modern, safe way to manipulate CSS classes.</p>
+      <div id="classList-demo" class="classList-target btn btn-primary btn-large">
+        classList Demo Element
+      </div>
+      <div class="btn-group">
+        <button id="btn-cl-add">add('spin', 'glow')</button>
+        <button id="btn-cl-remove">remove('spin', 'glow')</button>
+        <button id="btn-cl-toggle">toggle('active')</button>
+        <button id="btn-cl-replace">replace('btn-primary', 'btn-success')</button>
+        <button id="btn-cl-contains">contains('btn')?</button>
+        <button id="btn-cl-reset">Reset</button>
+      </div>
+      <div class="class-display">Current classes: <code id="class-display-text">btn btn-primary btn-large</code></div>
+      <pre class="output-panel" id="output-5"></pre>
+    </section>
+
+    <!-- EXAMPLE 6 — className vs classList -->
+    <section id="example-6">
+      <h2>Example 6 — className (string) vs classList (DOMTokenList)</h2>
+      <p class="description"><code>className</code> is a raw string — easy to misuse. <code>classList</code> is structured with purpose-built methods. Always prefer classList.</p>
+      <button id="btn-classname-demo">Show the Difference</button>
+      <pre class="output-panel" id="output-6"></pre>
+    </section>
+
+    <!-- EXAMPLE 7 — style Property -->
+    <section id="example-7">
+      <h2>Example 7 — style Property: Inline Styles</h2>
+      <p class="description">Direct way to set dynamic inline styles. CSS kebab-case becomes JS camelCase.</p>
+      <div id="style-target" class="style-demo-box">Style Me!</div>
+      <div class="btn-group">
+        <button id="btn-style-set">Set Styles</button>
+        <button id="btn-style-read">Read Styles</button>
+        <button id="btn-style-clear">Clear Styles</button>
+      </div>
+      <pre class="output-panel" id="output-7"></pre>
+    </section>
+
+    <!-- EXAMPLE 8 — getComputedStyle -->
+    <section id="example-8">
+      <h2>Example 8 — getComputedStyle(): Actual Rendered Styles</h2>
+      <p class="description"><code>element.style</code> reads inline only. <code>getComputedStyle()</code> reads the actual rendered result. Essential for animations.</p>
+      <button id="btn-computed">Get Computed Styles of Pay Button</button>
+      <pre class="output-panel" id="output-8"></pre>
+    </section>
+
+    <!-- EXAMPLE 9 — Boolean Properties -->
+    <section id="example-9">
+      <h2>Example 9 — Boolean & State Properties</h2>
+      <p class="description">Boolean attributes: PRESENCE = true, ABSENCE = false. The attribute's VALUE does not matter.</p>
+      <div class="bool-demo">
+        <div class="form-field">
+          <label>Username</label>
+          <input id="bool-input" type="text" value="john_doe" required>
+        </div>
+        <div class="form-field">
+          <label>
+            <input id="bool-check" type="checkbox" checked> Remember me
+          </label>
+        </div>
+        <div class="form-field">
+          <label>Read-only field</label>
+          <input id="bool-readonly" type="text" value="Cannot edit" readonly>
+        </div>
+        <div class="form-field">
+          <button id="bool-btn" disabled>Submit (disabled)</button>
+        </div>
+        <div id="bool-hidden-msg" hidden>This is a hidden message!</div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-toggle-disabled">Toggle disabled</button>
+        <button id="btn-toggle-hidden">Toggle hidden message</button>
+        <button id="btn-toggle-checked">Toggle checkbox</button>
+        <button id="btn-toggle-required">Toggle required</button>
+        <button id="btn-read-state">Read All States</button>
+      </div>
+      <pre class="output-panel" id="output-9"></pre>
+    </section>
+
+    <!-- EXAMPLE 10 — Theme Switcher -->
+    <section id="example-10">
+      <h2>Example 10 — Practical: Theme Switcher</h2>
+      <p class="description">Demonstrates classList + dataset. Theme stored on <code>&lt;html data-theme&gt;</code>.</p>
+      <button id="theme-toggle">Switch to Light Mode</button>
+      <pre class="output-panel" id="output-10"></pre>
+    </section>
+
+    <!-- EXAMPLE 11 — Form Validation -->
+    <section id="example-11">
+      <h2>Example 11 — Practical: Form Validation with Attributes</h2>
+      <p class="description">Real-time validation using classList.toggle(), disabled property, and dataset for tracking state.</p>
+      <div class="validation-form">
+        <div class="form-field">
+          <label for="val-card">Card Number (16 digits)</label>
+          <input id="val-card" type="text" placeholder="4111111111111111" maxlength="16">
+          <span class="validation-icon" id="val-card-icon"></span>
+        </div>
+        <div class="form-field">
+          <label for="val-expiry">Expiry (MM/YY)</label>
+          <input id="val-expiry" type="text" placeholder="12/26" maxlength="5">
+          <span class="validation-icon" id="val-expiry-icon"></span>
+        </div>
+        <div class="form-field">
+          <label for="val-cvv">CVV (3 digits)</label>
+          <input id="val-cvv" type="text" placeholder="123" maxlength="3">
+          <span class="validation-icon" id="val-cvv-icon"></span>
+        </div>
+        <button id="val-submit" disabled class="btn btn-primary btn-large">Pay Now</button>
+      </div>
+      <pre class="output-panel" id="output-11"></pre>
+    </section>
+
+    <!-- EXAMPLE 12 — Cheat Sheet -->
+    <section id="example-12">
+      <h2>Example 12 — Attribute Cheat Sheet</h2>
+      <div class="cheat-sheet">
+        <div class="cheat-group">
+          <h3>Attributes</h3>
+          <code>getAttribute('x')</code>
+          <code>setAttribute('x', 'v')</code>
+          <code>hasAttribute('x')</code>
+          <code>removeAttribute('x')</code>
+          <code>element.attributes</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Data-*</h3>
+          <code>dataset.camelCase (read)</code>
+          <code>dataset.camelCase = 'v' (write)</code>
+          <code>delete dataset.x (remove)</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Classes</h3>
+          <code>classList.add()</code>
+          <code>classList.remove()</code>
+          <code>classList.toggle()</code>
+          <code>classList.contains()</code>
+          <code>classList.replace()</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Styles</h3>
+          <code>style.propName = 'v'</code>
+          <code>style.propName = '' (remove)</code>
+          <code>style.cssText</code>
+          <code>getComputedStyle(el)</code>
+        </div>
+        <div class="cheat-group">
+          <h3>Boolean Properties</h3>
+          <code>hidden</code>
+          <code>disabled</code>
+          <code>checked</code>
+          <code>required</code>
+          <code>readOnly</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol class="takeaway-list">
+        <li>getAttribute/setAttribute work with HTML attributes (initial). DOM properties (element.prop) reflect live state.</li>
+        <li>dataset provides clean access to data-*. Hyphens become camelCase. Values are always strings.</li>
+        <li>classList is the modern way to manipulate CSS classes. Use add, remove, toggle, contains, replace. Avoid className for edits.</li>
+        <li>toggle(cls, force) is the cleanest conditional class pattern.</li>
+        <li>element.style reads/writes INLINE styles only. getComputedStyle() reads actual rendered styles.</li>
+        <li>Boolean attributes: presence = true, absence = false. &lt;input disabled="false"&gt; IS disabled.</li>
+        <li>Use classList for state appearance. Use style for dynamic values.</li>
+        <li>Sanitize data before setting attributes. dataset values are strings, safe from XSS when read via API.</li>
+        <li>getComputedStyle triggers reflow — cache and avoid in loops.</li>
+      </ol>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

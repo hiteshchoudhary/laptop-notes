@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24 — Browser APIs Grab Bag | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 24: Browser APIs Grab Bag</h1>
+    <p class="subtitle">Modern Web Capabilities &mdash; clipboard, geolocation, notifications, and more</p>
+  </header>
+
+  <main>
+
+    <!-- CARD: Clipboard -->
+    <section id="clipboard-section" class="api-card">
+      <h2>Clipboard API</h2>
+      <p>Paytm lets you copy a UPI ID with one click. Requires HTTPS + user gesture.</p>
+
+      <div class="demo-area">
+        <div class="input-row">
+          <input type="text" id="clipboard-input" value="rahul@paytm" placeholder="Text to copy">
+          <button id="btn-copy">Copy</button>
+          <button id="btn-paste">Paste</button>
+        </div>
+        <div class="result-badge" id="clipboard-result"></div>
+      </div>
+
+      <div class="output-box" id="clipboard-log"></div>
+    </section>
+
+    <!-- CARD: Geolocation -->
+    <section id="geo-section" class="api-card">
+      <h2>Geolocation API</h2>
+      <p>Ola finds your pickup location. Swiggy finds nearby restaurants. Requires HTTPS + permission.</p>
+
+      <div class="demo-area">
+        <button id="btn-get-location">Get My Location</button>
+        <div class="geo-display">
+          <div class="geo-stat">
+            <span class="geo-label">Latitude</span>
+            <span class="geo-value" id="geo-lat">&mdash;</span>
+          </div>
+          <div class="geo-stat">
+            <span class="geo-label">Longitude</span>
+            <span class="geo-value" id="geo-lng">&mdash;</span>
+          </div>
+          <div class="geo-stat">
+            <span class="geo-label">Accuracy</span>
+            <span class="geo-value" id="geo-accuracy">&mdash;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="output-box" id="geo-log"></div>
+    </section>
+
+    <!-- CARD: Notifications -->
+    <section id="notif-section" class="api-card">
+      <h2>Notification API</h2>
+      <p>Swiggy notifies you when food is out for delivery &mdash; even from another tab. Requires HTTPS + permission.</p>
+
+      <div class="demo-area">
+        <div class="btn-row">
+          <button id="btn-request-notif">Request Permission</button>
+          <button id="btn-send-notif" disabled>Send Notification</button>
+        </div>
+        <div class="result-badge" id="notif-permission">Permission: checking...</div>
+      </div>
+
+      <div class="output-box" id="notif-log"></div>
+    </section>
+
+    <!-- CARD: Fullscreen -->
+    <section id="fullscreen-section" class="api-card">
+      <h2>Fullscreen API</h2>
+      <p>Video players (Hotstar), games, presentations need fullscreen mode. Requires user gesture.</p>
+
+      <div class="demo-area">
+        <div class="fullscreen-target" id="fullscreen-target">
+          <p>This element will go fullscreen</p>
+          <button id="btn-fullscreen">Toggle Fullscreen</button>
+        </div>
+      </div>
+
+      <div class="output-box" id="fullscreen-log"></div>
+    </section>
+
+    <!-- CARD: Page Visibility -->
+    <section id="visibility-section" class="api-card">
+      <h2>Page Visibility API</h2>
+      <p>Pause video, stop animations, reduce API polling when tab is hidden. Saves CPU and battery.</p>
+
+      <div class="demo-area">
+        <div class="visibility-indicator">
+          <span class="vis-dot" id="vis-dot"></span>
+          <span id="vis-label">visible</span>
+        </div>
+        <p class="vis-counter">Visibility changes: <strong id="vis-count">0</strong></p>
+      </div>
+
+      <div class="output-box" id="visibility-log"></div>
+    </section>
+
+    <!-- CARD: Network -->
+    <section id="network-section" class="api-card">
+      <h2>Network Information API</h2>
+      <p>India has wildly varying speeds. JioCinema adjusts video quality. Flipkart shows lite mode on slow networks.</p>
+
+      <div class="demo-area">
+        <div class="network-indicator">
+          <span class="net-dot" id="net-dot"></span>
+          <span id="net-label">Checking...</span>
+        </div>
+        <div class="network-details" id="network-details"></div>
+      </div>
+
+      <div class="output-box" id="network-log"></div>
+    </section>
+
+    <!-- CARD: Broadcast Channel -->
+    <section id="broadcast-section" class="api-card">
+      <h2>Broadcast Channel API</h2>
+      <p>PhonePe: payment in Tab 1 updates balance in Tab 2. Same-origin, no server needed.</p>
+
+      <div class="demo-area">
+        <div class="input-row">
+          <input type="text" id="broadcast-input" placeholder="Message for other tabs" value="Payment of Rs.500 complete!">
+          <button id="btn-broadcast">Broadcast</button>
+        </div>
+        <div class="received-messages" id="broadcast-received">
+          <p class="empty-msg">Messages from other tabs will appear here. Open this page in another tab!</p>
+        </div>
+      </div>
+
+      <div class="output-box" id="broadcast-log"></div>
+    </section>
+
+    <!-- CARD: Performance -->
+    <section id="performance-section" class="api-card">
+      <h2>Performance API</h2>
+      <p>"If you cannot measure it, you cannot improve it." Microsecond precision timing.</p>
+
+      <div class="demo-area">
+        <div class="btn-row">
+          <button id="btn-perf-measure">Run Mark/Measure Demo</button>
+          <button id="btn-perf-sort">Benchmark: Sort 10K</button>
+        </div>
+        <div class="perf-results" id="perf-results"></div>
+      </div>
+
+      <div class="output-box" id="perf-log"></div>
+    </section>
+
+    <!-- Key Takeaways -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <div class="output-box" id="takeaways-log"></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

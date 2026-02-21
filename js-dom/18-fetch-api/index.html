@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>18 — Fetch API | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 18: Fetch API — Modern HTTP Requests</h1>
+    <p class="subtitle">Making network requests with the Promise-based Fetch API</p>
+  </header>
+
+  <main>
+    <!-- SECTION 1: Stock Ticker -->
+    <section id="example-1">
+      <h2>Example 1 — Zerodha-Style Stock Ticker</h2>
+      <p>Live data display with polling. Uses <a href="https://jsonplaceholder.typicode.com" target="_blank">JSONPlaceholder</a> as a demo API.</p>
+      <div class="ticker-bar" id="ticker-bar">
+        <div class="ticker-item" id="tick-1"><span class="tick-symbol">RELIANCE</span><span class="tick-price">--</span></div>
+        <div class="ticker-item" id="tick-2"><span class="tick-symbol">TCS</span><span class="tick-price">--</span></div>
+        <div class="ticker-item" id="tick-3"><span class="tick-symbol">INFY</span><span class="tick-price">--</span></div>
+        <div class="ticker-item" id="tick-4"><span class="tick-symbol">HDFCBANK</span><span class="tick-price">--</span></div>
+      </div>
+      <div class="controls">
+        <button id="ticker-start-btn" class="btn-success">Start Ticker</button>
+        <button id="ticker-stop-btn" class="btn-danger">Stop Ticker</button>
+        <span class="ticker-status" id="ticker-status">Stopped</span>
+      </div>
+      <div class="output-box" id="output-1"></div>
+    </section>
+
+    <!-- SECTION 2: GET Request -->
+    <section id="example-2">
+      <h2>Example 2 — Basic GET Request</h2>
+      <p>fetch() returns a Promise. CRITICAL: fetch does NOT reject on 404/500 — always check <code>response.ok</code>.</p>
+      <div class="controls">
+        <button id="get-users-btn">GET /users</button>
+        <button id="get-posts-btn">GET /posts/1</button>
+        <button id="get-404-btn" class="btn-danger">GET /invalid (404)</button>
+      </div>
+      <div class="response-display" id="response-2">
+        <div class="resp-header">
+          <span class="resp-status" id="resp-status-2">---</span>
+          <span class="resp-type" id="resp-type-2">---</span>
+        </div>
+        <div class="resp-headers" id="resp-headers-2">Headers will appear here</div>
+        <div class="resp-body" id="resp-body-2">Response body will appear here</div>
+      </div>
+      <div class="output-box" id="output-2"></div>
+    </section>
+
+    <!-- SECTION 3: POST/PUT/DELETE -->
+    <section id="example-3">
+      <h2>Example 3 — POST, PUT, DELETE Requests</h2>
+      <p>POST sends data. PUT replaces. DELETE removes. All need proper headers and body.</p>
+      <div class="controls">
+        <button id="post-btn" class="btn-success">POST (Create)</button>
+        <button id="put-btn">PUT (Replace)</button>
+        <button id="delete-btn" class="btn-danger">DELETE (Remove)</button>
+      </div>
+      <div class="output-box" id="output-3"></div>
+    </section>
+
+    <!-- SECTION 4: Request Builder -->
+    <section id="example-4">
+      <h2>Example 4 — Request Builder Panel</h2>
+      <p>Build and send custom requests. Demonstrates the full Request/Response API.</p>
+      <div class="request-builder">
+        <div class="builder-row">
+          <select id="builder-method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <input type="text" id="builder-url" value="https://jsonplaceholder.typicode.com/posts/1" placeholder="URL">
+        </div>
+        <div class="builder-row">
+          <input type="text" id="builder-header-key" placeholder="Header key (e.g. Content-Type)">
+          <input type="text" id="builder-header-value" placeholder="Header value (e.g. application/json)">
+        </div>
+        <textarea id="builder-body" placeholder='Request body (JSON)&#10;e.g. {"title":"Hello","body":"World","userId":1}' rows="3"></textarea>
+        <div class="controls">
+          <button id="builder-send-btn" class="btn-success">Send Request</button>
+          <span class="loading-spinner hidden" id="builder-spinner"></span>
+        </div>
+      </div>
+      <div class="response-display" id="response-4">
+        <div class="resp-header">
+          <span class="resp-status" id="resp-status-4">---</span>
+          <span class="resp-type" id="resp-type-4">---</span>
+        </div>
+        <div class="resp-headers" id="resp-headers-4">Send a request to see headers</div>
+        <div class="resp-body" id="resp-body-4">Send a request to see response</div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: AbortController -->
+    <section id="example-5">
+      <h2>Example 5 — AbortController: Cancelling Requests</h2>
+      <p>Essential for search-as-you-type, timeouts, and cleanup. Cancel outstanding requests.</p>
+      <div class="controls">
+        <button id="abort-start-btn">Start Slow Request</button>
+        <button id="abort-cancel-btn" class="btn-danger">Cancel Request</button>
+        <span class="loading-spinner hidden" id="abort-spinner"></span>
+      </div>
+      <div class="abort-demo">
+        <h3>Search-as-you-type (with auto-cancel)</h3>
+        <input type="text" id="search-input" placeholder="Type to search posts...">
+        <div class="search-results" id="search-results"></div>
+      </div>
+      <div class="output-box" id="output-5"></div>
+    </section>
+
+    <!-- SECTION 6: Retry with Exponential Backoff -->
+    <section id="example-6">
+      <h2>Example 6 — Retry with Exponential Backoff</h2>
+      <p>When APIs fail, wait progressively longer (1s, 2s, 4s) to avoid overwhelming the server.</p>
+      <div class="controls">
+        <button id="retry-success-btn" class="btn-success">Retry (will succeed)</button>
+        <button id="retry-fail-btn" class="btn-danger">Retry (will fail after 3 attempts)</button>
+      </div>
+      <div class="retry-progress" id="retry-progress">
+        <div class="retry-attempts" id="retry-attempts"></div>
+        <div class="retry-bar">
+          <div class="retry-fill" id="retry-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="output-box" id="output-6"></div>
+    </section>
+
+    <!-- SECTION 7: Error Handling -->
+    <section id="example-7">
+      <h2>Example 7 — Error Handling (The Fetch Gotcha)</h2>
+      <p>fetch() does NOT reject on 404/500 — it only rejects on network failures. Always check <code>response.ok</code>.</p>
+      <div class="controls">
+        <button id="err-wrong-btn" class="btn-danger">Wrong Way (misses errors)</button>
+        <button id="err-right-btn" class="btn-success">Right Way (checks response.ok)</button>
+        <button id="err-network-btn">Network Error (bad URL)</button>
+      </div>
+      <div class="error-display hidden" id="error-display">
+        <span class="error-icon">!</span>
+        <span id="error-message"></span>
+      </div>
+      <div class="output-box" id="output-7"></div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol>
+        <li><code>fetch()</code> returns a Promise. Use async/await for clean syntax.</li>
+        <li>CRITICAL: fetch does NOT reject on 404/500. Always check <code>response.ok</code> before parsing.</li>
+        <li>Response body can only be read ONCE. Use <code>.clone()</code> if needed.</li>
+        <li>POST needs <code>Content-Type</code> header + <code>JSON.stringify()</code>. FormData uploads should NOT set Content-Type manually.</li>
+        <li><code>AbortController</code> cancels requests — essential for search, timeouts, and component cleanup.</li>
+        <li>CORS is browser-only. Server controls access via headers.</li>
+        <li><code>credentials: 'include'</code> sends cookies cross-origin.</li>
+        <li>Exponential backoff: wait 1s, 2s, 4s between retries.</li>
+        <li>Clean up polling with <code>clearInterval()</code> + <code>abort()</code>.</li>
+        <li>Request/Response objects power Service Worker caching.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

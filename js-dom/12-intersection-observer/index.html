@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12 — Intersection Observer | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>FILE 12: Intersection Observer</h1>
+    <p class="subtitle">Efficiently detecting when elements enter or exit the viewport</p>
+  </header>
+
+  <!-- Section Navigation Sidebar -->
+  <nav id="section-nav" class="section-nav">
+    <a href="#example-1" class="nav-link active" data-section="example-1">1. What Is IO?</a>
+    <a href="#example-2" class="nav-link" data-section="example-2">2. Basic Observer</a>
+    <a href="#example-3" class="nav-link" data-section="example-3">3. Options</a>
+    <a href="#example-4" class="nav-link" data-section="example-4">4. Entry Deep Dive</a>
+    <a href="#example-5" class="nav-link" data-section="example-5">5. Lifecycle</a>
+    <a href="#example-6" class="nav-link" data-section="example-6">6. Lazy Loading</a>
+    <a href="#example-7" class="nav-link" data-section="example-7">7. Native vs IO</a>
+    <a href="#example-8" class="nav-link" data-section="example-8">8. Infinite Scroll</a>
+    <a href="#example-9" class="nav-link" data-section="example-9">9. Scroll Spy</a>
+    <a href="#example-10" class="nav-link" data-section="example-10">10. Fade-In</a>
+    <a href="#example-11" class="nav-link" data-section="example-11">11. Performance</a>
+    <a href="#example-12" class="nav-link" data-section="example-12">12. Gallery</a>
+  </nav>
+
+  <main>
+
+    <!-- SECTION 1 -->
+    <section id="example-1">
+      <h2>Example 1 — What Is IntersectionObserver? The Amazon Story</h2>
+      <p class="description">Amazon India loads 200+ product images only when visible, cutting initial load from 8s to under 1s on Jio 4G.</p>
+      <pre id="log-1" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 2: Basic Observer -->
+    <section id="example-2">
+      <h2>Example 2 — Creating Your First IntersectionObserver</h2>
+      <p class="description">Cards below are observed. Scroll them into view and watch the log.</p>
+
+      <div class="observed-cards">
+        <div class="observe-target" id="obs-card-1" data-label="Card A">
+          <span class="obs-label">Card A</span>
+          <span class="obs-status">Not visible</span>
+        </div>
+        <div class="observe-target" id="obs-card-2" data-label="Card B">
+          <span class="obs-label">Card B</span>
+          <span class="obs-status">Not visible</span>
+        </div>
+        <div class="observe-target" id="obs-card-3" data-label="Card C">
+          <span class="obs-label">Card C</span>
+          <span class="obs-status">Not visible</span>
+        </div>
+      </div>
+
+      <pre id="log-2" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 3: Options -->
+    <section id="example-3">
+      <h2>Example 3 — Observer Options: root, rootMargin, threshold</h2>
+      <p class="description">Configure WHERE, WHEN, and HOW MUCH visibility triggers the callback.</p>
+
+      <div class="threshold-viz" id="threshold-viz">
+        <h3>Threshold Visualization</h3>
+        <div class="threshold-bar-container">
+          <div class="threshold-target" id="threshold-target">
+            <div class="threshold-fill" id="threshold-fill"></div>
+          </div>
+          <div class="threshold-labels">
+            <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+          </div>
+        </div>
+        <p class="threshold-readout">Intersection Ratio: <strong id="threshold-ratio">0.00</strong></p>
+      </div>
+
+      <pre id="log-3" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 4: Entry Deep Dive -->
+    <section id="example-4">
+      <h2>Example 4 — IntersectionObserverEntry Deep Dive</h2>
+      <p class="description">A product counts as "viewed" only if 50% visible for at least 1 second.</p>
+
+      <div class="viewability-grid">
+        <div class="product-card viewable" data-product-id="P001">
+          <div class="card-image"></div>
+          <h3>Wireless Earbuds</h3>
+          <p class="price">Rs. 2,499</p>
+          <span class="view-badge" id="badge-P001">Not viewed</span>
+        </div>
+        <div class="product-card viewable" data-product-id="P002">
+          <div class="card-image"></div>
+          <h3>Phone Case</h3>
+          <p class="price">Rs. 499</p>
+          <span class="view-badge" id="badge-P002">Not viewed</span>
+        </div>
+        <div class="product-card viewable" data-product-id="P003">
+          <div class="card-image"></div>
+          <h3>USB-C Cable</h3>
+          <p class="price">Rs. 349</p>
+          <span class="view-badge" id="badge-P003">Not viewed</span>
+        </div>
+      </div>
+
+      <pre id="log-4" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 5: Lifecycle -->
+    <section id="example-5">
+      <h2>Example 5 — Observer Lifecycle: observe, unobserve, disconnect</h2>
+      <p class="description">Once an image loads, stop observing it. Proper cleanup prevents memory leaks.</p>
+
+      <div class="lifecycle-controls">
+        <button id="disconnect-all" class="btn btn-danger">Disconnect All Observers</button>
+        <button id="reconnect-all" class="btn btn-success">Reconnect</button>
+      </div>
+
+      <pre id="log-5" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 6: Lazy Loading Images -->
+    <section id="example-6">
+      <h2>Example 6 — Lazy Loading Images: data-src to src</h2>
+      <p class="description">Amazon-style product gallery. Images load as you scroll, with fade-in effect.</p>
+
+      <div class="lazy-gallery" id="lazy-gallery">
+        <div class="gallery-card">
+          <img class="lazy-image" data-src="https://picsum.photos/seed/prod1/300/200" src="" alt="Product 1">
+          <div class="skeleton-placeholder"></div>
+          <p>Bluetooth Speaker</p>
+        </div>
+        <div class="gallery-card">
+          <img class="lazy-image" data-src="https://picsum.photos/seed/prod2/300/200" src="" alt="Product 2">
+          <div class="skeleton-placeholder"></div>
+          <p>Smart Watch</p>
+        </div>
+        <div class="gallery-card">
+          <img class="lazy-image" data-src="https://picsum.photos/seed/prod3/300/200" src="" alt="Product 3">
+          <div class="skeleton-placeholder"></div>
+          <p>Laptop Stand</p>
+        </div>
+        <div class="gallery-card">
+          <img class="lazy-image" data-src="https://picsum.photos/seed/prod4/300/200" src="" alt="Product 4">
+          <div class="skeleton-placeholder"></div>
+          <p>Mechanical Keyboard</p>
+        </div>
+        <div class="gallery-card">
+          <img class="lazy-image" data-src="https://picsum.photos/seed/prod5/300/200" src="" alt="Product 5">
+          <div class="skeleton-placeholder"></div>
+          <p>Webcam HD</p>
+        </div>
+        <div class="gallery-card">
+          <img class="lazy-image" data-src="https://picsum.photos/seed/prod6/300/200" src="" alt="Product 6">
+          <div class="skeleton-placeholder"></div>
+          <p>USB Hub</p>
+        </div>
+      </div>
+
+      <pre id="log-6" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 7: Native vs IO -->
+    <section id="example-7">
+      <h2>Example 7 — Native loading="lazy" vs IntersectionObserver</h2>
+      <p class="description">Use native when possible, IO when you need custom rootMargin, animations, or analytics.</p>
+
+      <div class="comparison-table">
+        <div class="comp-row header">
+          <span>Feature</span><span>Native loading="lazy"</span><span>IntersectionObserver</span>
+        </div>
+        <div class="comp-row"><span>Setup</span><span class="good">One attribute</span><span>JS required</span></div>
+        <div class="comp-row"><span>Custom preload distance</span><span class="bad">No</span><span class="good">rootMargin</span></div>
+        <div class="comp-row"><span>Animations</span><span class="bad">No</span><span class="good">Yes</span></div>
+        <div class="comp-row"><span>Analytics</span><span class="bad">No</span><span class="good">Yes</span></div>
+        <div class="comp-row"><span>Non-image content</span><span class="bad">No</span><span class="good">Yes</span></div>
+        <div class="comp-row"><span>Scroll container</span><span class="bad">Viewport only</span><span class="good">Any</span></div>
+      </div>
+
+      <pre id="log-7" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 8: Infinite Scroll with Sentinel -->
+    <section id="example-8">
+      <h2>Example 8 — Infinite Scroll with Sentinel Element</h2>
+      <p class="description">An invisible sentinel div triggers loading. No scroll math needed.</p>
+
+      <div id="infinite-product-list" class="product-grid"></div>
+
+      <div id="loading-indicator" class="loading-indicator" style="display:none;">
+        <div class="spinner"></div>
+        <span>Loading more products...</span>
+      </div>
+
+      <div id="scroll-sentinel" class="sentinel"></div>
+      <p id="infinite-status" class="status-text"></p>
+
+      <pre id="log-8" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 9: Scroll Spy -->
+    <section id="example-9">
+      <h2>Example 9 — Section Highlighting: Active Nav Link on Scroll</h2>
+      <p class="description">The sidebar navigation highlights the current section as you scroll. Watch it change!</p>
+      <pre id="log-9" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 10: Fade-In -->
+    <section id="example-10">
+      <h2>Example 10 — Fade-In Animation on Scroll</h2>
+      <p class="description">Elements fade in and slide up when scrolled into view, with staggered delays.</p>
+
+      <div class="fade-in-grid">
+        <div class="fade-in">
+          <div class="promo-card">
+            <h3 class="animate-child">Great Indian Festival</h3>
+            <p class="animate-child">Up to 80% off on electronics</p>
+          </div>
+        </div>
+        <div class="fade-in">
+          <div class="promo-card">
+            <h3 class="animate-child">Fashion Sale</h3>
+            <p class="animate-child">Buy 2 Get 1 Free on clothing</p>
+          </div>
+        </div>
+        <div class="fade-in">
+          <div class="promo-card">
+            <h3 class="animate-child">Home Decor</h3>
+            <p class="animate-child">Flat 50% off on furniture</p>
+          </div>
+        </div>
+        <div class="fade-in">
+          <div class="promo-card">
+            <h3 class="animate-child">Grocery Deals</h3>
+            <p class="animate-child">Fresh produce at doorstep prices</p>
+          </div>
+        </div>
+      </div>
+
+      <pre id="log-10" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 11: Performance -->
+    <section id="example-11">
+      <h2>Example 11 — Performance: One Observer for Many Elements</h2>
+      <p class="description">One observer watches all 200+ products. Browser batches geometry calculations.</p>
+
+      <div class="perf-stats" id="perf-stats">
+        <div class="stat">
+          <span class="stat-label">Elements Observed</span>
+          <span class="stat-value" id="observed-count">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Elements Loaded</span>
+          <span class="stat-value" id="loaded-count">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Batch Callbacks</span>
+          <span class="stat-value" id="batch-count">0</span>
+        </div>
+      </div>
+
+      <pre id="log-11" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 12: Image Gallery -->
+    <section id="example-12">
+      <h2>Example 12 — Practical: Image Gallery with Lazy Loading + Fade-In</h2>
+      <p class="description">Production-ready combining lazy load and animation in one observer.</p>
+
+      <div class="final-gallery" id="final-gallery">
+        <div class="gallery-item" data-img="https://picsum.photos/seed/gal1/400/300">
+          <img data-src="https://picsum.photos/seed/gal1/400/300" src="" alt="Gallery 1">
+          <div class="skeleton-placeholder"></div>
+        </div>
+        <div class="gallery-item" data-img="https://picsum.photos/seed/gal2/400/300">
+          <img data-src="https://picsum.photos/seed/gal2/400/300" src="" alt="Gallery 2">
+          <div class="skeleton-placeholder"></div>
+        </div>
+        <div class="gallery-item" data-img="https://picsum.photos/seed/gal3/400/300">
+          <img data-src="https://picsum.photos/seed/gal3/400/300" src="" alt="Gallery 3">
+          <div class="skeleton-placeholder"></div>
+        </div>
+        <div class="gallery-item" data-img="https://picsum.photos/seed/gal4/400/300">
+          <img data-src="https://picsum.photos/seed/gal4/400/300" src="" alt="Gallery 4">
+          <div class="skeleton-placeholder"></div>
+        </div>
+      </div>
+
+      <pre id="log-12" class="console-output"></pre>
+
+      <div class="key-takeaways">
+        <h3>KEY TAKEAWAYS</h3>
+        <ol>
+          <li><strong>IntersectionObserver</strong> asynchronously detects when elements enter/exit the viewport. Replaces scroll + getBoundingClientRect().</li>
+          <li><strong>Constructor:</strong> new IntersectionObserver(callback, { root, rootMargin, threshold }).</li>
+          <li><strong>Callback</strong> receives IntersectionObserverEntry array. Key: isIntersecting, intersectionRatio, target.</li>
+          <li><strong>Lifecycle:</strong> observe() to start, unobserve() to stop one, disconnect() to stop all.</li>
+          <li><strong>Lazy loading:</strong> data-src -> src when visible. rootMargin preloads before visible.</li>
+          <li><strong>Native loading="lazy"</strong> is simpler but less flexible. Use IO for custom margins, animations, analytics.</li>
+          <li><strong>Infinite scroll:</strong> sentinel element at bottom. When it intersects, load more.</li>
+          <li><strong>Scroll spy:</strong> rootMargin '0px 0px -60% 0px' highlights nav links by section.</li>
+          <li><strong>ONE observer for MANY elements.</strong> Browser batches geometry calculations.</li>
+          <li><strong>Fade-in:</strong> add CSS class when isIntersecting. Combine with CSS transitions.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

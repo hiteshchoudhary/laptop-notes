@@ -1,0 +1,345 @@
+/* ============================================================
+   FILE 09: Form Handling — Styles
+   ============================================================ */
+
+:root {
+  --primary: #6366f1;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --surface: #1e293b;
+  --border: #334155;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --radius: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+header h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.25rem; }
+.subtitle { color: #94a3b8; font-size: 1.05rem; }
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+section h2 { color: var(--primary); font-size: 1.25rem; margin-bottom: 0.5rem; }
+.description { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem; }
+
+.output-console {
+  background: #020617;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.82rem;
+  color: var(--success);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  min-height: 50px;
+}
+
+/* Form Styling */
+form { max-width: 600px; }
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #cbd5e1;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: #020617;
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+}
+
+/* Validation States */
+.form-group input.valid,
+.form-group select.valid,
+.form-group textarea.valid {
+  border-color: var(--success);
+}
+.form-group input.invalid,
+.form-group select.invalid,
+.form-group textarea.invalid {
+  border-color: var(--danger);
+}
+
+.error-message {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--danger);
+  min-height: 1.2em;
+  margin-top: 0.2rem;
+}
+
+/* CSS Pseudo-Class Validation Styles */
+#validity-form input:valid {
+  border-color: var(--success);
+}
+#validity-form input:invalid:not(:placeholder-shown) {
+  border-color: var(--danger);
+}
+
+.validity-state {
+  font-size: 0.82rem;
+  font-family: monospace;
+  color: #94a3b8;
+  margin-top: 0.2rem;
+  display: block;
+}
+
+/* Checkbox & Radio Groups */
+.checkbox-group, .radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.checkbox-group label, .radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+.checkbox-group input, .radio-group input {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}
+
+/* File Input */
+input[type="file"] {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+input[type="file"]::file-selector-button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-right: 0.75rem;
+}
+.file-info {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Character Counter */
+.char-counter {
+  text-align: right;
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+}
+
+/* Buttons */
+button, .action-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, transform 0.1s;
+}
+button:hover { background: #818cf8; }
+button:active { transform: scale(0.97); }
+
+.submit-btn {
+  background: var(--success);
+  color: #000;
+  font-weight: 700;
+  padding: 0.65rem 2rem;
+  font-size: 1rem;
+}
+.submit-btn:hover { background: #4ade80; }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.reset-btn {
+  background: var(--border);
+  margin-left: 0.5rem;
+}
+.reset-btn:hover { background: #475569; }
+
+/* Auto-Save Indicator */
+.auto-save-indicator {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: right;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+.auto-save-indicator.saving { color: var(--warning); }
+.auto-save-indicator.saved  { color: var(--success); }
+
+/* FormData Panel */
+.formdata-panel {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+.formdata-panel h3 {
+  font-size: 1rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+/* Event Timeline */
+.event-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.event-tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-weight: 600;
+  animation: fadeIn 0.2s;
+}
+.event-tag.focus   { background: #3b82f6; color: #fff; }
+.event-tag.input   { background: var(--success); color: #000; }
+.event-tag.change  { background: var(--warning); color: #000; }
+.event-tag.blur    { background: var(--danger); color: #fff; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.demo-input-large {
+  width: 100%;
+  max-width: 400px;
+  background: #020617;
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+}
+.demo-input-large:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+}
+
+/* Progress Bar */
+.progress-bar {
+  margin-bottom: 1.5rem;
+}
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+.progress-fill {
+  height: 100%;
+  width: 33.33%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.step-labels {
+  display: flex;
+  justify-content: space-between;
+}
+.step-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.step-label.active { color: var(--primary); }
+.step-label.completed { color: var(--success); }
+
+/* Step Content */
+.step h3 {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Step Navigation */
+.step-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  padding: 0.55rem 1.5rem;
+  background: var(--border);
+}
+.nav-btn:hover { background: #475569; }
+.nav-btn.next { background: var(--primary); }
+.nav-btn.next:hover { background: #818cf8; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  body { padding: 1rem; }
+  header h1 { font-size: 1.4rem; }
+  form { max-width: 100%; }
+  .checkbox-group, .radio-group { flex-direction: column; }
+  .step-nav { flex-direction: column; }
+  .step-labels { font-size: 0.7rem; }
+}

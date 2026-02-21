@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04 — Creating and Modifying | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 04: Creating and Modifying DOM Elements</h1>
+    <p class="subtitle">Dynamically building, inserting, replacing, and removing elements</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1 — Dynamic Restaurant Cards -->
+    <section id="example-1">
+      <h2>Example 1 — Swiggy's Dynamic Restaurant Cards</h2>
+      <p class="description">When you search on Swiggy, the server returns JSON — not HTML. JavaScript creates elements for each restaurant and inserts them into the page. The entire grid is built dynamically from data.</p>
+      <button id="btn-build-cards">Build Cards from JSON</button>
+      <button id="btn-clear-cards">Clear Cards</button>
+      <div id="card-container" class="card-grid"></div>
+      <pre class="output-panel" id="output-1"></pre>
+    </section>
+
+    <!-- EXAMPLE 2 — createElement & createTextNode -->
+    <section id="example-2">
+      <h2>Example 2 — createElement() and createTextNode()</h2>
+      <p class="description"><code>createElement</code> creates elements. <code>createTextNode</code> creates text. Created elements are NOT in the DOM until inserted.</p>
+      <button id="btn-create">Create Elements Step by Step</button>
+      <div id="create-target" class="demo-area"></div>
+      <pre class="output-panel" id="output-2"></pre>
+    </section>
+
+    <!-- EXAMPLE 3 — appendChild vs append -->
+    <section id="example-3">
+      <h2>Example 3 — appendChild() vs append()</h2>
+      <p class="description"><code>appendChild</code> is classic (one node). <code>append</code> is modern (multiple nodes + strings).</p>
+      <div class="btn-group">
+        <button id="btn-appendchild">appendChild() Demo</button>
+        <button id="btn-append">append() Demo</button>
+      </div>
+      <div id="append-target" class="demo-area"></div>
+      <pre class="output-panel" id="output-3"></pre>
+    </section>
+
+    <!-- EXAMPLE 4 — prepend, before, after, replaceWith -->
+    <section id="example-4">
+      <h2>Example 4 — prepend(), before(), after(), replaceWith()</h2>
+      <p class="description">These methods cover every insertion position cleanly.</p>
+      <div id="position-demo" class="position-demo">
+        <div class="position-item" id="original-item">Original Item</div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-prepend">prepend() (first child)</button>
+        <button id="btn-before">before() (sibling before)</button>
+        <button id="btn-after">after() (sibling after)</button>
+        <button id="btn-replace">replaceWith()</button>
+        <button id="btn-reset-position">Reset</button>
+      </div>
+      <pre class="output-panel" id="output-4"></pre>
+    </section>
+
+    <!-- EXAMPLE 5 — insertBefore & insertAdjacentHTML -->
+    <section id="example-5">
+      <h2>Example 5 — insertBefore() and insertAdjacentHTML()</h2>
+      <p class="description"><code>insertAdjacentHTML</code> injects HTML strings at four precise positions: beforebegin, afterbegin, beforeend, afterend.</p>
+      <div id="adjacent-demo" class="adjacent-demo">
+        <div id="adj-target" class="adj-target">Target Element</div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-adj-bb">beforebegin</button>
+        <button id="btn-adj-ab">afterbegin</button>
+        <button id="btn-adj-be">beforeend</button>
+        <button id="btn-adj-ae">afterend</button>
+        <button id="btn-adj-reset">Reset</button>
+      </div>
+      <pre class="output-panel" id="output-5"></pre>
+    </section>
+
+    <!-- EXAMPLE 6 — remove & removeChild -->
+    <section id="example-6">
+      <h2>Example 6 — remove() and removeChild()</h2>
+      <p class="description">Removing elements is as important as adding them.</p>
+      <div id="remove-list" class="item-list">
+        <div class="removable-item">Item A</div>
+        <div class="removable-item">Item B</div>
+        <div class="removable-item">Item C</div>
+        <div class="removable-item">Item D</div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-remove-first">remove() first</button>
+        <button id="btn-remove-last">removeChild() last</button>
+        <button id="btn-clear-all">replaceChildren() clear all</button>
+        <button id="btn-reset-remove">Reset</button>
+      </div>
+      <pre class="output-panel" id="output-6"></pre>
+    </section>
+
+    <!-- EXAMPLE 7 — cloneNode -->
+    <section id="example-7">
+      <h2>Example 7 — cloneNode(shallow) vs cloneNode(deep)</h2>
+      <p class="description">Cloning is faster than creating from scratch. But understand shallow vs deep, and know that event listeners are NOT cloned.</p>
+      <div id="clone-source" class="clone-source">
+        <div class="clone-card" id="original-card">
+          <h3>Paradise Biryani</h3>
+          <span class="rating-badge">4.3</span>
+          <p>Delivers in 30 min</p>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-shallow-clone">Shallow Clone</button>
+        <button id="btn-deep-clone">Deep Clone</button>
+      </div>
+      <div id="clone-output" class="clone-output"></div>
+      <pre class="output-panel" id="output-7"></pre>
+    </section>
+
+    <!-- EXAMPLE 8 — DocumentFragment -->
+    <section id="example-8">
+      <h2>Example 8 — DocumentFragment: Batch Insertions</h2>
+      <p class="description">Build all elements in a DocumentFragment, then append once = 1 reflow. Instant vs janky.</p>
+      <div class="btn-group">
+        <button id="btn-no-fragment">Without Fragment (50 items)</button>
+        <button id="btn-with-fragment">With Fragment (50 items)</button>
+      </div>
+      <div class="perf-compare">
+        <span id="perf-no-frag" class="perf-bad">--</span>
+        <span id="perf-frag" class="perf-good">--</span>
+      </div>
+      <div id="fragment-target" class="fragment-container"></div>
+      <pre class="output-panel" id="output-8"></pre>
+    </section>
+
+    <!-- EXAMPLE 9 — innerHTML vs textContent vs innerText -->
+    <section id="example-9">
+      <h2>Example 9 — innerHTML vs textContent vs innerText</h2>
+      <p class="description"><code>innerHTML</code> parses HTML (powerful but XSS risk). <code>textContent</code> sets raw text (safe). <code>innerText</code> respects CSS visibility.</p>
+      <div class="content-demo">
+        <div id="content-target" class="content-target">
+          <span>Visible Text</span>
+          <span style="display:none;">Hidden Text</span>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button id="btn-innerhtml">innerHTML</button>
+        <button id="btn-textcontent">textContent</button>
+        <button id="btn-innertext">innerText</button>
+        <button id="btn-xss-demo">XSS Demo (safe)</button>
+        <button id="btn-content-reset">Reset</button>
+      </div>
+      <pre class="output-panel" id="output-9"></pre>
+    </section>
+
+    <!-- EXAMPLE 10 — Template Literals + innerHTML -->
+    <section id="example-10">
+      <h2>Example 10 — Template Literals + innerHTML</h2>
+      <p class="description">Quick way to build UI from data. Always sanitize user input with escapeHTML().</p>
+      <button id="btn-template">Build Card with Template</button>
+      <div id="template-target" class="demo-area"></div>
+      <pre class="output-panel" id="output-10"></pre>
+    </section>
+
+    <!-- EXAMPLE 11 — <template> Tag -->
+    <section id="example-11">
+      <h2>Example 11 — The &lt;template&gt; Tag</h2>
+      <p class="description">Browser-native reusable component. Parsed once, cloned N times. Content is inert until cloned and inserted.</p>
+      <template id="card-template">
+        <div class="template-card">
+          <h3 class="card-title"></h3>
+          <span class="rating-badge"></span>
+          <p class="card-time"></p>
+        </div>
+      </template>
+      <button id="btn-from-template">Build 3 Cards from Template</button>
+      <div id="template-output" class="card-grid"></div>
+      <pre class="output-panel" id="output-11"></pre>
+    </section>
+
+    <!-- EXAMPLE 12 — Batch DOM Updates -->
+    <section id="example-12">
+      <h2>Example 12 — Performance: Batch DOM Updates</h2>
+      <p class="description">Mixing reads and writes causes "layout thrashing." Batch them separately.</p>
+      <div class="dom-ops-counter">
+        <span>DOM Operations: <strong id="ops-count">0</strong></span>
+      </div>
+      <pre class="output-panel" id="output-12"></pre>
+    </section>
+
+    <!-- EXAMPLE 13 — Swiggy Cart -->
+    <section id="example-13">
+      <h2>Example 13 — Complete Practical: Swiggy Cart</h2>
+      <p class="description">Add items, remove items, update quantities, show total. Combines all creation and modification techniques.</p>
+      <div class="cart-controls">
+        <div class="menu-items">
+          <button class="menu-btn" data-name="Chicken Biryani" data-price="350">Chicken Biryani - $350</button>
+          <button class="menu-btn" data-name="Butter Naan" data-price="60">Butter Naan - $60</button>
+          <button class="menu-btn" data-name="Dal Makhani" data-price="220">Dal Makhani - $220</button>
+          <button class="menu-btn" data-name="Gulab Jamun" data-price="80">Gulab Jamun - $80</button>
+          <button class="menu-btn" data-name="Paneer Tikka" data-price="280">Paneer Tikka - $280</button>
+        </div>
+      </div>
+      <div id="cart-container" class="cart">
+        <h3 class="cart-title">Your Cart</h3>
+        <div id="cart-items" class="cart-items">
+          <p class="cart-empty">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+          <span class="cart-total">Total: <strong id="cart-total">$0</strong></span>
+          <button id="btn-clear-cart">Clear Cart</button>
+        </div>
+      </div>
+      <pre class="output-panel" id="output-13"></pre>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol class="takeaway-list">
+        <li>createElement + appendChild is the fundamental pattern. Created elements are NOT in the DOM until inserted.</li>
+        <li>append() is modern: multiple args + strings. Use over appendChild.</li>
+        <li>prepend, before, after, replaceWith cover all insertion positions.</li>
+        <li>insertAdjacentHTML injects HTML at 4 precise positions.</li>
+        <li>cloneNode(true) deep-clones but NOT event listeners. Change IDs.</li>
+        <li>DocumentFragment batches insertions — 1 reflow instead of N.</li>
+        <li>innerHTML is dangerous with user input — XSS. Use textContent.</li>
+        <li>&lt;template&gt; is browser-native reusable component (parsed once).</li>
+        <li>Batch reads and writes separately to avoid layout thrashing.</li>
+        <li>escapeHTML() prevents XSS when using innerHTML with data.</li>
+      </ol>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

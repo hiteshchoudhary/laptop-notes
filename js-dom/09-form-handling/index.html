@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09 — Form Handling | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 09: Form Handling</h1>
+    <p class="subtitle">Working with HTML forms — reading values, validation, FormData, and submission</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1: Complete Registration Form -->
+    <section id="example-1">
+      <h2>Example 1 — Naukri-Style Registration Form</h2>
+      <p class="description">Complete form with real-time validation, FormData display, and auto-save.</p>
+      <div class="auto-save-indicator" id="auto-save-status">Auto-save: idle</div>
+      <form id="job-application" novalidate>
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Priya Sharma" required minlength="2">
+          <span class="error-message" id="err-fullName"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" placeholder="priya@gmail.com" required>
+          <span class="error-message" id="err-email"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone *</label>
+          <input type="tel" id="phone" name="phone" placeholder="9876543210" pattern="[6-9]\d{9}" maxlength="10">
+          <span class="error-message" id="err-phone"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Experience *</label>
+          <select id="experience" name="experience" required>
+            <option value="">Select experience</option>
+            <option value="0-2">0-2 years (Fresher)</option>
+            <option value="3-5">3-5 years (Mid)</option>
+            <option value="5-10">5-10 years (Senior)</option>
+            <option value="10+">10+ years (Lead)</option>
+          </select>
+          <span class="error-message" id="err-experience"></span>
+        </div>
+
+        <div class="form-group">
+          <label>Skills</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="skills" value="javascript"> JavaScript</label>
+            <label><input type="checkbox" name="skills" value="react"> React</label>
+            <label><input type="checkbox" name="skills" value="node"> Node.js</label>
+            <label><input type="checkbox" name="skills" value="python"> Python</label>
+            <label><input type="checkbox" name="skills" value="sql"> SQL</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Job Type</label>
+          <div class="radio-group">
+            <label><input type="radio" name="jobType" value="fulltime"> Full Time</label>
+            <label><input type="radio" name="jobType" value="parttime"> Part Time</label>
+            <label><input type="radio" name="jobType" value="contract"> Contract</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="coverLetter">Cover Letter</label>
+          <textarea id="coverLetter" name="coverLetter" rows="4" placeholder="Write about yourself (min 50 chars)..." minlength="50"></textarea>
+          <div class="char-counter"><span id="char-count">0</span>/500</div>
+          <span class="error-message" id="err-coverLetter"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="resume">Resume (PDF/DOC, max 5MB)</label>
+          <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+          <span class="file-info" id="file-info"></span>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">Submit Application</button>
+        <button type="button" class="reset-btn" id="reset-btn">Clear Draft</button>
+      </form>
+
+      <!-- FormData Display Panel -->
+      <div class="formdata-panel">
+        <h3>FormData Contents</h3>
+        <div class="output-console" id="formdata-display"></div>
+      </div>
+      <div class="output-console" id="output-1"></div>
+    </section>
+
+    <!-- EXAMPLE 2: Input Events Demo -->
+    <section id="example-2">
+      <h2>Example 2 — Input Events: input, change, focus, blur</h2>
+      <p class="description">Type in the field. Watch the event order: focus → input(s) → change → blur.</p>
+      <div class="form-group">
+        <input type="text" id="event-demo-input" placeholder="Type here and tab away..." class="demo-input-large">
+      </div>
+      <div class="event-timeline" id="event-timeline"></div>
+      <div class="output-console" id="output-2"></div>
+    </section>
+
+    <!-- EXAMPLE 3: Custom Validity -->
+    <section id="example-3">
+      <h2>Example 3 — Custom Validity &amp; CSS Pseudo-Classes</h2>
+      <p class="description">The browser's constraint validation API with custom messages. Watch :valid/:invalid styling live.</p>
+      <form id="validity-form" novalidate>
+        <div class="form-group">
+          <label for="custom-phone">Phone (custom validity)</label>
+          <input type="tel" id="custom-phone" name="phone" placeholder="Must start with 6-9, 10 digits" required>
+          <span class="validity-state" id="validity-state">—</span>
+        </div>
+        <button type="submit" class="action-btn">Check Validity</button>
+      </form>
+      <div class="output-console" id="output-3"></div>
+    </section>
+
+    <!-- EXAMPLE 4: Multi-Step Form -->
+    <section id="example-4">
+      <h2>Example 4 — Multi-Step Registration Form</h2>
+      <p class="description">3 steps: Personal → Education → Experience. Validation per step before advancing.</p>
+      <div class="progress-bar">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="step-labels">
+          <span class="step-label active" data-step="1">1. Personal</span>
+          <span class="step-label" data-step="2">2. Education</span>
+          <span class="step-label" data-step="3">3. Experience</span>
+        </div>
+      </div>
+      <form id="registration-form" novalidate>
+        <!-- Step 1: Personal -->
+        <div class="step" data-step="1">
+          <h3>Personal Information</h3>
+          <div class="form-group">
+            <label for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" name="regName" required minlength="2" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email *</label>
+            <input type="email" id="reg-email" name="regEmail" required placeholder="you@email.com">
+          </div>
+          <div class="form-group">
+            <label for="reg-city">City *</label>
+            <select id="reg-city" name="regCity" required>
+              <option value="">Select city</option>
+              <option value="mumbai">Mumbai</option>
+              <option value="delhi">Delhi</option>
+              <option value="bangalore">Bangalore</option>
+              <option value="hyderabad">Hyderabad</option>
+              <option value="pune">Pune</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Step 2: Education -->
+        <div class="step" data-step="2" style="display:none">
+          <h3>Education</h3>
+          <div class="form-group">
+            <label for="reg-degree">Highest Degree *</label>
+            <select id="reg-degree" name="regDegree" required>
+              <option value="">Select degree</option>
+              <option value="btech">B.Tech / B.E.</option>
+              <option value="mtech">M.Tech / M.E.</option>
+              <option value="bca">BCA</option>
+              <option value="mca">MCA</option>
+              <option value="bsc">B.Sc</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="reg-college">College / University *</label>
+            <input type="text" id="reg-college" name="regCollege" required placeholder="College name">
+          </div>
+          <div class="form-group">
+            <label for="reg-year">Graduation Year *</label>
+            <input type="number" id="reg-year" name="regYear" required min="1990" max="2030" placeholder="2024">
+          </div>
+        </div>
+
+        <!-- Step 3: Experience -->
+        <div class="step" data-step="3" style="display:none">
+          <h3>Professional Experience</h3>
+          <div class="form-group">
+            <label for="reg-company">Current Company</label>
+            <input type="text" id="reg-company" name="regCompany" placeholder="Company name">
+          </div>
+          <div class="form-group">
+            <label for="reg-role">Current Role</label>
+            <input type="text" id="reg-role" name="regRole" placeholder="Software Engineer">
+          </div>
+          <div class="form-group">
+            <label for="reg-salary">Expected CTC (LPA)</label>
+            <input type="number" id="reg-salary" name="regSalary" min="0" max="100" placeholder="15">
+          </div>
+        </div>
+
+        <div class="step-nav">
+          <button type="button" id="prev-btn" class="nav-btn" style="display:none">Previous</button>
+          <button type="button" id="next-btn" class="nav-btn next">Next</button>
+          <button type="submit" id="final-submit-btn" class="submit-btn" style="display:none">Submit Registration</button>
+        </div>
+      </form>
+      <div class="output-console" id="output-4"></div>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08 — Event Delegation | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 08: Event Delegation</h1>
+    <p class="subtitle">Handling events efficiently with a single listener on a parent element</p>
+  </header>
+  <main>
+
+    <!-- EXAMPLE 1: Flipkart Product Grid -->
+    <section id="example-1">
+      <h2>Example 1 — Flipkart Product Grid (Delegated)</h2>
+      <p class="description">ONE listener on the grid handles all product actions. Click "Add Product" to prove delegation works on new elements.</p>
+      <div class="demo-row">
+        <button id="add-product-btn" class="action-btn">Add Product</button>
+        <span class="listener-count">Active listeners on grid: <strong id="listener-display">1</strong></span>
+      </div>
+      <div id="product-grid"></div>
+      <div class="output-console" id="output-1"></div>
+    </section>
+
+    <!-- EXAMPLE 2: closest() Explained -->
+    <section id="example-2">
+      <h2>Example 2 — The Delegation Workhorse: event.target.closest()</h2>
+      <p class="description">Click anywhere inside the card. closest() walks UP to find the matching ancestor.</p>
+      <div class="product-card-demo" data-product-id="12345">
+        <img class="product-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect fill='%236366f1' width='80' height='80' rx='8'/%3E%3Ctext x='40' y='45' text-anchor='middle' fill='white' font-size='12'%3EiPhone%3C/text%3E%3C/svg%3E" alt="Product">
+        <h3 class="product-title">iPhone 16</h3>
+        <p class="product-price">Rs. 79,999</p>
+        <button class="add-to-cart" data-action="cart">
+          <span class="btn-icon">&#128722;</span>
+          <span>Add to Cart</span>
+        </button>
+      </div>
+      <div class="output-console" id="output-2"></div>
+    </section>
+
+    <!-- EXAMPLE 3: data-action Routing -->
+    <section id="example-3">
+      <h2>Example 3 — Multiple Actions via data-action</h2>
+      <p class="description">5 action buttons per order, ONE listener on the list. Uses data-action + switch.</p>
+      <div id="order-list">
+        <div class="order-item" data-order-id="ORD-2024-78912">
+          <div class="order-info">
+            <strong>MacBook Air M3</strong>
+            <span class="order-date">Delivered on 15 Jan 2024</span>
+          </div>
+          <div class="order-actions">
+            <button data-action="track">Track</button>
+            <button data-action="cancel">Cancel</button>
+            <button data-action="return">Return</button>
+            <button data-action="review">Review</button>
+            <button data-action="reorder">Reorder</button>
+          </div>
+        </div>
+        <div class="order-item" data-order-id="ORD-2024-88234">
+          <div class="order-info">
+            <strong>Sony WH-1000XM5</strong>
+            <span class="order-date">Arriving 22 Feb 2024</span>
+          </div>
+          <div class="order-actions">
+            <button data-action="track">Track</button>
+            <button data-action="cancel">Cancel</button>
+            <button data-action="return">Return</button>
+            <button data-action="review">Review</button>
+            <button data-action="reorder">Reorder</button>
+          </div>
+        </div>
+      </div>
+      <div class="output-console" id="output-3"></div>
+    </section>
+
+    <!-- EXAMPLE 4: Performance Comparison -->
+    <section id="example-4">
+      <h2>Example 4 — Performance: 1000 Listeners vs 1 Delegated</h2>
+      <p class="description">Run both benchmarks. Watch the setup time and memory difference.</p>
+      <div class="demo-row">
+        <button id="bench-individual" class="action-btn">Benchmark: 1000 Individual</button>
+        <button id="bench-delegated" class="action-btn">Benchmark: 1 Delegated</button>
+      </div>
+      <div id="bench-container" style="display:none; max-height:0; overflow:hidden;"></div>
+      <div class="perf-table">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>1000 Individual</th><th>1 Delegated</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Event listeners</td><td>1000</td><td>1</td></tr>
+            <tr><td>Memory (listeners)</td><td>~100-200 KB</td><td>~0.1 KB</td></tr>
+            <tr><td>Dynamic elements</td><td>Needs re-attachment</td><td>Works automatically</td></tr>
+            <tr><td>Cleanup</td><td>Track 1000 refs</td><td>Remove 1 listener</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="output-console" id="output-4"></div>
+    </section>
+
+    <!-- EXAMPLE 5: Dynamic Add/Remove -->
+    <section id="example-5">
+      <h2>Example 5 — Dynamic Lists: Add/Remove Without Re-attaching</h2>
+      <p class="description">Delegation's killer feature: handles elements that don't exist yet.</p>
+      <div class="demo-row">
+        <button id="add-dynamic-btn" class="action-btn">Add Item</button>
+        <span class="item-count">Items: <strong id="dynamic-count">0</strong></span>
+      </div>
+      <div id="dynamic-list"></div>
+      <div class="output-console" id="output-5"></div>
+    </section>
+
+    <!-- EXAMPLE 6: Todo List -->
+    <section id="example-6">
+      <h2>Example 6 — Practical: Todo List with Delegation</h2>
+      <p class="description">Add/complete/delete — all via ONE delegated listener on the list. New tasks are instantly interactive.</p>
+      <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Add a warehouse task..." autocomplete="off">
+        <button type="submit" class="action-btn">Add Task</button>
+      </form>
+      <ul id="todo-list"></ul>
+      <div class="todo-stats">
+        <span>Total: <strong id="todo-total">0</strong></span>
+        <span>Completed: <strong id="todo-completed">0</strong></span>
+      </div>
+      <div class="output-console" id="output-6"></div>
+    </section>
+
+    <!-- EXAMPLE 7: Non-Click Delegation -->
+    <section id="example-7">
+      <h2>Example 7 — Delegation with Non-Click Events</h2>
+      <p class="description">change, input, and focusin/focusout — all delegated on a single filter panel.</p>
+      <div id="filter-panel">
+        <div class="filter-group">
+          <label><input type="checkbox" name="brand" value="apple"> Apple</label>
+          <label><input type="checkbox" name="brand" value="samsung"> Samsung</label>
+          <label><input type="checkbox" name="brand" value="oneplus"> OnePlus</label>
+        </div>
+        <div class="filter-group">
+          <label>Sort by:
+            <select name="sort">
+              <option value="">Select</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Rating</option>
+            </select>
+          </label>
+        </div>
+        <div class="filter-group">
+          <label>Price Range:
+            <input type="range" name="price" min="0" max="100000" step="5000" value="50000">
+            <span id="range-value">Rs. 50,000</span>
+          </label>
+        </div>
+        <div class="filter-group">
+          <input type="text" name="search" placeholder="Search within filters..." class="demo-input">
+        </div>
+      </div>
+      <div class="output-console" id="output-7"></div>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

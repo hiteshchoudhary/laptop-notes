@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>19 — Web Workers | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 19: Web Workers — Multi-Threading in the Browser</h1>
+    <p class="subtitle">Offloading heavy computation to background threads</p>
+  </header>
+
+  <main>
+    <!-- CPU Info -->
+    <div class="cpu-bar" id="cpu-bar">
+      <span>CPU Cores: <strong id="core-count">--</strong></span>
+      <span>|</span>
+      <span>Main Thread: <span class="thread-indicator" id="main-thread-indicator">responsive</span></span>
+    </div>
+
+    <!-- SECTION 1: Why Web Workers -->
+    <section id="example-1">
+      <h2>Example 1 — Why Web Workers? The Frozen UI Problem</h2>
+      <p>JavaScript has ONE main thread for BOTH code AND UI. Heavy computation freezes everything.</p>
+      <div class="demo-split">
+        <div class="demo-panel">
+          <h3>Main Thread Animation</h3>
+          <p>This spinner/counter proves the UI is alive. Watch it freeze when you block the main thread.</p>
+          <div class="animation-area">
+            <div class="spinner" id="spinner"></div>
+            <div class="counter" id="counter">0</div>
+          </div>
+        </div>
+        <div class="demo-panel">
+          <h3>Comparison: Block vs Worker</h3>
+          <div class="controls">
+            <button id="block-btn" class="btn-danger">Block Main Thread (3s)</button>
+            <button id="worker-btn" class="btn-success">Use Worker Instead</button>
+          </div>
+          <div class="result-cards">
+            <div class="result-card" id="block-result">
+              <span class="result-label">Without Worker</span>
+              <span class="result-value" id="block-time">--</span>
+              <span class="result-status" id="block-status">UI freezes!</span>
+            </div>
+            <div class="result-card" id="worker-result">
+              <span class="result-label">With Worker</span>
+              <span class="result-value" id="worker-time">--</span>
+              <span class="result-status" id="worker-status">UI stays smooth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="output-box" id="output-1"></div>
+    </section>
+
+    <!-- SECTION 2: Prime Calculator -->
+    <section id="example-2">
+      <h2>Example 2 — Prime Number Calculator with Progress</h2>
+      <p>Worker computes primes in the background while UI stays responsive. Watch the progress bar!</p>
+      <div class="controls">
+        <label>Find primes up to:</label>
+        <select id="prime-limit">
+          <option value="10000">10,000</option>
+          <option value="50000">50,000</option>
+          <option value="100000" selected>100,000</option>
+          <option value="500000">500,000</option>
+          <option value="1000000">1,000,000</option>
+        </select>
+        <button id="prime-start-btn" class="btn-success">Start Worker</button>
+        <button id="prime-cancel-btn" class="btn-danger">Cancel</button>
+      </div>
+      <div class="progress-area">
+        <div class="progress-bar">
+          <div class="progress-fill" id="prime-progress" style="width:0%"></div>
+        </div>
+        <div class="progress-stats">
+          <span id="prime-percent">0%</span>
+          <span id="prime-found">0 primes found</span>
+        </div>
+      </div>
+      <div class="prime-results" id="prime-results">
+        <div class="prime-stat">
+          <span class="stat-label">Total Primes</span>
+          <span class="stat-value" id="total-primes">--</span>
+        </div>
+        <div class="prime-stat">
+          <span class="stat-label">Largest Prime</span>
+          <span class="stat-value" id="largest-prime">--</span>
+        </div>
+        <div class="prime-stat">
+          <span class="stat-label">Computation Time</span>
+          <span class="stat-value" id="prime-time">--</span>
+        </div>
+      </div>
+      <div class="output-box" id="output-2"></div>
+    </section>
+
+    <!-- SECTION 3: Worker Message Log -->
+    <section id="example-3">
+      <h2>Example 3 — Worker Message Log</h2>
+      <p>All messages between main thread and worker appear here. Shows the <code>postMessage/onmessage</code> pattern.</p>
+      <div class="controls">
+        <button id="clear-log-btn">Clear Log</button>
+      </div>
+      <div class="message-log" id="message-log">
+        <div class="log-empty">Messages will appear here when you use the worker demos above</div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Structured Clone & Transferables -->
+    <section id="example-4">
+      <h2>Example 4 — What Can Be Sent to Workers</h2>
+      <p>postMessage uses Structured Clone, NOT JSON. Supports more types but still has restrictions.</p>
+      <div class="clone-grid">
+        <div class="clone-card can">
+          <h4>CAN be sent</h4>
+          <ul>
+            <li>Strings, Numbers, Booleans</li>
+            <li>null, undefined</li>
+            <li>Date objects (preserved)</li>
+            <li>RegExp (preserved)</li>
+            <li>Map, Set (preserved)</li>
+            <li>ArrayBuffer, Blob</li>
+            <li>Nested objects/arrays</li>
+          </ul>
+        </div>
+        <div class="clone-card cannot">
+          <h4>CANNOT be sent</h4>
+          <ul>
+            <li>Functions / closures</li>
+            <li>DOM nodes (document.body)</li>
+            <li>Symbols</li>
+            <li>Class instances lose prototype</li>
+          </ul>
+        </div>
+        <div class="clone-card transfer">
+          <h4>Transferable (zero-copy)</h4>
+          <ul>
+            <li>ArrayBuffer (MOVED, not copied)</li>
+            <li>MessagePort</li>
+            <li>OffscreenCanvas</li>
+            <li>Sender loses access!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="clone-test-btn">Test Structured Clone</button>
+        <button id="transfer-test-btn">Test Transferable</button>
+      </div>
+      <div class="output-box" id="output-4"></div>
+    </section>
+
+    <!-- SECTION 5: Worker Limitations -->
+    <section id="example-5">
+      <h2>Example 5 — Worker Limitations &amp; Available APIs</h2>
+      <p>Workers are sandboxed. No DOM prevents race conditions. But many APIs ARE available.</p>
+      <div class="api-grid">
+        <div class="api-card no-access">
+          <h4>CANNOT Access</h4>
+          <ul>
+            <li><code>window</code>, <code>document</code></li>
+            <li><code>document.cookie</code></li>
+            <li><code>localStorage</code>, <code>sessionStorage</code></li>
+            <li><code>alert()</code>, <code>confirm()</code>, <code>prompt()</code></li>
+            <li>Parent page variables</li>
+          </ul>
+        </div>
+        <div class="api-card has-access">
+          <h4>CAN Access</h4>
+          <ul>
+            <li><code>self</code> (worker global scope)</li>
+            <li><code>fetch()</code> — HTTP requests</li>
+            <li><code>IndexedDB</code> — database</li>
+            <li><code>setTimeout</code> / <code>setInterval</code></li>
+            <li><code>WebSocket</code> — real-time</li>
+            <li><code>crypto</code> — encryption</li>
+            <li><code>console</code> — debugging</li>
+            <li><code>navigator.onLine</code></li>
+            <li><code>Blob</code>, <code>FileReader</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol>
+        <li>Workers run JS in a SEPARATE THREAD, preventing heavy computation from blocking the UI.</li>
+        <li>Communication via <code>postMessage/onmessage</code>. Data is COPIED using Structured Clone.</li>
+        <li>Transferable objects (ArrayBuffer) can be MOVED — zero copy but sender loses access.</li>
+        <li>Workers CANNOT access: DOM, window, localStorage, cookies. CAN access: fetch, IndexedDB, WebSocket, crypto, timers.</li>
+        <li>Inline workers use <code>Blob + URL.createObjectURL()</code> for small utility workers.</li>
+        <li>SharedWorkers are shared across tabs of the same origin.</li>
+        <li>Always terminate workers when done — they consume real system resources.</li>
+        <li>Use <code>navigator.hardwareConcurrency</code> to size worker pools.</li>
+        <li>Use request IDs (RPC pattern) for concurrent requests.</li>
+        <li>Ideal for: CSV export, encryption, image processing, data sorting, mathematical computation.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

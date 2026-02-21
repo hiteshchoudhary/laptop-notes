@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>13 — Mutation Observer | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>FILE 13: Mutation Observer</h1>
+    <p class="subtitle">Watching the DOM for changes — added nodes, attribute modifications, and text updates</p>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: What Is MutationObserver -->
+    <section id="example-1">
+      <h2>Example 1 — What Is MutationObserver? The Paytm Story</h2>
+      <p class="description">MutationObserver replaced deprecated Mutation Events. Asynchronous, batched, efficient.</p>
+      <pre id="log-1" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 2: Creating a MutationObserver -->
+    <section id="example-2">
+      <h2>Example 2 — Creating a MutationObserver: Basics</h2>
+      <p class="description">Constructor, callback signature, observe() method, and config object.</p>
+
+      <div class="chat-area" id="chat-area">
+        <div class="chat-header">
+          <span>Paytm Support Chat</span>
+          <span class="online-badge">Online</span>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="message incoming">
+            <span class="msg-sender">Support Bot</span>
+            <p>Welcome to Paytm Support! How can I help you today?</p>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chat-input" placeholder="Type a message..." class="chat-input">
+          <button id="send-message" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+
+      <pre id="log-2" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 3: Config Options -->
+    <section id="example-3">
+      <h2>Example 3 — Config Options Deep Dive</h2>
+      <p class="description">childList, attributes, characterData, subtree, attributeFilter, and oldValue options.</p>
+
+      <div class="config-demo">
+        <h3>Attribute Watcher Panel</h3>
+        <div id="attr-target" class="attr-target" data-status="idle" data-priority="normal">
+          <span>Payment Widget</span>
+          <span class="attr-status" id="attr-status-display">Status: idle</span>
+        </div>
+        <div class="attr-controls">
+          <button class="btn btn-sm" id="attr-processing">Set: processing</button>
+          <button class="btn btn-sm" id="attr-success">Set: success</button>
+          <button class="btn btn-sm" id="attr-failed">Set: failed</button>
+          <button class="btn btn-sm btn-warning" id="attr-priority">Toggle priority</button>
+          <button class="btn btn-sm btn-danger" id="attr-add-class">Add CSS class</button>
+        </div>
+      </div>
+
+      <pre id="log-3" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 4: MutationRecord -->
+    <section id="example-4">
+      <h2>Example 4 — MutationRecord: Understanding What Changed</h2>
+      <p class="description">Each MutationRecord describes ONE change: type, target, addedNodes, removedNodes, attributeName, oldValue.</p>
+
+      <!-- Mutation Log -->
+      <div class="mutation-log-panel">
+        <h3>Live Mutation Log</h3>
+        <div id="mutation-log" class="mutation-log">
+          <!-- Mutations will appear here -->
+        </div>
+        <button id="clear-mutation-log" class="btn btn-sm">Clear Log</button>
+      </div>
+
+      <pre id="log-4" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 5: disconnect() and takeRecords() -->
+    <section id="example-5">
+      <h2>Example 5 — disconnect() and takeRecords()</h2>
+      <p class="description">Stop all observations. takeRecords() delivers pending mutations before disconnect.</p>
+
+      <div class="lifecycle-controls">
+        <button id="observer-disconnect" class="btn btn-danger">Disconnect Observer</button>
+        <button id="observer-reconnect" class="btn btn-success">Reconnect Observer</button>
+        <button id="take-records" class="btn btn-primary">takeRecords()</button>
+      </div>
+
+      <pre id="log-5" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 6: Detecting Dynamic Elements -->
+    <section id="example-6">
+      <h2>Example 6 — Detecting Dynamically Added Elements</h2>
+      <p class="description">Third-party scripts inject elements at unpredictable times. MutationObserver detects them.</p>
+
+      <div id="dynamic-container" class="dynamic-container">
+        <p class="placeholder-text">Third-party widgets will appear here...</p>
+      </div>
+
+      <div class="inject-controls">
+        <button id="inject-widget" class="btn btn-primary">Inject Payment Widget</button>
+        <button id="inject-chat" class="btn btn-primary">Inject Chat Widget</button>
+        <button id="inject-ad" class="btn btn-warning">Inject Ad Banner</button>
+      </div>
+
+      <pre id="log-6" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 7: Auto-Format Card Number -->
+    <section id="example-7">
+      <h2>Example 7 — Auto-Format Card Number Input</h2>
+      <p class="description">Card numbers auto-format with spaces: "4111111111111111" becomes "4111 1111 1111 1111".</p>
+
+      <div class="card-input-demo">
+        <label for="card-number">Card Number</label>
+        <input type="text" id="card-number" class="card-input" placeholder="1234 5678 9012 3456" maxlength="19">
+        <p class="card-hint">Type or paste a card number. It will auto-format.</p>
+      </div>
+
+      <pre id="log-7" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 8: Undo System -->
+    <section id="example-8">
+      <h2>Example 8 — Undo System Using Mutation Records</h2>
+      <p class="description">Record all DOM mutations and reverse them. Add items, change attributes, then undo!</p>
+
+      <div id="undo-playground" class="undo-playground">
+        <div class="undo-item" data-color="blue">Item A</div>
+        <div class="undo-item" data-color="green">Item B</div>
+        <div class="undo-item" data-color="purple">Item C</div>
+      </div>
+
+      <div class="undo-controls">
+        <button id="add-undo-item" class="btn btn-primary">Add Item</button>
+        <button id="remove-undo-item" class="btn btn-danger">Remove Last</button>
+        <button id="change-undo-attr" class="btn btn-warning">Change Color</button>
+        <button id="undo-btn" class="btn btn-undo">Undo</button>
+        <span id="undo-stack-count" class="stack-badge">Stack: 0</span>
+      </div>
+
+      <pre id="log-8" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 9: Performance -->
+    <section id="example-9">
+      <h2>Example 9 — Performance and Comparison with Alternatives</h2>
+      <p class="description">Narrow target, use attributeFilter, batch with rAF, guard against infinite loops.</p>
+
+      <div class="comparison-table">
+        <div class="comp-row header"><span>Method</span><span>Sync/Async</span><span>Verdict</span></div>
+        <div class="comp-row"><span>Polling (setInterval)</span><span>Sync</span><span class="bad">Wastes CPU</span></div>
+        <div class="comp-row"><span>Mutation Events</span><span>Sync</span><span class="bad">DEPRECATED</span></div>
+        <div class="comp-row"><span>MutationObserver</span><span>Async</span><span class="good">STANDARD</span></div>
+      </div>
+
+      <pre id="log-9" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 11 (from original): Character Counter -->
+    <section id="example-11">
+      <h2>Example 11 — Live Character Counter for contenteditable</h2>
+      <p class="description">contenteditable + input events are unreliable. MutationObserver catches ALL changes.</p>
+
+      <div class="editor-container">
+        <div id="rich-editor" class="rich-editor" contenteditable="true">
+          Start typing here...
+        </div>
+        <div class="char-counter" id="char-counter">
+          <span id="char-count">0</span> / <span id="char-max">500</span> characters
+          <div class="counter-bar">
+            <div class="counter-fill" id="counter-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <pre id="log-11" class="console-output"></pre>
+    </section>
+
+    <!-- SECTION 12: Security Monitor -->
+    <section id="example-12">
+      <h2>Example 12 — Security Monitor for Script Injections</h2>
+      <p class="description">Detect unauthorized script/iframe injections. Real defense against Magecart attacks.</p>
+
+      <div class="security-panel">
+        <div class="security-status" id="security-status">
+          <span class="security-icon">&#128274;</span>
+          <span>Security Monitor: <strong>Active</strong></span>
+        </div>
+        <div class="security-alerts" id="security-alerts">
+          <p class="no-alerts">No threats detected</p>
+        </div>
+        <div class="security-controls">
+          <button id="inject-safe-script" class="btn btn-success btn-sm">Inject Safe Script (paytm.com)</button>
+          <button id="inject-evil-script" class="btn btn-danger btn-sm">Inject Suspicious Script (evil.com)</button>
+        </div>
+      </div>
+
+      <pre id="log-12" class="console-output"></pre>
+
+      <div class="key-takeaways">
+        <h3>KEY TAKEAWAYS</h3>
+        <ol>
+          <li><strong>MutationObserver</strong> watches DOM changes asynchronously in batches. Replaced deprecated Mutation Events.</li>
+          <li><strong>Constructor:</strong> new MutationObserver(callback). Start: observer.observe(target, config).</li>
+          <li><strong>Config:</strong> childList, attributes, characterData, subtree, attributeFilter, attributeOldValue, characterDataOldValue.</li>
+          <li><strong>MutationRecord:</strong> type, target, addedNodes, removedNodes, attributeName, oldValue.</li>
+          <li><strong>Lifecycle:</strong> disconnect() stops ALL observations. takeRecords() returns pending records.</li>
+          <li><strong>Performance:</strong> Narrow target, use attributeFilter, batch with rAF, guard against loops.</li>
+          <li><strong>Use cases:</strong> detect dynamic elements, auto-format inputs, undo systems, character counters, security.</li>
+          <li><strong>Does NOT observe</strong> input.value changes via JS. Watches DOM structure and attributes.</li>
+          <li><strong>Avoid</strong> document.body + subtree unless necessary — processes everything.</li>
+          <li><strong>MutationObserver is the only recommended approach.</strong> Never use polling or Mutation Events.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

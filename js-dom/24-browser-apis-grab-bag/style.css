@@ -1,0 +1,299 @@
+/* ============================================================
+   FILE 24: Browser APIs Grab Bag — Dark Theme Styles
+   ============================================================ */
+
+:root {
+  --primary: #6366f1;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --surface: #1e293b;
+  --border: #334155;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --font-mono: 'Courier New', Courier, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+header h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.25rem; }
+.subtitle { color: #94a3b8; font-size: 1.05rem; }
+
+/* API Cards */
+.api-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.2s;
+}
+
+.api-card:hover { border-color: var(--primary); }
+
+.api-card h2 { color: var(--primary); font-size: 1.3rem; margin-bottom: 0.35rem; }
+.api-card > p { color: #94a3b8; margin-bottom: 1rem; font-size: 0.95rem; }
+
+section#takeaways {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+section#takeaways h2 { color: var(--primary); font-size: 1.3rem; margin-bottom: 0.75rem; }
+
+/* Demo areas */
+.demo-area {
+  margin-bottom: 0.75rem;
+}
+
+/* Input rows */
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.input-row input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  outline: none;
+}
+
+.input-row input:focus { border-color: var(--primary); }
+
+/* Buttons */
+.btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+button:hover { background: #4f46e5; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Result badge */
+.result-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--bg);
+  color: #94a3b8;
+  margin-top: 0.5rem;
+}
+
+.result-badge.success { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+.result-badge.error { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+/* Geo display */
+.geo-display {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.geo-stat {
+  background: var(--bg);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+.geo-label { display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 0.25rem; }
+.geo-value { display: block; font-size: 1.15rem; font-weight: 700; color: var(--primary); font-family: var(--font-mono); }
+
+/* Notification permission */
+#notif-permission {
+  margin-top: 0.5rem;
+}
+
+/* Fullscreen target */
+.fullscreen-target {
+  background: var(--bg);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.fullscreen-target p { margin-bottom: 0.75rem; color: #94a3b8; }
+
+/* Make fullscreen content look good */
+.fullscreen-target:fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+}
+
+/* Visibility indicator */
+.visibility-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.vis-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--success);
+  transition: background 0.3s;
+}
+
+.vis-dot.hidden { background: var(--danger); }
+
+#vis-label { font-weight: 600; font-size: 1rem; }
+
+.vis-counter { color: #94a3b8; font-size: 0.9rem; }
+
+/* Network indicator */
+.network-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.net-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--success);
+  transition: background 0.3s;
+}
+
+.net-dot.offline { background: var(--danger); }
+
+#net-label { font-weight: 600; }
+
+.network-details {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.net-detail {
+  background: var(--bg);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  color: #94a3b8;
+}
+
+.net-detail strong { color: var(--text); }
+
+/* Broadcast channel */
+.received-messages {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  min-height: 60px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.received-messages .empty-msg { color: #475569; font-size: 0.85rem; font-style: italic; }
+
+.bc-msg {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.bc-msg .bc-time { color: #64748b; font-size: 0.75rem; font-family: var(--font-mono); margin-right: 0.5rem; }
+
+/* Performance results */
+.perf-results {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.perf-result {
+  background: var(--bg);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.perf-result .perf-label { color: #64748b; display: block; font-size: 0.75rem; }
+.perf-result .perf-value { color: var(--success); font-weight: 700; font-size: 1.1rem; }
+
+/* Console output box */
+.output-box {
+  background: #0b1120;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+  color: #a5b4c8;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  body { padding: 1rem; }
+  header h1 { font-size: 1.5rem; }
+  .input-row { flex-direction: column; }
+  .btn-row { flex-direction: column; }
+  .btn-row button { width: 100%; }
+  .geo-display { flex-direction: column; }
+}

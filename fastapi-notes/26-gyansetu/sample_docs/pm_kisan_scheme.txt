@@ -1,0 +1,67 @@
+PM-KISAN: PRADHAN MANTRI KISAN SAMMAN NIDHI
+
+Overview:
+PM-KISAN is a Central Sector scheme with 100% funding from the Government
+of India. It was launched on 24 February 2019 by Prime Minister Narendra Modi
+from Gorakhpur, Uttar Pradesh. The scheme provides income support to all
+landholding farmer families across the country.
+
+Financial Benefit:
+Under the scheme, an amount of Rs. 6000 per year is transferred in three
+equal installments of Rs. 2000 each directly into the bank accounts of
+eligible farmer families through Direct Benefit Transfer (DBT) mode.
+
+The three installments are paid in the following periods:
+- First installment: April to July (Rs. 2000)
+- Second installment: August to November (Rs. 2000)
+- Third installment: December to March (Rs. 2000)
+
+Eligibility:
+All landholding farmer families are eligible for the scheme, subject to
+the following exclusion criteria:
+
+1. Institutional land holders are not eligible.
+2. Farmer families in which one or more members belong to the following
+   categories are excluded:
+   a. Former and present holders of constitutional posts
+   b. Former and present Ministers, Members of Parliament, Members of
+      State Legislative Assemblies
+   c. All serving or retired officers and employees of Central/State
+      Government Ministries
+   d. All persons who paid Income Tax in the last assessment year
+   e. Professionals like Doctors, Engineers, Lawyers, Chartered Accountants
+      registered with professional bodies
+
+Registration Process:
+Farmers can register for the scheme through:
+1. Common Service Centres (CSCs) in their village
+2. The PM-KISAN portal at pmkisan.gov.in
+3. The PM-KISAN mobile app
+
+Required Documents:
+- Aadhaar card (mandatory)
+- Bank account details with IFSC code
+- Land ownership documents
+- Mobile number
+
+Impact and Coverage:
+As of 2024, PM-KISAN has benefited over 11 crore (110 million) farmer
+families across India. The total amount disbursed exceeds Rs. 2.5 lakh
+crore (approximately $30 billion USD).
+
+The scheme has been particularly impactful for small and marginal farmers
+who constitute about 86% of all farmers in India. These farmers typically
+own less than 2 hectares of land and the Rs. 6000 annual support helps
+them purchase seeds, fertilizers, and other agricultural inputs.
+
+eKYC Requirement:
+Since 2022, eKYC through Aadhaar-based OTP or biometric authentication
+has been made mandatory for all PM-KISAN beneficiaries to continue
+receiving installments. This measure was introduced to prevent fraudulent
+claims and ensure that benefits reach genuine farmers.
+
+Grievance Redressal:
+Beneficiaries can raise grievances through:
+- PM-KISAN helpline: 155261 or 011-24300606
+- The PM-KISAN portal's grievance section
+- Local agriculture office

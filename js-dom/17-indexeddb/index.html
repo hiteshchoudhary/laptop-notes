@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>17 — IndexedDB | JS DOM Course</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>FILE 17: IndexedDB — Browser-Side NoSQL Database</h1>
+    <p class="subtitle">Storing large structured data client-side with async transactions</p>
+  </header>
+
+  <main>
+    <!-- Sync Status Indicator -->
+    <div class="sync-bar" id="sync-bar">
+      <span class="sync-dot" id="sync-dot"></span>
+      <span id="sync-status">Initializing...</span>
+    </div>
+
+    <!-- SECTION 1: What is IndexedDB -->
+    <section id="example-1">
+      <h2>Example 1 — What is IndexedDB? (Ola's Offline Ride History)</h2>
+      <p>IndexedDB is the ONLY browser API for large structured data: no size limit, stores objects directly, supports indexes, works in Web Workers, and is transaction-based.</p>
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>localStorage</th><th>IndexedDB</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>API</td><td>Synchronous</td><td>Asynchronous</td></tr>
+            <tr><td>Data format</td><td>Strings only</td><td>Objects, Blobs, etc</td></tr>
+            <tr><td>Capacity</td><td>~5-10 MB</td><td>50MB+ (varies)</td></tr>
+            <tr><td>Indexes</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Transactions</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Web Workers</td><td>No</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="output-box" id="output-1"></div>
+    </section>
+
+    <!-- SECTION 2: Add Notes Form -->
+    <section id="example-2">
+      <h2>Example 2 — Offline Notes App (Add Notes)</h2>
+      <p>Add notes with title, body, and category. Saved instantly to IndexedDB.</p>
+      <div class="form-grid">
+        <input type="text" id="note-title" placeholder="Note title">
+        <select id="note-category">
+          <option value="general">General</option>
+          <option value="ride-feedback">Ride Feedback</option>
+          <option value="route-issue">Route Issue</option>
+          <option value="driver-note">Driver Note</option>
+          <option value="todo">To-Do</option>
+        </select>
+        <textarea id="note-body" placeholder="Note body..." rows="3"></textarea>
+        <div class="controls">
+          <button id="add-note-btn" class="btn-success">Add Note</button>
+          <button id="clear-notes-btn" class="btn-danger">Delete All Notes</button>
+        </div>
+      </div>
+      <div class="output-box" id="output-2"></div>
+    </section>
+
+    <!-- SECTION 3: Notes List with Search/Filter -->
+    <section id="example-3">
+      <h2>Example 3 — Notes List (Search &amp; Filter)</h2>
+      <p>All notes from IndexedDB displayed here. Search by text or filter by category.</p>
+      <div class="controls">
+        <input type="text" id="search-notes" placeholder="Search notes...">
+        <select id="filter-category">
+          <option value="all">All Categories</option>
+          <option value="general">General</option>
+          <option value="ride-feedback">Ride Feedback</option>
+          <option value="route-issue">Route Issue</option>
+          <option value="driver-note">Driver Note</option>
+          <option value="todo">To-Do</option>
+        </select>
+        <button id="refresh-notes-btn">Refresh List</button>
+      </div>
+      <div class="notes-list" id="notes-list">
+        <div class="empty-state">No notes yet. Add one above!</div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: CRUD Operations -->
+    <section id="example-4">
+      <h2>Example 4 — CRUD Operations &amp; Transactions</h2>
+      <p>Every IndexedDB operation happens inside a TRANSACTION, ensuring atomicity.</p>
+      <div class="controls">
+        <input type="number" id="note-id-input" placeholder="Note ID">
+        <button id="get-note-btn">Get by ID</button>
+        <button id="update-note-btn">Update by ID</button>
+        <button id="delete-note-btn" class="btn-danger">Delete by ID</button>
+        <button id="get-all-btn">Get All</button>
+      </div>
+      <div class="transaction-indicator" id="tx-indicator">
+        <span class="tx-label">Transaction State:</span>
+        <span class="tx-state" id="tx-state">idle</span>
+      </div>
+      <div class="output-box" id="output-4"></div>
+    </section>
+
+    <!-- SECTION 5: Index Queries -->
+    <section id="example-5">
+      <h2>Example 5 — Index Queries &amp; Key Ranges</h2>
+      <p>Indexes make lookups fast. IDBKeyRange enables SQL-like range queries.</p>
+      <div class="controls">
+        <select id="query-index">
+          <option value="byCategory">By Category</option>
+          <option value="bySyncStatus">By Sync Status</option>
+        </select>
+        <select id="query-value">
+          <option value="general">general</option>
+          <option value="ride-feedback">ride-feedback</option>
+          <option value="route-issue">route-issue</option>
+          <option value="driver-note">driver-note</option>
+          <option value="todo">todo</option>
+          <option value="false">Unsynced (false)</option>
+          <option value="true">Synced (true)</option>
+        </select>
+        <button id="query-index-btn">Query Index</button>
+        <button id="cursor-demo-btn">Cursor Demo</button>
+      </div>
+      <div class="output-box" id="output-5"></div>
+    </section>
+
+    <!-- SECTION 6: Database Inspector -->
+    <section id="example-6">
+      <h2>Database Inspector</h2>
+      <p>Shows object stores, record counts, and indexes in the current database.</p>
+      <div class="controls">
+        <button id="inspect-db-btn">Inspect Database</button>
+        <button id="delete-db-btn" class="btn-danger">Delete Database</button>
+      </div>
+      <div class="db-inspector" id="db-inspector">
+        <div class="empty-state">Click "Inspect Database" to view structure</div>
+      </div>
+      <div class="output-box" id="output-6"></div>
+    </section>
+
+    <!-- KEY TAKEAWAYS -->
+    <section id="takeaways">
+      <h2>Key Takeaways</h2>
+      <ol>
+        <li>IndexedDB is an async, transactional NoSQL database — ideal for large structured data and offline apps.</li>
+        <li>Schema changes happen ONLY in <code>onupgradeneeded</code>, triggered by bumping the version number.</li>
+        <li>All operations require a transaction: <code>'readonly'</code> for reads, <code>'readwrite'</code> for writes.</li>
+        <li>Indexes enable fast lookups on non-key fields.</li>
+        <li><code>IDBKeyRange</code> enables range queries (BETWEEN, &gt;, &lt;).</li>
+        <li>Cursors iterate large datasets one record at a time.</li>
+        <li>Wrap the callback API in Promises for async/await.</li>
+        <li>Handle <code>onblocked</code> when other tabs hold older versions.</li>
+        <li>Apply schema migrations incrementally by checking <code>oldVersion</code>.</li>
+        <li>IndexedDB is the backbone of offline-first: save locally, sync when online.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
