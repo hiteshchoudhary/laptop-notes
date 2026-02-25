@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LohaServer — Built with Rust</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-top: 4px solid #ff9933;
+            border-bottom: 4px solid #138808;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff9933;
+            color: #fff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #138808;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box h3 {
+            color: #138808;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .routes {
+            margin: 1.5rem 0;
+        }
+
+        .routes h2 {
+            color: #1a1a2e;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .route {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background: #f0f4f8;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .route:hover {
+            background: #e2e8f0;
+        }
+
+        .method {
+            background: #138808;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 1rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .path {
+            font-family: 'Courier New', monospace;
+            color: #1a1a2e;
+            font-weight: 600;
+            margin-right: 1rem;
+            min-width: 100px;
+        }
+
+        .desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: #ff9933;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .chakra {
+            display: block;
+            margin: 1rem auto;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #000080;
+            border-radius: 50%;
+            position: relative;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chakra"></div>
+        <h1>LohaServer</h1>
+        <p class="subtitle">
+            A Multi-Threaded HTTP Server Built with Rust
+            <br>
+            <span class="badge">std only — no frameworks</span>
+        </p>
+
+        <div class="info-box">
+            <h3>How It Works</h3>
+            <p>
+                Like IRCTC handling thousands of Tatkal bookings at once,
+                LohaServer uses a thread pool to serve multiple requests
+                concurrently. Each incoming connection is dispatched to
+                an available worker thread via an mpsc channel — just like
+                passengers being directed to the next free booking counter.
+            </p>
+        </div>
+
+        <div class="routes">
+            <h2>Available Routes</h2>
+            <a href="/" style="text-decoration:none;">
+                <div class="route">
+                    <span class="method">GET</span>
+                    <span class="path">/</span>
+                    <span class="desc">This welcome page</span>
+                </div>
+            </a>
+            <a href="/about" style="text-decoration:none;">
+                <div class="route">
+                    <span class="method">GET</span>
+                    <span class="path">/about</span>
+                    <span class="desc">About this server</span>
+                </div>
+            </a>
+            <a href="/echo" style="text-decoration:none;">
+                <div class="route">
+                    <span class="method">GET</span>
+                    <span class="path">/echo</span>
+                    <span class="desc">Echoes request info as JSON</span>
+                </div>
+            </a>
+            <a href="/json" style="text-decoration:none;">
+                <div class="route">
+                    <span class="method">GET</span>
+                    <span class="path">/json</span>
+                    <span class="desc">Sample train schedule JSON</span>
+                </div>
+            </a>
+            <a href="/health" style="text-decoration:none;">
+                <div class="route">
+                    <span class="method">GET</span>
+                    <span class="path">/health</span>
+                    <span class="desc">Health check</span>
+                </div>
+            </a>
+            <div class="route">
+                <span class="method">GET</span>
+                <span class="path">/public/*</span>
+                <span class="desc">Static files</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Built from scratch with <a href="https://www.rust-lang.org/">Rust</a> std library.
+            <br>
+            No frameworks. No crates. Just Loha (iron).
+        </div>
+    </div>
+</body>
+</html>

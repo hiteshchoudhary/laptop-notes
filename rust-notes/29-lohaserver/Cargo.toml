@@ -1,0 +1,7 @@
+[package]
+name = "lohaserver"
+version = "0.1.0"
+edition = "2021"
+
+# No external dependencies — built entirely with std
+[dependencies]

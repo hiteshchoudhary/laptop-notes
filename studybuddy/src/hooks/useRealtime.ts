@@ -21,16 +21,11 @@ export function useRealtime(roomCode: string | null) {
       try {
         await insforge.realtime.connect();
         if (cancelled) return;
-        const subResult = await insforge.realtime.subscribe(channel);
-        console.log("[Realtime] subscribe result:", subResult);
+        await insforge.realtime.subscribe(channel);
         if (cancelled) return;
         setReady(true);
-        console.log("[Realtime] connected and subscribed to", channel);
 
-        // Debug: log ALL incoming events
-        insforge.realtime.on("connect", () => console.log("[Realtime] connected"));
-        insforge.realtime.on("disconnect", (r: unknown) => console.log("[Realtime] disconnected:", r));
-        insforge.realtime.on("error", (e: unknown) => console.log("[Realtime] error:", e));
+        insforge.realtime.on("error", (e: unknown) => console.error("[Realtime] error:", e));
       } catch (err) {
         console.error("Realtime setup failed:", err);
       }
@@ -50,8 +45,7 @@ export function useRealtime(roomCode: string | null) {
       handlersRef.current.set(event, handlers);
 
       const wrappedHandler = (message: Record<string, unknown>) => {
-        console.log(`[Realtime] event "${event}" received:`, JSON.stringify(message));
-        // Try to extract payload - server may wrap it
+        // Extract payload - server may wrap it
         const data = (message?.payload as Record<string, unknown>) || message || {};
         handler(data);
       };
@@ -73,7 +67,6 @@ export function useRealtime(roomCode: string | null) {
       if (readyPromiseRef.current) {
         await readyPromiseRef.current;
       }
-      console.log(`[Realtime] publishing "${event}" to ${channel}:`, data);
       await insforge.realtime.publish(channel, event, data);
     },
     [channel]

@@ -26,6 +26,7 @@ export default function MultiplayerBattlePage({
   const [phase, setPhase] = useState<GamePhase>("waiting");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(0);
   const [myFinished, setMyFinished] = useState(false);
 
   const [players, setPlayers] = useState<PlayerScore[]>([]);
@@ -63,13 +64,15 @@ export default function MultiplayerBattlePage({
     };
 
     fetchRoom();
-    // Poll every 2 seconds while waiting
-    const interval = setInterval(fetchRoom, 2000);
+    // Poll every 3 seconds only while waiting for opponent
+    const interval = setInterval(() => {
+      if (phase === "waiting") fetchRoom();
+    }, 3000);
     return () => {
       stopped = true;
       clearInterval(interval);
     };
-  }, [roomCode]);
+  }, [roomCode, phase]);
 
   // Initialize player scores — only once when room first loads with both players
   const playersInitialized = useRef(false);
@@ -194,7 +197,8 @@ export default function MultiplayerBattlePage({
     (answerIndex: number) => {
       if (!user) return;
       const isCorrect = answerIndex === questions[currentIndex]?.correctAnswer;
-      const newScore = isCorrect ? score + 1 : score;
+      const newScore = isCorrect ? scoreRef.current + 1 : scoreRef.current;
+      scoreRef.current = newScore;
       setScore(newScore);
 
       publish("score_update", {
@@ -203,19 +207,20 @@ export default function MultiplayerBattlePage({
         currentIndex: currentIndex + 1,
       });
     },
-    [user, questions, currentIndex, score, publish]
+    [user, questions, currentIndex, publish]
   );
 
   const handleNext = useCallback(async () => {
     const nextIndex = currentIndex + 1;
     if (nextIndex >= questions.length) {
+      const finalScore = scoreRef.current;
       setMyFinished(true);
       setPhase("finished");
 
       if (user) {
         publish("game_complete", {
           userId: user.id,
-          finalScore: score,
+          finalScore,
         });
 
         // Save score via API
@@ -226,7 +231,7 @@ export default function MultiplayerBattlePage({
             user_id: user.id,
             user_name: user.name || user.email,
             topic: room?.topic || "unknown",
-            score,
+            score: finalScore,
             total: QUIZ_CONFIG.questionsPerQuiz,
           }),
         });
@@ -234,7 +239,7 @@ export default function MultiplayerBattlePage({
     } else {
       setCurrentIndex(nextIndex);
     }
-  }, [currentIndex, questions.length, score, user, room, publish]);
+  }, [currentIndex, questions.length, user, room, publish]);
 
   if (!room || !user) {
     return (

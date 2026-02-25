@@ -1,0 +1,11 @@
+[package]
+name = "vaayusanket"
+version = "0.1.0"
+edition = "2021"
+description = "VaayuSanket - Real-Time System Monitor CLI (like ISRO mission control for your machine)"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+sysinfo = "0.32"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

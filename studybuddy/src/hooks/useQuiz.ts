@@ -95,15 +95,15 @@ export function useQuiz(sessionId: string, topic: string) {
   }, []);
 
   const saveScore = useCallback(
-    async (userId: string, userName: string) => {
+    async (userId: string, userName: string, finalScore: number) => {
       const response = await fetch("/api/quiz/save-score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: userId,
           user_name: userName,
-          topic: session.topic,
-          score: session.score,
+          topic,
+          score: finalScore,
           total: QUIZ_CONFIG.questionsPerQuiz,
         }),
       });
@@ -114,7 +114,7 @@ export function useQuiz(sessionId: string, topic: string) {
         throw new Error(`Failed to save score (${response.status}): ${text}`);
       }
     },
-    [session.topic, session.score]
+    [topic]
   );
 
   return {

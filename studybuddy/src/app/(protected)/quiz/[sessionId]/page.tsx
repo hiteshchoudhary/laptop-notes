@@ -31,14 +31,14 @@ export default function QuizPage({
 
   useEffect(() => {
     if (session.status === "finished" && !scoreSaved && user) {
-      saveScore(user.id, user.name || user.email)
+      saveScore(user.id, user.name || user.email, session.score)
         .then(() => setScoreSaved(true))
         .catch((err) => {
           console.warn("Could not save score:", err.message);
           setScoreSaved(true); // Don't retry, just show results
         });
     }
-  }, [session.status, scoreSaved, user, saveScore]);
+  }, [session.status, session.score, scoreSaved, user, saveScore]);
 
   const handlePlayAgain = () => {
     router.push("/dashboard");
